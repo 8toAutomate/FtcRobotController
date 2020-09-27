@@ -112,15 +112,15 @@ public class MecanumDrive extends OpMode
         double strafingConstant = 1.5;
 
         // controller variables
-        double y = -gamepad1.left_stick_y; // reversed
+        double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x * strafingConstant; // coefficient counteracts imperfect strafing
         double rx = gamepad1.right_stick_x;
 
 
         frontLeftPower = y + x + rx;
         frontRightPower = y - x - rx;
-        backLeftPower = y - x + rx;
-        backRightPower = y + x - rx;
+        backLeftPower = -y - x + rx;
+        backRightPower = -y + x - rx;
 
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
