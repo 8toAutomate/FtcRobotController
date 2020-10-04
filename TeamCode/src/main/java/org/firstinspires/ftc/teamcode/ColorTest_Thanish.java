@@ -134,16 +134,16 @@ public class ColorTest_Thanish extends LinearOpMode {
       rgbValues[2] = colors.blue;
 
       telemetry.addLine()
-              .addData("Red", "%.3f", rgbValues[0])
-              .addData("Green", "%.3f", rgbValues[1])
-              .addData("Blue", "%.3f", rgbValues[2]);
+              .addData("Red", "%.3f", colors.red)
+              .addData("Green", "%.3f", colors.green)
+              .addData("Blue", "%.3f", colors.blue);
       telemetry.addLine()
               .addData("Hue", "%.3f", hsvValues[0])
               .addData("Saturation", "%.3f", hsvValues[1])
               .addData("Value", "%.3f", hsvValues[2]);
       telemetry.addData("Alpha", "%.3f", colors.alpha);
 
-      if (rgbValues[0] == 0 && rgbValues[1] == 0 && rgbValues[2] == 0) {
+      if (colors.red == 0 && colors.green == 0 && colors.blue == 0) {
         colorDetected = "Black";
       } else {
         colorDetected = "Unknown";
@@ -151,6 +151,10 @@ public class ColorTest_Thanish extends LinearOpMode {
 
 
       telemetry.addData("Color detected: ", colorDetected);
+
+      if (colorSensor instanceof DistanceSensor) {
+        telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM));
+      }
 
       telemetry.update();
 
