@@ -114,6 +114,7 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
 
         telemetry.addData("Path", "Complete");
+        telemetry.addData("counts",COUNTS);
         telemetry.update();
     }
 
