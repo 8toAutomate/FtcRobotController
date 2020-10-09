@@ -65,19 +65,20 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
  */
 
 @Autonomous(name="ProgrammingFrameConversionFactor", group="ProgrammingFrame")
-@Disabled
+//@Disabled
 public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
     /* Declare OpMode members. */
     ProgrammingFrame        robot   = new ProgrammingFrame();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
-    static final int     COUNTS = 1000;
 
-    static final double     COUNTS_PER_CENTIMETER   = 1000;
+    static final int        TICKS                   = 1000;
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
+    static final double     timeoutS                = 20;
 
-    @Override
+
+
     public void runOpMode() {
 
         /*
@@ -97,34 +98,62 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
-                          robot.frontLeftMotor.getCurrentPosition(),
-                          robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(),  robot.backRightMotor.getCurrentPosition());
+        telemetry.addData("Path0", "Starting at %7d :%7d",
+                robot.frontLeftMotor.getCurrentPosition(),
+                robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        robot.frontLeftMotor.setTargetPosition(COUNTS);
-        robot.frontRightMotor.setTargetPosition(COUNTS);
-        robot.backLeftMotor.setTargetPosition(COUNTS);
-        robot.backLeftMotor.setTargetPosition(COUNTS);
+        int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
+        int BLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
 
+        robot.frontLeftMotor.setTargetPosition(FLtarget);
+        robot.frontRightMotor.setTargetPosition(FRtarget);
+        robot.backLeftMotor.setTargetPosition(BLtarget);
+        robot.backRightMotor.setTargetPosition(BRtarget);
+
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+        runtime.reset();
+        robot.frontLeftMotor.setPower(DRIVE_SPEED);
+        robot.frontRightMotor.setPower(DRIVE_SPEED);
+        robot.backRightMotor.setPower(DRIVE_SPEED);
+        robot.backLeftMotor.setPower(DRIVE_SPEED);
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while (opModeIsActive() &&
+                (runtime.seconds() < timeoutS) &&
+                (Math.abs(robot.frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(robot.frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(robot.backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(robot.backRightMotor.getCurrentPosition()) < TICKS)) {
+        }
+
+        robot.frontLeftMotor.setPower(0);
+        robot.frontRightMotor.setPower(0);
+        robot.backRightMotor.setPower(0);
+        robot.backLeftMotor.setPower(0);
+
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Path", "Complete");
-        telemetry.addData("counts",COUNTS);
+        telemetry.addData("counts", TICKS);
         telemetry.update();
+
+
+
     }
-
-    /*
-     *  Method to perform a relative move, based on encoder counts.
-     *  Encoders are not reset as the move is based on the current position.
-     *  Move will stop if any of three conditions occur:
-     *  1) Move gets to the desired position
-     *  2) Move runs out of time
-     *  3) Driver stops the opmode running.
-     */
-
 }
