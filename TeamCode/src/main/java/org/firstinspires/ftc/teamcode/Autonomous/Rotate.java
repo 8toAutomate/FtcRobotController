@@ -16,9 +16,9 @@ public class Rotate extends LinearOpMode {
     static final double conversion_factor = 8.46;
     private ElapsedTime runtime = new ElapsedTime();
 
-    public void Rotate(int centimeters, double power){
+    public void Rotate(int degrees, double power){
 
-        int TICKS = (int) Math.round(centimeters * conversion_factor);
+        int TICKS = (int) Math.round(degrees * conversion_factor);
         /*
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
@@ -62,8 +62,8 @@ public class Rotate extends LinearOpMode {
         // reset the timeout time and start motion.
         runtime.reset();
         robot.frontLeftMotor.setPower(power);
-        robot.frontRightMotor.setPower(power);
-        robot.backRightMotor.setPower(power);
+        robot.frontRightMotor.setPower(-power);
+        robot.backRightMotor.setPower(-power);
         robot.backLeftMotor.setPower(power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
