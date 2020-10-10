@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-// THIS PROGRAM IS NOT FINISHED
 @Autonomous(name="Rotate", group="Motion")
 
 public class Rotate extends LinearOpMode {
@@ -45,9 +44,9 @@ public class Rotate extends LinearOpMode {
         waitForStart();
 
         int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
-        int FRtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
-        int BLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
-        int BRtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = robot.frontRightMotor.getCurrentPosition() - TICKS;
+        int BLtarget = robot.backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = robot.backRightMotor.getCurrentPosition() - TICKS;
 
         robot.frontLeftMotor.setTargetPosition(FLtarget);
         robot.frontRightMotor.setTargetPosition(FRtarget);

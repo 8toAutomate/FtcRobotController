@@ -2,22 +2,20 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="GoDistance", group="Motion")
+@Autonomous(name="Strafe", group="Motion")
 
-public class GoDistance extends LinearOpMode {
+public class Strafe extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
     static final double conversion_factor = 8.46;
     private ElapsedTime runtime = new ElapsedTime();
 
-    public void GoDistanceCM(int centimeters, double power){
+    public void Strafe(int centimeters, double power){
 
         int TICKS = (int) Math.round(centimeters * conversion_factor);
         /*
@@ -94,8 +92,7 @@ public class GoDistance extends LinearOpMode {
     }
     @Override
     public void runOpMode() {
-
-        GoDistanceCM(100, 0.5);
+        Strafe(100, 0.5);
 
     }
 }
