@@ -39,10 +39,10 @@ public class Strafe extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        int FLtarget = robot.frontLeftMotor.getCurrentPosition() - TICKS;
-        int FRtarget = robot.frontRightMotor.getCurrentPosition() + TICKS;
-        int BLtarget = robot.backLeftMotor.getCurrentPosition() + TICKS;
-        int BRtarget = robot.backRightMotor.getCurrentPosition() - TICKS;
+        int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = robot.frontRightMotor.getCurrentPosition() - TICKS;
+        int BLtarget = robot.backLeftMotor.getCurrentPosition() - TICKS;
+        int BRtarget = robot.backRightMotor.getCurrentPosition() + TICKS;
 
         robot.frontLeftMotor.setTargetPosition(FLtarget);
         robot.frontRightMotor.setTargetPosition(FRtarget);
@@ -56,10 +56,10 @@ public class Strafe extends LinearOpMode {
 
         // reset the timeout time and start motion.
         runtime.reset();
-        robot.frontLeftMotor.setPower(-power);
-        robot.frontRightMotor.setPower(power);
-        robot.backRightMotor.setPower(power);
+        robot.frontLeftMotor.setPower(power);
+        robot.frontRightMotor.setPower(-power);
         robot.backLeftMotor.setPower(-power);
+        robot.backRightMotor.setPower(power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
