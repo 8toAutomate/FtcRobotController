@@ -11,27 +11,23 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 public class Strafe extends LinearOpMode {
 
-    ProgrammingFrame robot   = new ProgrammingFrame();
+    ProgrammingFrame robot   = new ProgrammingFrame(this);
     static final double conversion_factor = 8.46;
     private ElapsedTime runtime = new ElapsedTime();
 
     public void Strafe(int centimeters, double power){
 
         int TICKS = (int) Math.round(centimeters * conversion_factor);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
-        robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.resetEncoders();
+//        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -76,15 +72,17 @@ public class Strafe extends LinearOpMode {
                 (Math.abs(robot.frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(robot.frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(robot.backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(robot.backRightMotor.getCurrentPosition()) < TICKS)) {
         }
 
-        robot.frontLeftMotor.setPower(0);
-        robot.frontRightMotor.setPower(0);
-        robot.backRightMotor.setPower(0);
-        robot.backLeftMotor.setPower(0);
+        robot.stopDriveMotors();
+//        robot.frontLeftMotor.setPower(0);
+//        robot.frontRightMotor.setPower(0);
+//        robot.backRightMotor.setPower(0);
+//        robot.backLeftMotor.setPower(0);
 
-        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.startEncoders();
+//        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Path", "Complete");
         telemetry.addData("counts", TICKS);
