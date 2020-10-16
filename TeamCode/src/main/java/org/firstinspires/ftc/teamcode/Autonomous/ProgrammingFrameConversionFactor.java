@@ -69,7 +69,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
     /* Declare OpMode members. */
-    ProgrammingFrame        robot   = new ProgrammingFrame();   // Use a Pushbot's hardware
+    ProgrammingFrame        robot   = new ProgrammingFrame(this);   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final int        TICKS                   = 1000;
@@ -86,7 +86,6 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
          */
-        robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //

@@ -95,7 +95,7 @@ public class GoDistance extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        GoDistanceCM(100, 0.5);
+        GoDistanceCM(20, 0.5);
 
     }
 }
