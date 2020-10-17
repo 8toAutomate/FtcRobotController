@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -49,6 +50,9 @@ public class ProgrammingFrame
     public DcMotor frontRightMotor = null;
     public DcMotor backLeftMotor = null;
     public DcMotor backRightMotor = null;
+
+    public NormalizedColorSensor colorSensor1;
+    public NormalizedColorSensor colorSensor2;
 
     public OpMode systemTools;
 
@@ -95,6 +99,8 @@ public class ProgrammingFrame
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
+        colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
 
 
     }

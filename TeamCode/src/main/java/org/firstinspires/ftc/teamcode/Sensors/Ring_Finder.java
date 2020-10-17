@@ -1,62 +1,66 @@
 package org.firstinspires.ftc.teamcode.Sensors;
 
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+@Autonomous(name="Ring_Finder", group="Motion")
+public class Ring_Finder extends LinearOpMode {
 
-public class Ring_Finder {
+    ProgrammingFrame robot = new ProgrammingFrame(this);
+
     public void runOpMode() {
 
-        final float[] hsvValues = new float[3];
+        String ringsFound;
 
-        int RingsFound = 0;
+        boolean sensor1Detected;
+        boolean sensor2Detected;
 
-        final float[] rgbValues = new float[3];
-
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
         float gain = 2;
 
+
+        float redLowerVal = 1;
+        float redUpperVal = 1;
+        float greenLowerVal = 1;
+        float greenUpperVal = 1;
+        float blueLowerVal = 1;
+        float blueUpperVal = 1;
+
         waitForStart();
         while (opModeIsActive()) {
+
+
+
             telemetry.addData("Gain", gain);
 
-            colorSensor.setGain(gain);
+            robot.colorSensor1.setGain(gain);
+            robot.colorSensor2.setGain(gain);
 
-            if ((((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM))>0) {
-                RingsFound = 1
+
+            NormalizedRGBA colors1 = robot.colorSensor1.getNormalizedColors();
+            NormalizedRGBA colors2 = robot.colorSensor2.getNormalizedColors();
+
+
+            sensor1Detected = colors1.red >= redLowerVal && colors1.red <= redUpperVal && colors1.green >= greenLowerVal && colors1.green <= greenUpperVal && colors1.blue >= blueLowerVal && colors1.blue <= blueUpperVal;
+
+            sensor2Detected = colors2.red == 0 && colors2.green == 0 && colors2.blue == 0;
+
+            if (sensor1Detected && sensor2Detected) {
+                ringsFound = "2";
+            } else if (sensor1Detected && !sensor2Detected) {
+                ringsFound = "1";
+            } else if (!sensor1Detected && !sensor2Detected) {
+                ringsFound = "0";
             } else {
-
-                NormalizedRGBA colors = colorSensor.getNormalizedColors();
-                Color.colorToHSV(colors.toColor(), hsvValues);
-
-                rgbValues[0] = colors.red;
-                rgbValues[1] = colors.green;
-                rgbValues[2] = colors.blue;
-
-                telemetry.addLine()
-                        .addData("Red", "%.3f", colors.red)
-                        .addData("Green", "%.3f", colors.green)
-                        .addData("Blue", "%.3f", colors.blue);
-                telemetry.addLine()
-                        .addData("Hue", "%.3f", hsvValues[0])
-                        .addData("Saturation", "%.3f", hsvValues[1])
-                        .addData("Value", "%.3f", hsvValues[2]);
-                telemetry.addData("Alpha", "%.3f", colors.alpha);
-
-
-                if (colors.red == 0 && colors.green == 0 && colors.blue == 0) {
-                    RingsFound = 1;
-                }
+                ringsFound = "error - sensor 2 detects but sensor 1 doesn't";
             }
 
-            telemetry.addData("Rings Found:", RingsFound);
+            telemetry.addData("Rings Found:", ringsFound);
             telemetry.update();
+
         }
+
     }
 }
