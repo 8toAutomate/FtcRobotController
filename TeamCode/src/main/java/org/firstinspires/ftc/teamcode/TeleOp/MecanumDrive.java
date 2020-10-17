@@ -44,7 +44,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 public class MecanumDrive extends OpMode
 {
 
-    ProgrammingFrame robot   = new ProgrammingFrame(this);
+    ProgrammingFrame robot   = new ProgrammingFrame();
 
 
 
@@ -56,6 +56,9 @@ public class MecanumDrive extends OpMode
     @Override
     public void init() {
 
+        robot.init(hardwareMap, this);
+        gamepad1.setJoystickDeadzone(.1f);
+        gamepad2.setJoystickDeadzone(.1f);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }

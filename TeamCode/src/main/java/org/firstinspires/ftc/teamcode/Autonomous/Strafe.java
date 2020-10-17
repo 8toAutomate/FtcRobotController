@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 public class Strafe extends LinearOpMode {
 
-    ProgrammingFrame robot   = new ProgrammingFrame(this);
+    ProgrammingFrame robot   = new ProgrammingFrame();
     static final double conversion_factor = 8.46;
     private ElapsedTime runtime = new ElapsedTime();
 

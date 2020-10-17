@@ -42,7 +42,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 //@Disabled
 public class RotationTest extends OpMode
 {
-    ProgrammingFrame robot   = new ProgrammingFrame(this);
+    ProgrammingFrame robot   = new ProgrammingFrame();
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();

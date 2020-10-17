@@ -29,7 +29,7 @@ public class Ring_Finder {
             colorSensor.setGain(gain);
 
             if ((((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM))>0) {
-                RingsFound = 1
+                RingsFound = 1;
             } else {
 
                 NormalizedRGBA colors = colorSensor.getNormalizedColors();

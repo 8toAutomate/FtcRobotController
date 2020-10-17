@@ -31,11 +31,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
 
 
@@ -43,12 +42,12 @@ public class ItsComplicated
 {
 
     /* Public OpMode members. */
-    public DcMotor frontLeftMotor = null;
-    public DcMotor frontRightMotor = null;
-    public DcMotor backLeftMotor = null;
-    public DcMotor backRightMotor = null;
+    public DcMotorImplEx frontLeftMotor = null;
+    public DcMotorImplEx frontRightMotor = null;
+    public DcMotorImplEx backLeftMotor = null;
+    public DcMotorImplEx backRightMotor = null;
 
-    public OpMode systemTools;
+    public LinearOpMode systemTools;
 
 
     /* local OpMode members. */
@@ -56,27 +55,24 @@ public class ItsComplicated
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public ItsComplicated(OpMode systemToolsIn){
-        init(hardwareMap, systemToolsIn);
-    }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap, OpMode systemToolsIn) {
+    public void init(HardwareMap ahwMap, LinearOpMode systemToolsIn) {
         // Save reference to Hardware map
         hwMap = ahwMap;
         systemTools = systemToolsIn;
 
 
         // Define and Initialize Motors
-        frontLeftMotor  = hwMap.get(DcMotor.class, "front_left_drive");
-        frontRightMotor = hwMap.get(DcMotor.class, "front_right_drive");
-        backLeftMotor = hwMap.get(DcMotor.class, "back_left_drive");
-        backRightMotor = hwMap.get(DcMotor.class, "back_right_drive");
+        frontLeftMotor  = hwMap.get(DcMotorImplEx.class, "front_left_drive");
+        frontRightMotor = hwMap.get(DcMotorImplEx.class, "front_right_drive");
+        backLeftMotor = hwMap.get(DcMotorImplEx.class, "back_left_drive");
+        backRightMotor = hwMap.get(DcMotorImplEx.class, "back_right_drive");
 
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorImplEx.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotorImplEx.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotorImplEx.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotorImplEx.Direction.REVERSE);
         // Set all motors to zero power
         stopDriveMotors();
 //        frontLeftMotor.setPower(0);
@@ -87,10 +83,10 @@ public class ItsComplicated
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         startEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
 
@@ -107,10 +103,10 @@ public class ItsComplicated
         systemTools.telemetry.update();
 
         resetEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -129,10 +125,10 @@ public class ItsComplicated
         backLeftMotor.setTargetPosition(BLtarget);
         backRightMotor.setTargetPosition(BRtarget);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
         frontLeftMotor.setPower(power);
@@ -157,10 +153,10 @@ public class ItsComplicated
 //        backLeftMotor.setPower(0);
 
         startEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.addData("counts", TICKS);
@@ -181,10 +177,10 @@ public class ItsComplicated
         systemTools.telemetry.update();
 
         resetEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -203,10 +199,10 @@ public class ItsComplicated
         backLeftMotor.setTargetPosition(BLtarget);
         backRightMotor.setTargetPosition(BRtarget);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
         frontLeftMotor.setPower(power);
@@ -231,10 +227,10 @@ public class ItsComplicated
 //        backLeftMotor.setPower(0);
 
         startEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.addData("counts", TICKS);
@@ -251,10 +247,10 @@ public class ItsComplicated
         systemTools.telemetry.update();
 
         resetEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -273,10 +269,10 @@ public class ItsComplicated
         backLeftMotor.setTargetPosition(BLtarget);
         backRightMotor.setTargetPosition(BRtarget);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_TO_POSITION);
 
         frontLeftMotor.setPower(-power);
         frontRightMotor.setPower(power);
@@ -300,10 +296,10 @@ public class ItsComplicated
 //        backLeftMotor.setPower(0);
 
         startEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.addData("counts", TICKS);
@@ -318,17 +314,17 @@ public class ItsComplicated
     }
 
     public void resetEncoders() {
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void startEncoders() {
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
     }
  }
 

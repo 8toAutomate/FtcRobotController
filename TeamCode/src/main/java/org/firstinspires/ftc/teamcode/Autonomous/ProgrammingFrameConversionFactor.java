@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -69,7 +68,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
     /* Declare OpMode members. */
-    ProgrammingFrame        robot   = new ProgrammingFrame(this);   // Use a Pushbot's hardware
+    ProgrammingFrame        robot   = new ProgrammingFrame();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final int        TICKS                   = 1000;
