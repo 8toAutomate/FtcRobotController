@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 public class RingFinderDistance extends LinearOpMode {
 
-    ProgrammingFrame robot   = new ProgrammingFrame(this);
+    ProgrammingFrame robot   = new ProgrammingFrame();
 
     public void runOpMode() {
 
