@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 @Autonomous(name="Ring_Finder", group="Motion")
 public class Ring_Finder extends LinearOpMode {
 
-    ProgrammingFrame robot = new ProgrammingFrame(this);
+    ProgrammingFrame robot = new ProgrammingFrame();
 
     public void runOpMode() {
 
