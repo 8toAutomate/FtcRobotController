@@ -97,7 +97,6 @@ public class MecanumDrive extends OpMode
         frontRightPower = y - x - rx;
         backLeftPower = -y - x + rx;
         backRightPower = -y + x - rx;
-
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
         backLeftPower = Range.clip(backLeftPower, -1.0, 1.0);
