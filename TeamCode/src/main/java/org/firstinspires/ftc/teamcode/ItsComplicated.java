@@ -46,8 +46,9 @@ public class ItsComplicated
     public DcMotorImplEx frontRightMotor = null;
     public DcMotorImplEx backLeftMotor = null;
     public DcMotorImplEx backRightMotor = null;
+    public DcMotorImplEx intake = null;
 
-    public LinearOpMode systemTools;
+    public OpMode systemTools;
 
 
     /* local OpMode members. */
@@ -57,7 +58,7 @@ public class ItsComplicated
     /* Constructor */
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap, LinearOpMode systemToolsIn) {
+    public void init(HardwareMap ahwMap, OpMode systemToolsIn) {
         // Save reference to Hardware map
         hwMap = ahwMap;
         systemTools = systemToolsIn;
@@ -68,6 +69,7 @@ public class ItsComplicated
         frontRightMotor = hwMap.get(DcMotorImplEx.class, "front_right_drive");
         backLeftMotor = hwMap.get(DcMotorImplEx.class, "back_left_drive");
         backRightMotor = hwMap.get(DcMotorImplEx.class, "back_right_drive");
+        intake = hwMap.get(DcMotorImplEx.class, "intake");
 
         frontLeftMotor.setDirection(DcMotorImplEx.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotorImplEx.Direction.REVERSE);

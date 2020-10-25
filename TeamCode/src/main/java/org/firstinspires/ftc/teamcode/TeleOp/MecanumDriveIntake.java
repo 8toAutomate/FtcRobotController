@@ -31,31 +31,34 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.ItsComplicated;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
-@TeleOp(name="RotationTest", group="Iterative Opmode")
+@TeleOp(name="MecanumDrive", group="Iterative Opmode")
 //@Disabled
-public class RotationTest extends OpMode
+public class MecanumDriveIntake extends OpMode
 {
-    ProgrammingFrame robot   = new ProgrammingFrame();
+
+    ItsComplicated robot   = new ItsComplicated();
+
+
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor frontLeftMotor = null;
-    private DcMotor frontRightMotor = null;
-    private DcMotor backLeftMotor = null;
-    private DcMotor backRightMotor = null;
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
+
         robot.init(hardwareMap, this);
+        gamepad1.setJoystickDeadzone(.1f);
+        gamepad2.setJoystickDeadzone(.1f);
+        // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
 
@@ -74,10 +77,9 @@ public class RotationTest extends OpMode
 
     @Override
     public void loop() {
-
-        robot.resetEncoders();
-
         // Setup a variable for each drive wheel to save power level for telemetry
+
+
         double frontLeftPower;
         double frontRightPower;
         double backLeftPower;
@@ -94,26 +96,21 @@ public class RotationTest extends OpMode
         frontRightPower = y - x - rx;
         backLeftPower = -y - x + rx;
         backRightPower = -y + x - rx;
-
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
         backLeftPower = Range.clip(backLeftPower, -1.0, 1.0);
         backRightPower   = Range.clip(backRightPower, -1.0, 1.0);
 
-        frontLeftMotor.setPower(frontLeftPower);
-        frontRightMotor.setPower(frontRightPower);
-        backLeftMotor.setPower(backLeftPower);
-        backRightMotor.setPower(backRightPower);
+        robot.frontLeftMotor.setPower(frontLeftPower);
+        robot.frontRightMotor.setPower(frontRightPower);
+        robot.backLeftMotor.setPower(backLeftPower);
+        robot.backRightMotor.setPower(backRightPower);
 
-        int FLend = robot.frontLeftMotor.getCurrentPosition();
-        int FRend = robot.frontLeftMotor.getCurrentPosition();
-        int BLend = robot.frontLeftMotor.getCurrentPosition();
-        int BRend = robot.frontLeftMotor.getCurrentPosition();
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
-        telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", FLend, FRend, BLend, BRend);
+        telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
 
 

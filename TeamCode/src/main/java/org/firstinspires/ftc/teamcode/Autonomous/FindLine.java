@@ -42,6 +42,7 @@ public class FindLine extends LinearOpMode {
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
+        robot.init(hardwareMap, this);
         waitForStart();
 
         NormalizedRGBA colors1 = robot.colorSensor1.getNormalizedColors();

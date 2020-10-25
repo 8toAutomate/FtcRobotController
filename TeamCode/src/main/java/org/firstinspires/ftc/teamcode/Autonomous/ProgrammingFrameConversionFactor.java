@@ -103,6 +103,7 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
+        robot.init(hardwareMap, this);
         waitForStart();
 
         int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;

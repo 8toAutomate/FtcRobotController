@@ -90,6 +90,8 @@ public class Strafe extends LinearOpMode {
     }
     @Override
     public void runOpMode() {
+        robot.init(hardwareMap, this);
+        waitForStart();
         Strafe(100, 0.5);
 
     }

@@ -12,6 +12,8 @@ public class Ring_Finder extends LinearOpMode {
 
     public void runOpMode() {
 
+        robot.init(hardwareMap, this);
+
         String ringsFound;
 
         boolean sensor1Detected;

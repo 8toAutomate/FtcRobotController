@@ -95,7 +95,8 @@ public class Rotate extends LinearOpMode {
     }
     @Override
     public void runOpMode() {
-
+        robot.init(hardwareMap, this);
+        waitForStart();
         Rotate(100, 0.5);
 
     }

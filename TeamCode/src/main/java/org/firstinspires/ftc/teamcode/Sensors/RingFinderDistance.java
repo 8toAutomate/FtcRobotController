@@ -13,6 +13,7 @@ public class RingFinderDistance extends LinearOpMode {
 
     public void runOpMode() {
 
+        robot.init(hardwareMap, this);
 
         int RingsFound = 0;
 
