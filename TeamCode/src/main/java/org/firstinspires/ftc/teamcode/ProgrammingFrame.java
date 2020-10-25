@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -313,6 +314,63 @@ public class ProgrammingFrame
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.addData("counts", TICKS);
+        systemTools.telemetry.update();
+    }
+
+    public void findLine(double power) {
+        // Send telemetry message to signify robot waiting;
+       systemTools.telemetry.addData("Status", "Resetting Encoders");
+        systemTools.telemetry.update();
+
+        resetEncoders();
+//        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        systemTools.telemetry.update();
+
+        NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
+        NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
+
+        // reset the timeout time and start motion.
+
+        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(power);
+        backRightMotor.setPower(power);
+        backLeftMotor.setPower(power);
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while (
+                //        (runtime.seconds() < 30) &&
+                ((colors1.red != 0 && colors1.green != 0 && colors1.blue != 0) || (colors2.red != 0 && colors2.green != 0 && colors2.blue != 0))) {
+            colors1 = colorSensor1.getNormalizedColors();
+            colors2 = colorSensor2.getNormalizedColors();
+        }
+
+        stopDriveMotors();
+//        robot.frontLeftMotor.setPower(0);
+//        robot.frontRightMotor.setPower(0);
+//        robot.backRightMotor.setPower(0);
+//        robot.backLeftMotor.setPower(0);
+
+        startEncoders();
+//        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.update();
     }
 

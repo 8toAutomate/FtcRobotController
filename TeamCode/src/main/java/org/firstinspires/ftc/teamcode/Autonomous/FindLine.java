@@ -16,14 +16,7 @@ public class FindLine extends LinearOpMode {
     static final double conversion_factor = 8.46;
     private ElapsedTime runtime = new ElapsedTime();
 
-    public void GoDistanceCM(int centimeters, double power){
-
-        int TICKS = (int) Math.round(centimeters * conversion_factor);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
-
+    public void findLine(double centimeters, double power) {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
@@ -62,8 +55,10 @@ public class FindLine extends LinearOpMode {
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (opModeIsActive() &&
-                (runtime.seconds() < 30) &&
-                (colors1.red != 0 && colors1.green != 0 && colors1.blue != 0 && colors2.red != 0 && colors2.green != 0 && colors2.blue != 0)) {
+        //        (runtime.seconds() < 30) &&
+                ((colors1.red != 0 && colors1.green != 0 && colors1.blue != 0) || (colors2.red != 0 && colors2.green != 0 && colors2.blue != 0))) {
+            colors1 = robot.colorSensor1.getNormalizedColors();
+            colors2 = robot.colorSensor2.getNormalizedColors();
         }
 
         robot.stopDriveMotors();
@@ -79,7 +74,6 @@ public class FindLine extends LinearOpMode {
 //        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Path", "Complete");
-        telemetry.addData("counts", TICKS);
         telemetry.update();
     }
 
@@ -87,7 +81,7 @@ public class FindLine extends LinearOpMode {
     public void runOpMode() {
 
         robot.init(hardwareMap, this);
-        GoDistanceCM(100, 0.5);
+        findLine(100, 0.5);
 
     }
 }
