@@ -106,6 +106,14 @@ public class MecanumDriveIntake extends OpMode
         robot.backLeftMotor.setPower(backLeftPower);
         robot.backRightMotor.setPower(backRightPower);
 
+        if(gamepad1.a) {
+            robot.intake.setPower(1);
+        } else if (gamepad1.b) {
+            robot.intake.setPower(-1);
+        } else {
+            robot.intake.setPower(0);
+        }
+
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
