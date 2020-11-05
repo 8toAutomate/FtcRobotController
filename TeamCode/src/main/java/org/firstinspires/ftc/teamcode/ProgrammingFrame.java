@@ -107,6 +107,12 @@ public class ProgrammingFrame
     public void GoDistanceCM(int centimeters, double power, LinearOpMode linearOpMode){
 
         final double conversion_factor = 8.46;
+        if (centimeters < 0 && power > 0) {
+            power = power * -1;
+        }
+        else if (centimeters > 0 && power < 0) {
+            centimeters = centimeters * -1;
+        }
         int TICKS = (int) Math.round(centimeters * conversion_factor);
 
         // Send telemetry message to signify robot waiting;
@@ -174,9 +180,15 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-    public void Rotate(int degrees, double power, LinearOpMode linearOpMode) {
+    public void RotateDEG(int degrees, double power, LinearOpMode linearOpMode) {
 
         final double conversion_factor = 8.46;
+        if (degrees < 0 && power > 0) {
+            power = power * -1;
+        }
+        else if (degrees > 0 && power < 0) {
+            degrees = degrees * -1;
+        }
         int TICKS = (int) Math.round(degrees * conversion_factor);
         /*
          * Initialize the drive system variables.
@@ -248,9 +260,16 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-    public void Strafe(int centimeters, double power){
+    public void StrafeCM(int centimeters, double power){
 
         final double conversion_factor = 8.46;
+        if (centimeters < 0 && power > 0) {
+            power = power * -1;
+        }
+        else if (centimeters > 0 && power < 0) {
+            centimeters = centimeters * -1;
+        }
+
         int TICKS = (int) Math.round(centimeters * conversion_factor);
 
         // Send telemetry message to signify robot waiting;
@@ -262,7 +281,6 @@ public class ProgrammingFrame
 //        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         // Send telemetry message to indicate successful Encoder reset
         systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -372,6 +390,45 @@ public class ProgrammingFrame
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.update();
+    }
+
+    public char ringFinder() {
+        char path;
+        boolean sensor1Detected;
+        boolean sensor2Detected;
+        float gain = 2;
+        float redLowerVal = 1;
+        float redUpperVal = 1;
+        float greenLowerVal = 1;
+        float greenUpperVal = 1;
+        float blueLowerVal = 1;
+        float blueUpperVal = 1;
+
+        systemTools.telemetry.addData("Gain", gain);
+
+        colorSensor1.setGain(gain);
+        colorSensor2.setGain(gain);
+
+        NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
+        NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
+
+        sensor1Detected = colors1.red >= redLowerVal && colors1.red <= redUpperVal && colors1.green >= greenLowerVal && colors1.green <= greenUpperVal && colors1.blue >= blueLowerVal && colors1.blue <= blueUpperVal;
+
+        sensor2Detected = colors2.red == 0 && colors2.green == 0 && colors2.blue == 0;
+
+        if (sensor1Detected && sensor2Detected) {
+            path = 'C';
+        } else if (sensor1Detected && !sensor2Detected) {
+            path = 'B';
+        } else if (!sensor1Detected && !sensor2Detected) {
+            path = 'A';
+        } else {
+            path = 'E';
+        }
+
+        systemTools.telemetry.addData("Path letter (E is Error): ", path);
+        systemTools.telemetry.update();
+        return path;
     }
 
     public void stopDriveMotors() {
