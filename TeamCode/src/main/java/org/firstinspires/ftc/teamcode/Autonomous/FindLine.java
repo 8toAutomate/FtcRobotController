@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
@@ -15,10 +18,14 @@ public class FindLine extends LinearOpMode {
     ProgrammingFrame robot   = new ProgrammingFrame();
     static final double conversion_factor = 8.46;
     private ElapsedTime runtime = new ElapsedTime();
+    final float[] hsvValues = new float[3];
+    final float[] hsvValues2 = new float[3];
+    int hBound1 = 0;
+    int hBound2 = 0;
 
-    public void GoDistanceCM(int centimeters, double power){
 
-        int TICKS = (int) Math.round(centimeters * conversion_factor);
+    public void findLine(double power){
+
         /*
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
@@ -42,11 +49,20 @@ public class FindLine extends LinearOpMode {
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
-        robot.init(hardwareMap, this);
-        waitForStart();
+
 
         NormalizedRGBA colors1 = robot.colorSensor1.getNormalizedColors();
         NormalizedRGBA colors2 = robot.colorSensor2.getNormalizedColors();
+
+        Color.colorToHSV(colors1.toColor(), hsvValues);
+        Color.colorToHSV(colors2.toColor(), hsvValues2);
+
+
+        if (robot.colorSensor1 instanceof SwitchableLight && robot.colorSensor2 instanceof SwitchableLight)
+        {
+            ((SwitchableLight)robot.colorSensor1).enableLight(true);
+            ((SwitchableLight)robot.colorSensor2).enableLight(true);
+        }
 
         // reset the timeout time and start motion.
         runtime.reset();
@@ -62,8 +78,7 @@ public class FindLine extends LinearOpMode {
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (opModeIsActive() &&
-                (runtime.seconds() < 30) &&
-                (colors1.red != 0 && colors1.green != 0 && colors1.blue != 0 && colors2.red != 0 && colors2.green != 0 && colors2.blue != 0)) {
+                hsvValues[0] == hBound1 && hsvValues2[0] == hBound2) {
         }
 
         robot.stopDriveMotors();
@@ -79,15 +94,13 @@ public class FindLine extends LinearOpMode {
 //        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Path", "Complete");
-        telemetry.addData("counts", TICKS);
         telemetry.update();
     }
 
     @Override
     public void runOpMode() {
-
         robot.init(hardwareMap, this);
-        GoDistanceCM(100, 0.5);
+        findLine(0.5);
 
     }
 }

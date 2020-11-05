@@ -30,6 +30,8 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -46,6 +48,8 @@ public class ColorTest_Thanish_1_Sensor extends OpMode {
   ProgrammingFrame robot   = new ProgrammingFrame();
 
   float gain = 2;
+
+  final float[] hsvValues = new float[3];
 
   @Override public void init() {
 
@@ -70,6 +74,8 @@ public class ColorTest_Thanish_1_Sensor extends OpMode {
 
     NormalizedRGBA colors1 = robot.colorSensor1.getNormalizedColors();
 
+    Color.colorToHSV(colors1.toColor(), hsvValues);
+
 
     float red1 = colors1.red;
     float green1 = colors1.green;
@@ -80,6 +86,7 @@ public class ColorTest_Thanish_1_Sensor extends OpMode {
     telemetry.addData("red1", red1);
     telemetry.addData("green1", green1);
     telemetry.addData("blue1", blue1);
+    telemetry.addData("Hue: ", hsvValues);
 
     telemetry.update();
 

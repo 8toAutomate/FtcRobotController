@@ -38,7 +38,7 @@ import org.firstinspires.ftc.teamcode.ItsComplicated;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
-@TeleOp(name="MecanumDrive", group="Iterative Opmode")
+@TeleOp(name="MecanumDriveIntake", group="Iterative Opmode")
 //@Disabled
 public class MecanumDriveIntake extends OpMode
 {
