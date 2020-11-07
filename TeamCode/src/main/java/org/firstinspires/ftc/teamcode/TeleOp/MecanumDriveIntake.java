@@ -123,6 +123,7 @@ public class MecanumDriveIntake extends OpMode
 
 
     public void stop() {
+        robot.stopDriveMotors();
     }
 
 }

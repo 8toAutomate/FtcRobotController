@@ -116,6 +116,7 @@ public class MecanumDrive extends OpMode
 
 
     public void stop() {
+        robot.stopDriveMotors();
     }
 
 }
