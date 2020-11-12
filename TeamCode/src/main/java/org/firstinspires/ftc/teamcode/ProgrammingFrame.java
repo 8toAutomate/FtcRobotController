@@ -32,14 +32,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
 
@@ -83,19 +79,11 @@ public class ProgrammingFrame
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
         // Set all motors to zero power
-        stopDriveMotors();
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-//        backRightMotor.setPower(0);
+        stopAllMotors();
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        startEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        startDriveEncoders();
 
         // Define and initialize ALL installed servos.
         colorSensor1 = hwMap.get(NormalizedColorSensor.class, "sensor_color");
@@ -119,11 +107,7 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("Status", "Resetting Encoders");
         systemTools.telemetry.update();
 
-        resetEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetDriveEncoders();
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -164,16 +148,8 @@ public class ProgrammingFrame
         }
 
         stopDriveMotors();
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
 
-        startEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        startDriveEncoders();
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.addData("counts", TICKS);
@@ -199,11 +175,7 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("Status", "Resetting Encoders");
         systemTools.telemetry.update();
 
-        resetEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetDriveEncoders();
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -244,16 +216,8 @@ public class ProgrammingFrame
         }
 
         stopDriveMotors();
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
 
-        startEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        startDriveEncoders();
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.addData("counts", TICKS);
@@ -276,11 +240,7 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("Status", "Resetting Encoders");
         systemTools.telemetry.update();
 
-        resetEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
         systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -319,16 +279,8 @@ public class ProgrammingFrame
         }
 
         stopDriveMotors();
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
 
-        startEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        startDriveEncoders();
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.addData("counts", TICKS);
@@ -340,11 +292,7 @@ public class ProgrammingFrame
        systemTools.telemetry.addData("Status", "Resetting Encoders");
         systemTools.telemetry.update();
 
-        resetEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetDriveEncoders();
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -369,7 +317,7 @@ public class ProgrammingFrame
         // always end the motion as soon as possible.
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (
+        while (linearOpMode.opModeIsActive() &&
                 //        (runtime.seconds() < 30) &&
                 ((colors1.red != 0 && colors1.green != 0 && colors1.blue != 0) || (colors2.red != 0 && colors2.green != 0 && colors2.blue != 0))) {
             colors1 = colorSensor1.getNormalizedColors();
@@ -377,16 +325,8 @@ public class ProgrammingFrame
         }
 
         stopDriveMotors();
-//        robot.frontLeftMotor.setPower(0);
-//        robot.frontRightMotor.setPower(0);
-//        robot.backRightMotor.setPower(0);
-//        robot.backLeftMotor.setPower(0);
 
-        startEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        startDriveEncoders();
 
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.update();
@@ -414,7 +354,7 @@ public class ProgrammingFrame
 
         sensor1Detected = colors1.red >= redLowerVal && colors1.red <= redUpperVal && colors1.green >= greenLowerVal && colors1.green <= greenUpperVal && colors1.blue >= blueLowerVal && colors1.blue <= blueUpperVal;
 
-        sensor2Detected = colors2.red == 0 && colors2.green == 0 && colors2.blue == 0;
+        sensor2Detected = colors2.red >= redLowerVal && colors2.red <= redUpperVal && colors2.green >= greenLowerVal && colors2.green <= greenUpperVal && colors2.blue >= blueLowerVal && colors2.blue <= blueUpperVal;
 
         if (sensor1Detected && sensor2Detected) {
             path = 'C';
@@ -422,7 +362,7 @@ public class ProgrammingFrame
             path = 'B';
         } else if (!sensor1Detected && !sensor2Detected) {
             path = 'A';
-        } else {
+        } else { // 'E' Means there was an error
             path = 'E';
         }
 
@@ -438,14 +378,19 @@ public class ProgrammingFrame
         backRightMotor.setPower(0);
     }
 
-    public void resetEncoders() {
+    public void stopAllMotors() {
+        stopDriveMotors();
+        // Add additional motors here, with a 0 power
+    }
+
+    public void resetDriveEncoders() {
         frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void startEncoders() {
+    public void startDriveEncoders() {
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

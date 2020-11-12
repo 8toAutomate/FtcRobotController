@@ -19,21 +19,12 @@ public class Rotate extends LinearOpMode {
 
         final double conversion_factor = 8.46;
         int TICKS = (int) Math.round(degrees * conversion_factor);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        robot.resetEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        robot.resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -73,21 +64,13 @@ public class Rotate extends LinearOpMode {
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (opModeIsActive() &&
-                (runtime.seconds() < 30) &&
+//                (runtime.seconds() < 30) &&
                 (Math.abs(robot.frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(robot.frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(robot.backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(robot.backRightMotor.getCurrentPosition()) < TICKS)) {
         }
 
         robot.stopDriveMotors();
-//        robot.frontLeftMotor.setPower(0);
-//        robot.frontRightMotor.setPower(0);
-//        robot.backRightMotor.setPower(0);
-//        robot.backLeftMotor.setPower(0);
 
-        robot.startEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.startDriveEncoders();
 
         telemetry.addData("Path", "Complete");
         telemetry.addData("counts", TICKS);

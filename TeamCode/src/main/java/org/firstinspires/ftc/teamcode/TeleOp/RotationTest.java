@@ -50,6 +50,13 @@ public class RotationTest extends OpMode
     private DcMotor frontRightMotor = null;
     private DcMotor backLeftMotor = null;
     private DcMotor backRightMotor = null;
+
+    // Setup a variable for each drive wheel to save power level for telemetry
+    double frontLeftPower;
+    double frontRightPower;
+    double backLeftPower;
+    double backRightPower;
+    double strafingConstant = 1.5;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -75,14 +82,7 @@ public class RotationTest extends OpMode
     @Override
     public void loop() {
 
-        robot.resetEncoders();
-
-        // Setup a variable for each drive wheel to save power level for telemetry
-        double frontLeftPower;
-        double frontRightPower;
-        double backLeftPower;
-        double backRightPower;
-        double strafingConstant = 1.5;
+        robot.resetDriveEncoders();
 
         // controller variables
         double y = -gamepad1.left_stick_y;

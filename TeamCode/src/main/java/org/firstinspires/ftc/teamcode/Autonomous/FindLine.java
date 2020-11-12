@@ -4,7 +4,6 @@ import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -26,20 +25,11 @@ public class FindLine extends LinearOpMode {
 
     public void findLine(double power){
 
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
-
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        robot.resetEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.resetDriveEncoders();
 
 
         // Send telemetry message to indicate successful Encoder reset
@@ -47,8 +37,6 @@ public class FindLine extends LinearOpMode {
                 robot.frontLeftMotor.getCurrentPosition(),
                 robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
         telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
 
 
         NormalizedRGBA colors1 = robot.colorSensor1.getNormalizedColors();
@@ -82,16 +70,8 @@ public class FindLine extends LinearOpMode {
         }
 
         robot.stopDriveMotors();
-//        robot.frontLeftMotor.setPower(0);
-//        robot.frontRightMotor.setPower(0);
-//        robot.backRightMotor.setPower(0);
-//        robot.backLeftMotor.setPower(0);
 
-        robot.startEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.startDriveEncoders();
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -100,6 +80,7 @@ public class FindLine extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, this);
+        waitForStart();
         findLine(0.5);
 
     }
