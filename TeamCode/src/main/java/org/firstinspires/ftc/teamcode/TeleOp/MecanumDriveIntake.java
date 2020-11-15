@@ -49,6 +49,13 @@ public class MecanumDriveIntake extends OpMode
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+
+    // Setup a variable for each drive wheel to save power level for telemetry
+    double frontLeftPower;
+    double frontRightPower;
+    double backLeftPower;
+    double backRightPower;
+    double strafingConstant = 1.5;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -77,14 +84,6 @@ public class MecanumDriveIntake extends OpMode
 
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
-
-
-        double frontLeftPower;
-        double frontRightPower;
-        double backLeftPower;
-        double backRightPower;
-        double strafingConstant = 1.5;
 
         // controller variables
         double y = -gamepad1.left_stick_y;
@@ -123,7 +122,7 @@ public class MecanumDriveIntake extends OpMode
 
 
     public void stop() {
-        robot.stopDriveMotors();
+        robot.stopAllMotors();
     }
 
 }

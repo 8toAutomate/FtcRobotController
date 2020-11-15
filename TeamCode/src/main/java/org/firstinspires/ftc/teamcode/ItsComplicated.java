@@ -76,19 +76,11 @@ public class ItsComplicated
         backLeftMotor.setDirection(DcMotorImplEx.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorImplEx.Direction.REVERSE);
         // Set all motors to zero power
-        stopDriveMotors();
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-//        backRightMotor.setPower(0);
+        stopAllMotors();
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        startEncoders();
-//        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
+        startDriveEncoders();
 
         // Define and initialize ALL installed servos.
 
@@ -104,7 +96,7 @@ public class ItsComplicated
         systemTools.telemetry.addData("Status", "Resetting Encoders");
         systemTools.telemetry.update();
 
-        resetEncoders();
+        resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 //        frontRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 //        backLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -154,7 +146,7 @@ public class ItsComplicated
 //        backRightMotor.setPower(0);
 //        backLeftMotor.setPower(0);
 
-        startEncoders();
+        startDriveEncoders();
 //        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 //        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 //        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
@@ -169,16 +161,12 @@ public class ItsComplicated
 
         final double conversion_factor = 8.46;
         int TICKS = (int) Math.round(degrees * conversion_factor);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
 
         // Send telemetry message to signify robot waiting;
         systemTools.telemetry.addData("Status", "Resetting Encoders");
         systemTools.telemetry.update();
 
-        resetEncoders();
+        resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 //        frontRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 //        backLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -228,7 +216,7 @@ public class ItsComplicated
 //        backRightMotor.setPower(0);
 //        backLeftMotor.setPower(0);
 
-        startEncoders();
+        startDriveEncoders();
 //        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 //        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 //        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
@@ -248,7 +236,7 @@ public class ItsComplicated
         systemTools.telemetry.addData("Status", "Resetting Encoders");
         systemTools.telemetry.update();
 
-        resetEncoders();
+        resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 //        frontRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
 //        backLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -297,7 +285,7 @@ public class ItsComplicated
 //        backRightMotor.setPower(0);
 //        backLeftMotor.setPower(0);
 
-        startEncoders();
+        startDriveEncoders();
 //        frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 //        frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
 //        backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
@@ -315,14 +303,20 @@ public class ItsComplicated
         backRightMotor.setPower(0);
     }
 
-    public void resetEncoders() {
+    public void stopAllMotors() {
+        stopDriveMotors();
+        // add additional motors here, with a 0 power
+        intake.setPower(0);
+    }
+
+    public void resetDriveEncoders() {
         frontLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
         frontRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
         backLeftMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
         backRightMotor.setMode(DcMotorImplEx.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void startEncoders() {
+    public void startDriveEncoders() {
         frontLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotorImplEx.RunMode.RUN_USING_ENCODER);

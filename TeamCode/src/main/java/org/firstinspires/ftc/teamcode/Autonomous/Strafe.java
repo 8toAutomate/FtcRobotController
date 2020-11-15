@@ -23,12 +23,7 @@ public class Strafe extends LinearOpMode {
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        robot.resetEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        robot.resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -73,16 +68,8 @@ public class Strafe extends LinearOpMode {
         }
 
         robot.stopDriveMotors();
-//        robot.frontLeftMotor.setPower(0);
-//        robot.frontRightMotor.setPower(0);
-//        robot.backRightMotor.setPower(0);
-//        robot.backLeftMotor.setPower(0);
 
-        robot.startEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.startDriveEncoders();
 
         telemetry.addData("Path", "Complete");
         telemetry.addData("counts", TICKS);
