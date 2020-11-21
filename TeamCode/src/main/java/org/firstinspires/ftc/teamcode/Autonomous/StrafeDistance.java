@@ -22,7 +22,7 @@ public class StrafeDistance extends LinearOpMode {
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        robot.resetEncoders();
+        robot.resetDriveEncoders();
 //        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -38,7 +38,7 @@ public class StrafeDistance extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robot.startEncoders();
+        robot.startDriveEncoders();
 
         double startDistance = robot.getDistanceCM();
         double targetDistance = Math.abs(startDistance - centimeters);
