@@ -115,10 +115,8 @@ public class ProgrammingFrame
         if (centimeters < 0 && power > 0) {
             power = power * -1;
         }
-        else if (centimeters > 0 && power < 0) {
-            centimeters = centimeters * -1;
-        }
-        int TICKS = (int) Math.round(centimeters * conversion_factor);
+
+        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
 
         // Send telemetry message to signify robot waiting;
         systemTools.telemetry.addData("Status", "Resetting Encoders");
@@ -142,15 +140,7 @@ public class ProgrammingFrame
         int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
         int BRtarget = backRightMotor.getCurrentPosition() + TICKS;
 
-        frontLeftMotor.setTargetPosition(FLtarget);
-        frontRightMotor.setTargetPosition(FRtarget);
-        backLeftMotor.setTargetPosition(BLtarget);
-        backRightMotor.setTargetPosition(BRtarget);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        startDriveEncoders();
 
         // reset the timeout time and start motion.
         frontLeftMotor.setPower(power);
@@ -191,10 +181,8 @@ public class ProgrammingFrame
         if (degrees < 0 && power > 0) {
             power = power * -1;
         }
-        else if (degrees > 0 && power < 0) {
-            degrees = degrees * -1;
-        }
-        int TICKS = (int) Math.round(degrees * conversion_factor);
+
+        int TICKS = (int) Math.abs(Math.round(degrees * conversion_factor));
         /*
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
@@ -222,15 +210,7 @@ public class ProgrammingFrame
         int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
         int BRtarget = backRightMotor.getCurrentPosition() - TICKS;
 
-        frontLeftMotor.setTargetPosition(FLtarget);
-        frontRightMotor.setTargetPosition(FRtarget);
-        backLeftMotor.setTargetPosition(BLtarget);
-        backRightMotor.setTargetPosition(BRtarget);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        startDriveEncoders();
 
         // reset the timeout time and start motion.
         frontLeftMotor.setPower(power);
@@ -265,17 +245,14 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-    public void StrafeCM(int centimeters, double power){
+    public void StrafeCM(int centimeters, double power, LinearOpMode linearOpMode){
 
         final double conversion_factor = 8.46;
         if (centimeters < 0 && power > 0) {
             power = power * -1;
         }
-        else if (centimeters > 0 && power < 0) {
-            centimeters = centimeters * -1;
-        }
 
-        int TICKS = (int) Math.round(centimeters * conversion_factor);
+        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
 
         // Send telemetry message to signify robot waiting;
         systemTools.telemetry.addData("Status", "Resetting Encoders");
@@ -298,15 +275,7 @@ public class ProgrammingFrame
         int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
         int BRtarget = backRightMotor.getCurrentPosition() - TICKS;
 
-        frontLeftMotor.setTargetPosition(FLtarget);
-        frontRightMotor.setTargetPosition(FRtarget);
-        backLeftMotor.setTargetPosition(BLtarget);
-        backRightMotor.setTargetPosition(BRtarget);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        startDriveEncoders();
 
         frontLeftMotor.setPower(-power);
         frontRightMotor.setPower(power);
