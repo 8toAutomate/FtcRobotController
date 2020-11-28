@@ -1,12 +1,3 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.teamcode.ProgrammingFrame;
-
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,17 +27,29 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@TeleOp(name="ShootingAlignment", group="Iterative OpMode")
+package org.firstinspires.ftc.teamcode.TeleOp;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.ProgrammingFrame;
+
+
+@TeleOp(name="RotationTest", group="Iterative Opmode")
 //@Disabled
-public class ShootingAlignment extends OpMode
+public class RotationTest extends OpMode
 {
-
     ProgrammingFrame robot   = new ProgrammingFrame();
-
-
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor frontLeftMotor = null;
+    private DcMotor frontRightMotor = null;
+    private DcMotor backLeftMotor = null;
+    private DcMotor backRightMotor = null;
 
     // Setup a variable for each drive wheel to save power level for telemetry
     double frontLeftPower;
@@ -59,11 +62,7 @@ public class ShootingAlignment extends OpMode
      */
     @Override
     public void init() {
-
         robot.init(hardwareMap, this);
-        gamepad1.setJoystickDeadzone(.1f);
-        gamepad2.setJoystickDeadzone(.1f);
-        // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
 
@@ -83,6 +82,8 @@ public class ShootingAlignment extends OpMode
     @Override
     public void loop() {
 
+        robot.resetDriveEncoders();
+
         // controller variables
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x * strafingConstant; // coefficient counteracts imperfect strafing
@@ -93,21 +94,26 @@ public class ShootingAlignment extends OpMode
         frontRightPower = y - x - rx;
         backLeftPower = -y - x + rx;
         backRightPower = -y + x - rx;
+
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
         backLeftPower = Range.clip(backLeftPower, -1.0, 1.0);
         backRightPower   = Range.clip(backRightPower, -1.0, 1.0);
 
-        robot.frontLeftMotor.setPower(frontLeftPower);
-        robot.frontRightMotor.setPower(frontRightPower);
-        robot.backLeftMotor.setPower(backLeftPower);
-        robot.backRightMotor.setPower(backRightPower);
+        frontLeftMotor.setPower(frontLeftPower);
+        frontRightMotor.setPower(frontRightPower);
+        backLeftMotor.setPower(backLeftPower);
+        backRightMotor.setPower(backRightPower);
 
+        int FLend = robot.frontLeftMotor.getCurrentPosition();
+        int FRend = robot.frontLeftMotor.getCurrentPosition();
+        int BLend = robot.frontLeftMotor.getCurrentPosition();
+        int BRend = robot.frontLeftMotor.getCurrentPosition();
 
-        // Show the elapsed game time and wheel power.
+       // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
-        telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+        telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", FLend, FRend, BLend, BRend);
     }
 
 

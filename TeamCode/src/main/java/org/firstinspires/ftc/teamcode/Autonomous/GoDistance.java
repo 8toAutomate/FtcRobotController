@@ -18,21 +18,12 @@ public class GoDistance extends LinearOpMode {
     public void GoDistanceCM(int centimeters, double power){
 
         int TICKS = (int) Math.round(centimeters * conversion_factor);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        robot.resetEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        robot.resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -41,8 +32,6 @@ public class GoDistance extends LinearOpMode {
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
-        robot.init(hardwareMap, this);
-        waitForStart();
 
         int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
         int FRtarget = robot.frontRightMotor.getCurrentPosition() + TICKS;
@@ -78,16 +67,8 @@ public class GoDistance extends LinearOpMode {
         }
 
         robot.stopDriveMotors();
-//        robot.frontLeftMotor.setPower(0);
-//        robot.frontRightMotor.setPower(0);
-//        robot.backRightMotor.setPower(0);
-//        robot.backLeftMotor.setPower(0);
 
-        robot.startEncoders();
-//        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.startDriveEncoders();
 
         telemetry.addData("Path", "Complete");
         telemetry.addData("counts", TICKS);
@@ -95,7 +76,8 @@ public class GoDistance extends LinearOpMode {
     }
     @Override
     public void runOpMode() {
-
+        robot.init(hardwareMap, this);
+        waitForStart();
         GoDistanceCM(20, 0.5);
 
     }
