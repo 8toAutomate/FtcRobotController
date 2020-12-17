@@ -12,7 +12,7 @@ public class AutoLeft2WV1Blue extends LinearOpMode {
     // This program starts on the right line, drops off a wobble goal in it's target,
     // Goes to shoot at the center shooting spot, grabs second wobble goal and drops in it's target,
     // than drives to center shooting spot to park at the end.
-    char ringAt = 'A';
+    char ringAt;
     ProgrammingFrame robot   = new ProgrammingFrame();
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -26,9 +26,10 @@ public class AutoLeft2WV1Blue extends LinearOpMode {
         robot.GoDistanceCM(59, .8, this);
         robot.StrafeCM(-35, .8, this);
         // Detect the rings here and return A, B, C, or E for Error
-
-        if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, taking C path is safest
-            ringAt = 'C';
+        ringAt = robot.ringFinder();
+        // ringAt = 'A';
+        if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
+            ringAt = robot.ringFinder();  // If this fails it will take C path
         }
         // Gets us to the target zone
         robot.StrafeCM(-59, .8 , this);

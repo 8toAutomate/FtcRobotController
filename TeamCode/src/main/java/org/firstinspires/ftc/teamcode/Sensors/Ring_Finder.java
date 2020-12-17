@@ -50,7 +50,7 @@ public class Ring_Finder extends LinearOpMode {
             sensor2Detected = colors2.red >= redLowerVal && colors2.red <= redUpperVal && colors2.green >= greenLowerVal && colors2.green <= greenUpperVal && colors2.blue >= blueLowerVal && colors2.blue <= blueUpperVal;
 
             if (sensor1Detected && sensor2Detected) {
-                ringsFound = "2";
+                ringsFound = "4";
             } else if (sensor1Detected && !sensor2Detected) {
                 ringsFound = "1";
             } else if (!sensor1Detected && !sensor2Detected) {
