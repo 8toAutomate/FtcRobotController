@@ -43,7 +43,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
 
 
 public class ProgrammingFrame
@@ -309,7 +308,7 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-    public void findLine(double power) {
+    public void findLine(double power, LinearOpMode linearOpMode) {
         // Send telemetry message to signify robot waiting;
        systemTools.telemetry.addData("Status", "Resetting Encoders");
         systemTools.telemetry.update();
