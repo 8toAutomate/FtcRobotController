@@ -104,7 +104,7 @@ public class ProgrammingFrame
         // Define and initialize ALL installed servos.
         sensorRange = hwMap.get(DistanceSensor.class, "sensor_range");
         colorSensor1 = hwMap.get(NormalizedColorSensor.class, "sensor_color");
-        colorSensor2 = hwMap.get(NormalizedColorSensor.class, "sensor_color");
+        colorSensor2 = hwMap.get(NormalizedColorSensor.class, "sensor_color2");
 
 
     }

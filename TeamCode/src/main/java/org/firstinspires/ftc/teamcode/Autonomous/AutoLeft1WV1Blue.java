@@ -26,7 +26,7 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         robot.GoDistanceCM(59, .8, this);
         robot.StrafeCM(-35, .8, this);
         // Detect the rings here and return A, B, C, or E for Error
-        ringAt = 'A';
+        ringAt = robot.ringFinder();
         if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, taking C path is safest
             ringAt = 'C';
         }
