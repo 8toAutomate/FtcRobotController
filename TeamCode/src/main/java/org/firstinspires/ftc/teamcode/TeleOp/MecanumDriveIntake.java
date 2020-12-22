@@ -56,6 +56,8 @@ public class MecanumDriveIntake extends OpMode
     double backLeftPower;
     double backRightPower;
     double strafingConstant = 1.5;
+    boolean isIntakeOn = false;
+    boolean isAPressed = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -90,6 +92,8 @@ public class MecanumDriveIntake extends OpMode
         double x = gamepad1.left_stick_x * strafingConstant; // coefficient counteracts imperfect strafing
         double rx = gamepad1.right_stick_x;
 
+        if (Math.abs(x) <= .2) x = 0;
+
         // for the programming frame
         // frontLeftPower = y + x + rx;
         // frontRightPower = y - x - rx;
@@ -112,7 +116,16 @@ public class MecanumDriveIntake extends OpMode
         robot.backLeftMotor.setPower(backLeftPower);
         robot.backRightMotor.setPower(backRightPower);
 
-        if(gamepad1.a) {
+        if (gamepad1.a) {
+            if (!isAPressed) {
+                isIntakeOn = !isIntakeOn;
+                isAPressed = true;
+            }
+        } else {
+            isAPressed = false;
+        }
+
+        if(isIntakeOn) {
             robot.intake.setPower(1);
         } else if (gamepad1.b) {
             robot.intake.setPower(-1);
