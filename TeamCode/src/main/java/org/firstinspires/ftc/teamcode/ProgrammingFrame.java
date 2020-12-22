@@ -58,8 +58,8 @@ public class ProgrammingFrame
 
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
-    public NormalizedColorSensor colorSensor3;
-    public NormalizedColorSensor colorSensor4;
+    public NormalizedColorSensor bottomRing;
+    public NormalizedColorSensor topRing;
     public OpMode systemTools;
 
 
@@ -105,8 +105,8 @@ public class ProgrammingFrame
         sensorRange = hwMap.get(DistanceSensor.class, "sensor_range");
         colorSensor1 = hwMap.get(NormalizedColorSensor.class, "sensor_color");
         colorSensor2 = hwMap.get(NormalizedColorSensor.class, "sensor_color2");
-        colorSensor3 = hwMap.get(NormalizedColorSensor.class, "sensor_color3");
-        colorSensor4 = hwMap.get(NormalizedColorSensor.class, "sensor_color4");
+        bottomRing = hwMap.get(NormalizedColorSensor.class, "sensor_color3");
+        topRing = hwMap.get(NormalizedColorSensor.class, "sensor_color4");
 
 
     }
