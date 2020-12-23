@@ -189,7 +189,7 @@ public class ProgrammingFrame
     public void RotateDEG(int degrees, double power, LinearOpMode linearOpMode) {
 
         // conversion for degrees to ticks
-        final double conversion_factor = 8.46;
+        final double conversion_factor = 27.82;
 
         // if degrees are negative, set the power negative
         if (degrees < 0 && power > 0) {
