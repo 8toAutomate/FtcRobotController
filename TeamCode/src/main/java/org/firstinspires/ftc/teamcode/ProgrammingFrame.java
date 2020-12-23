@@ -56,8 +56,6 @@ public class ProgrammingFrame
     public DcMotor intake = null;
     public DcMotor shooting = null;
 
-    // define sensors
-    public DistanceSensor sensorRange;
 
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
@@ -108,7 +106,6 @@ public class ProgrammingFrame
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
-        sensorRange = hwMap.get(DistanceSensor.class, "sensor_range");
         colorSensor1 = hwMap.get(NormalizedColorSensor.class, "sensor_color");
         colorSensor2 = hwMap.get(NormalizedColorSensor.class, "sensor_color2");
         bottomRing = hwMap.get(NormalizedColorSensor.class, "sensor_color3");

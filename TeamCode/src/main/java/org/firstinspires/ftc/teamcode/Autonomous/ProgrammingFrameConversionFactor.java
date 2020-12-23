@@ -143,5 +143,6 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
         robot.init(hardwareMap,this);
         waitForStart();
         GoDistanceTICKS(550, 0.8);
+        robot.stopDriveMotors();
     }
 }
