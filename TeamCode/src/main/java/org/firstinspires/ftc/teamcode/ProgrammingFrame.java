@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -264,7 +266,7 @@ public class ProgrammingFrame
     public void StrafeCM(int centimeters, double power, LinearOpMode linearOpMode){
 
         // conversion factor between ticks and centimeters
-        final double conversion_factor = 8.46;
+        final double conversion_factor = 27.82;
 
         // if the distance is negative, set power negative
         if (centimeters < 0 && power > 0) {
@@ -379,27 +381,26 @@ public class ProgrammingFrame
         boolean sensor1Detected;
         boolean sensor2Detected;
         float gain = 2;
-        float redLowerVal = 1;
-        float redUpperVal = 1;
-        float greenLowerVal = 1;
-        float greenUpperVal = 1;
-        float blueLowerVal = 1;
-        float blueUpperVal = 1;
+        int hueTarget = 30;
+        final float[] hsvValues = new float[3];
+        final float[] hsvValues2 = new float[3];
 
         systemTools.telemetry.addData("Gain", gain);
 
         // set gain on color sensors
-        colorSensor1.setGain(gain);
-        colorSensor2.setGain(gain);
+        topRing.setGain(gain);
+        bottomRing.setGain(gain);
 
         // get color sensors
-        NormalizedRGBA colors1 = topRing.getNormalizedColors();
-        NormalizedRGBA colors2 = bottomRing.getNormalizedColors();
+        NormalizedRGBA colors2 = topRing.getNormalizedColors();
+        NormalizedRGBA colors1 = bottomRing.getNormalizedColors();
+
+        Color.colorToHSV(colors1.toColor(), hsvValues);
+        Color.colorToHSV(colors2.toColor(), hsvValues2);
 
         // checks if values are within the bounds
-        sensor1Detected = colors1.red >= redLowerVal && colors1.red <= redUpperVal && colors1.green >= greenLowerVal && colors1.green <= greenUpperVal && colors1.blue >= blueLowerVal && colors1.blue <= blueUpperVal;
-
-        sensor2Detected = colors2.red >= redLowerVal && colors2.red <= redUpperVal && colors2.green >= greenLowerVal && colors2.green <= greenUpperVal && colors2.blue >= blueLowerVal && colors2.blue <= blueUpperVal;
+        sensor1Detected = hsvValues[0] > 30;
+        sensor2Detected = hsvValues2[0] > 30;
 
         // return a character determined by the color sensor output
         if (sensor1Detected && sensor2Detected) {
