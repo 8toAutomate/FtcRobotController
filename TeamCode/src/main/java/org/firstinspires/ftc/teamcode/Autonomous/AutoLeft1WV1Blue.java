@@ -23,8 +23,7 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         // Have method(s) that shoot 3 rings here, find out if the team want the 3 rings shot in
         // the Tower Goal, Power Shot Targets, or some mixture of both
         // Driving to the starter stack
-        robot.GoDistanceCM(59, .8, this);
-        robot.StrafeCM(-35, .8, this);
+        robot.GoDistanceCM(67, .8, this);
         // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinder();
        // ringAt = 'A';
