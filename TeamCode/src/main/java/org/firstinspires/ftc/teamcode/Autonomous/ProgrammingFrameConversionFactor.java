@@ -140,6 +140,7 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
 
     public void runOpMode() {
+        robot.init(hardwareMap,this);
         GoDistanceTICKS(100, 0.8);
     }
 }
