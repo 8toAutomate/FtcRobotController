@@ -84,7 +84,8 @@ public class ProgrammingFrame
         frontRightMotor = hwMap.get(DcMotor.class, "front_right_drive");
         backLeftMotor = hwMap.get(DcMotor.class, "back_left_drive");
         backRightMotor = hwMap.get(DcMotor.class, "back_right_drive");
-
+        intake = hwMap.get(DcMotor.class, "intake");
+        shooting = hwMap.get(DcMotor.class, "shooting");
         // set motor directions
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
