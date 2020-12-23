@@ -41,7 +41,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.lin
 public class ItsComplicated
 {
 
-    /* Public OpMode members. */
+    // declare motors
     public DcMotorImplEx frontLeftMotor = null;
     public DcMotorImplEx frontRightMotor = null;
     public DcMotorImplEx backLeftMotor = null;

@@ -48,12 +48,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class ProgrammingFrame
 {
 
-    /* Public OpMode members. */
+    // define motors
     public DcMotor frontLeftMotor = null;
     public DcMotor frontRightMotor = null;
     public DcMotor backLeftMotor = null;
     public DcMotor backRightMotor = null;
+    public DcMotor intake = null;
+    public DcMotor shooting = null;
 
+    // define sensors
     public DistanceSensor sensorRange;
 
     public NormalizedColorSensor colorSensor1;
@@ -82,10 +85,12 @@ public class ProgrammingFrame
         backLeftMotor = hwMap.get(DcMotor.class, "back_left_drive");
         backRightMotor = hwMap.get(DcMotor.class, "back_right_drive");
 
+        // set motor directions
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+
         // Set all motors to zero power
         stopDriveMotors();
 //        frontLeftMotor.setPower(0);
@@ -111,13 +116,17 @@ public class ProgrammingFrame
 
     }
 
+    // go distance function
     public void GoDistanceCM(int centimeters, double power, LinearOpMode linearOpMode){
-
+        // holds the conversion factor for ticks to centimeters
         final double conversion_factor = 8.46;
+
+        // sets the power negative if the distance is negative
         if (centimeters < 0 && power > 0) {
             power = power * -1;
         }
 
+        // calculates the target amount of motor ticks
         int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
 
         // Send telemetry message to signify robot waiting;
@@ -137,6 +146,7 @@ public class ProgrammingFrame
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         systemTools.telemetry.update();
 
+        // sets the target position for each of the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
         int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
         int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
@@ -177,9 +187,13 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
+    // function for rotating the robot
     public void RotateDEG(int degrees, double power, LinearOpMode linearOpMode) {
 
+        // conversion for degrees to ticks
         final double conversion_factor = 8.46;
+
+        // if degrees are negative, set the power negative
         if (degrees < 0 && power > 0) {
             power = power * -1;
         }
@@ -207,6 +221,7 @@ public class ProgrammingFrame
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         systemTools.telemetry.update();
 
+        // set target position for all the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
         int FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
         int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
@@ -247,9 +262,13 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
+    // robot strafing function
     public void StrafeCM(int centimeters, double power, LinearOpMode linearOpMode){
 
+        // conversion factor between ticks and centimeters
         final double conversion_factor = 8.46;
+
+        // if the distance is negative, set power negative
         if (centimeters < 0 && power > 0) {
             power = power * -1;
         }
@@ -272,6 +291,7 @@ public class ProgrammingFrame
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         systemTools.telemetry.update();
 
+        // set target position for motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
         int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
         int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
@@ -279,6 +299,7 @@ public class ProgrammingFrame
 
         startDriveEncoders();
 
+        // after resetting encoders, apply power to the motors
         frontLeftMotor.setPower(-power);
         frontRightMotor.setPower(power);
         backRightMotor.setPower(power);
@@ -311,10 +332,11 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
+    // find line function
     public void findLine(double power, LinearOpMode linearOpMode) {
         // Send telemetry message to signify robot waiting;
        systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+       systemTools.telemetry.update();
 
         resetDriveEncoders();
 
@@ -329,15 +351,13 @@ public class ProgrammingFrame
         NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
 
         // reset the timeout time and start motion.
-
         frontLeftMotor.setPower(power);
         frontRightMotor.setPower(power);
         backRightMotor.setPower(power);
         backLeftMotor.setPower(power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // When the color sensors detect the line, the motion will stop.  This is "safer" in the event that the robot will
         // always end the motion as soon as possible.
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
@@ -370,16 +390,20 @@ public class ProgrammingFrame
 
         systemTools.telemetry.addData("Gain", gain);
 
+        // set gain on color sensors
         colorSensor1.setGain(gain);
         colorSensor2.setGain(gain);
 
-        NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
-        NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
+        // get color sensors
+        NormalizedRGBA colors1 = topRing.getNormalizedColors();
+        NormalizedRGBA colors2 = bottomRing.getNormalizedColors();
 
+        // checks if values are within the bounds
         sensor1Detected = colors1.red >= redLowerVal && colors1.red <= redUpperVal && colors1.green >= greenLowerVal && colors1.green <= greenUpperVal && colors1.blue >= blueLowerVal && colors1.blue <= blueUpperVal;
 
         sensor2Detected = colors2.red >= redLowerVal && colors2.red <= redUpperVal && colors2.green >= greenLowerVal && colors2.green <= greenUpperVal && colors2.blue >= blueLowerVal && colors2.blue <= blueUpperVal;
 
+        // return a character determined by the color sensor output
         if (sensor1Detected && sensor2Detected) {
             path = 'C';
         } else if (sensor1Detected && !sensor2Detected) {
@@ -408,7 +432,8 @@ public class ProgrammingFrame
 
     public void stopAllMotors() {
         stopDriveMotors();
-        // Add any other motors we use here and set them to 0 power
+        intake.setPower(0);
+        shooting.setPower(0);
     }
 
     public void resetDriveEncoders() {
