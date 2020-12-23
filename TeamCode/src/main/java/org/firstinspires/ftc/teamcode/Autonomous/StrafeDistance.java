@@ -64,15 +64,15 @@ public class StrafeDistance extends LinearOpMode {
         // always end the motion as soon as possible.
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (opModeIsActive() &&
-                (runtime.seconds() < 30)) {
-            if (strafingLeft && robot.getDistanceCM() > targetDistance) {
-                break;
-            }
-            if (!strafingLeft && robot.getDistanceCM() < targetDistance) {
-                break;
-            }
-        }
+        //while (opModeIsActive() &&
+        //        (runtime.seconds() < 30)) {
+        //if (strafingLeft && robot.getDistanceCM() > targetDistance) {
+        //        break;
+        //    }
+        //    if (!strafingLeft && robot.getDistanceCM() < targetDistance) {
+        //       break;
+        //    }
+        //}
 
         robot.stopDriveMotors();
 //        robot.frontLeftMotor.setPower(0);
