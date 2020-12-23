@@ -40,7 +40,7 @@ public class StrafeDistance extends LinearOpMode {
 
         robot.startDriveEncoders();
 
-        double startDistance = robot.getDistanceCM();
+        double startDistance = 1;
         double targetDistance = Math.abs(startDistance - centimeters);
         strafingLeft = targetDistance > startDistance;
 

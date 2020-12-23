@@ -112,9 +112,9 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
         // reset the timeout time and start motion.
         runtime.reset();
-        robot.frontLeftMotor.setPower(power);
+        robot.frontLeftMotor.setPower(-power);
         robot.frontRightMotor.setPower(power);
-        robot.backRightMotor.setPower(power);
+        robot.backRightMotor.setPower(-power);
         robot.backLeftMotor.setPower(power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.

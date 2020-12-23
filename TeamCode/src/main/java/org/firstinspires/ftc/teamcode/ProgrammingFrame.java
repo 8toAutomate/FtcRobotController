@@ -117,7 +117,7 @@ public class ProgrammingFrame
     // go distance function
     public void GoDistanceCM(int centimeters, double power, LinearOpMode linearOpMode){
         // holds the conversion factor for ticks to centimeters
-        final double conversion_factor = 8.46;
+        final double conversion_factor = 27.82;
 
         // sets the power negative if the distance is negative
         if (centimeters < 0 && power > 0) {
@@ -417,9 +417,6 @@ public class ProgrammingFrame
         return path;
     }
 
-    public double getDistanceCM() {
-        return sensorRange.getDistance(DistanceUnit.CM);
-    }
 
     public void stopDriveMotors() {
         frontLeftMotor.setPower(0);
