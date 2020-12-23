@@ -95,10 +95,10 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
 
-        int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
-        int FRtarget = robot.frontRightMotor.getCurrentPosition() + TICKS;
-        int BLtarget = robot.backLeftMotor.getCurrentPosition() + TICKS;
-        int BRtarget = robot.backRightMotor.getCurrentPosition() + TICKS;
+        int FLtarget = robot.frontLeftMotor.getCurrentPosition() + ticks;
+        int FRtarget = robot.frontRightMotor.getCurrentPosition() + ticks;
+        int BLtarget = robot.backLeftMotor.getCurrentPosition() + ticks;
+        int BRtarget = robot.backRightMotor.getCurrentPosition() + ticks;
 
         robot.frontLeftMotor.setTargetPosition(FLtarget);
         robot.frontRightMotor.setTargetPosition(FRtarget);
@@ -125,7 +125,7 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (opModeIsActive() &&
                 (runtime.seconds() < 30) &&
-                (Math.abs(robot.frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(robot.frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(robot.backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(robot.backRightMotor.getCurrentPosition()) < TICKS)) {
+                (Math.abs(robot.frontLeftMotor.getCurrentPosition()) < ticks && Math.abs(robot.frontRightMotor.getCurrentPosition()) < ticks && Math.abs(robot.backLeftMotor.getCurrentPosition()) < ticks && Math.abs(robot.backRightMotor.getCurrentPosition()) < ticks)) {
         }
 
         robot.stopDriveMotors();
@@ -142,6 +142,6 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap,this);
         waitForStart();
-        GoDistanceTICKS(100, 0.8);
+        GoDistanceTICKS(550, 0.8);
     }
 }
