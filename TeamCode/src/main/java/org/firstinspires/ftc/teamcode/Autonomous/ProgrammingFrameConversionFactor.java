@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.ItsComplicated;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 /**
@@ -68,7 +69,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
     /* Declare OpMode members. */
-    ProgrammingFrame        robot   = new ProgrammingFrame();   // Use a Pushbot's hardware
+    ItsComplicated robot   = new ItsComplicated();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final int        TICKS                   = 1000;
