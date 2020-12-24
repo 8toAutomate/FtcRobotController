@@ -58,6 +58,7 @@ public class MecanumDriveIntake extends OpMode
     double strafingConstant = 1.5;
     boolean isIntakeOn = false;
     boolean isAPressed = false;
+    boolean gripperClosed = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -133,6 +134,14 @@ public class MecanumDriveIntake extends OpMode
             robot.intake.setPower(0);
         }
 
+        if (gamepad1.x && !gripperClosed) {
+            robot.moveGripper(true);
+            gripperClosed = true;
+        }
+        if (gamepad1.y && gripperClosed) {
+            robot.moveGripper(false);
+            gripperClosed = false;
+        }
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

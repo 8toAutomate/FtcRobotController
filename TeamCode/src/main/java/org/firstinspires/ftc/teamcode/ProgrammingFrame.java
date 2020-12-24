@@ -57,7 +57,7 @@ public class ProgrammingFrame
     public DcMotor backRightMotor = null;
     public DcMotor intake = null;
     public DcMotor shooting = null;
-
+    public Servo servo = null;
 
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
@@ -86,6 +86,10 @@ public class ProgrammingFrame
         backRightMotor = hwMap.get(DcMotor.class, "back_right_drive");
         intake = hwMap.get(DcMotor.class, "intake");
         shooting = hwMap.get(DcMotor.class, "shooting");
+
+        // define and initialize servo
+        servo = hwMap.get(Servo.class, "servo");
+
         // set motor directions
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -450,6 +454,18 @@ public class ProgrammingFrame
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void moveGripper(boolean close) {
+        servo.scaleRange(0, 1.0);
+        if (close) {
+            servo.setDirection(Servo.Direction.FORWARD);
+            servo.setPosition(0.25);
+        }
+        else {
+            servo.setDirection(Servo.Direction.REVERSE);
+            servo.setPosition(0);
+        }
     }
  }
 
