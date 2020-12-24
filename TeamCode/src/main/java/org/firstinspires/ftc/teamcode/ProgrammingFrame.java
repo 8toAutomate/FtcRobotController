@@ -87,6 +87,11 @@ public class ProgrammingFrame
         intake = hwMap.get(DcMotor.class, "intake");
         shooting = hwMap.get(DcMotor.class, "shooting");
 
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         // define and initialize servo
         servo = hwMap.get(Servo.class, "servo");
 
