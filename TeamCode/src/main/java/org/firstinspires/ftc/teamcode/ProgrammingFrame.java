@@ -156,11 +156,13 @@ public class ProgrammingFrame
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         systemTools.telemetry.update();
 
+        /*
         // sets the target position for each of the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
         int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
         int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
         int BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+        M.M. 12/24- Redundant */
 
         startDriveEncoders();
 
