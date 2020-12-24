@@ -485,25 +485,11 @@ public class ProgrammingFrame
 
         // Wait for the game to start (driver presses PLAY)
 
-        int FLtarget = frontLeftMotor.getCurrentPosition() + ticks;
-        int FRtarget = frontRightMotor.getCurrentPosition() + ticks;
-        int BLtarget = backLeftMotor.getCurrentPosition() + ticks;
-        int BRtarget = backRightMotor.getCurrentPosition() + ticks;
-
-        frontLeftMotor.setTargetPosition(FLtarget);
-        frontRightMotor.setTargetPosition(FRtarget);
-        backLeftMotor.setTargetPosition(BLtarget);
-        backRightMotor.setTargetPosition(BRtarget);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
-        frontLeftMotor.setPower(-power);
+        frontLeftMotor.setPower(power);
         frontRightMotor.setPower(power);
-        backRightMotor.setPower(-power);
+        backRightMotor.setPower(power);
         backLeftMotor.setPower(power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
