@@ -72,11 +72,12 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
     ProgrammingFrame robot   = new ProgrammingFrame();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
+    /*
     static final int        TICKS                   = 1000;
     static final double     DRIVE_SPEED             = 0.8;
     static final double     TURN_SPEED              = 0.5;
     static final double     timeoutS                = 20;
-
+*/
 
     public void GoDistanceTICKS(int ticks, double power) {
 
@@ -133,7 +134,6 @@ public class ProgrammingFrameConversionFactor extends LinearOpMode {
         robot.startDriveEncoders();
 
         telemetry.addData("Path", "Complete");
-        telemetry.addData("counts", TICKS);
         telemetry.update();
     }
 
