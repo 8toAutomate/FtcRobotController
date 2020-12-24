@@ -69,7 +69,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 public class ProgrammingFrameConversionFactor extends LinearOpMode {
 
     /* Declare OpMode members. */
-    ItsComplicated robot   = new ItsComplicated();   // Use a Pushbot's hardware
+    ProgrammingFrame robot   = new ProgrammingFrame();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final int        TICKS                   = 1000;
