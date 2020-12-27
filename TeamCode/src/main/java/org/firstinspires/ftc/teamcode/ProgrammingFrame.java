@@ -451,6 +451,7 @@ public class ProgrammingFrame
 
         systemTools.telemetry.addData("Path letter (E is Error): ", path);
         systemTools.telemetry.update();
+        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
         return path;
     }
 
@@ -662,7 +663,7 @@ public class ProgrammingFrame
         */
 
         while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()){
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
         }
         stopDriveMotors();
 
@@ -764,7 +765,7 @@ public class ProgrammingFrame
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()){
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
         }
 
         stopDriveMotors();

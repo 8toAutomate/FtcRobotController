@@ -32,21 +32,21 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
             ringAt = robot.ringFinder();  // If this fails it will take C path
         }
         // Gets us to the target zone
-        robot.StrafeCM2(59, .7, this);
+        robot.StrafeCM2(-22, .7, this);
         if (ringAt == 'A') {
-            robot.GoDistanceCM2(59, .7, this);
+            robot.GoDistanceCM2(80, .7, this);
         }
         else if (ringAt == 'B') {
-            robot.GoDistanceCM2(118, .7, this);
-            robot.StrafeCM2(59, .7, this);
+            robot.GoDistanceCM2(140, .7, this);
+            robot.StrafeCM2(40, .7, this);
         }
         else {
-            robot.GoDistanceCM2(177, .7, this);
+            robot.GoDistanceCM2(205, .7, this);
         }
         // Add function that drops a wobble goal
         // Move to the launch line
-        if (ringAt == 'A') {
-            robot.StrafeCM2(59, .7, this);
+      /*  if (ringAt == 'A') {
+            robot.StrafeCM2(-22, .7, this);
             robot.GoDistanceCM2(27, .7, this);
         }
         else if (ringAt == 'B') {
@@ -54,8 +54,11 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         }
         else {
             robot.GoDistanceCM2(-86, .7, this);
-            robot.StrafeCM2(59, .7, this);
+            robot.StrafeCM2(-59, .7, this);
         }
+       */
+
+
         // Comment out the below if we don't have time!!!
         // Use our sensor to make sure we are on the line
         // Backup to make sure we are behind the line
