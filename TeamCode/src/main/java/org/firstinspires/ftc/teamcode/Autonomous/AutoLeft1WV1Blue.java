@@ -21,7 +21,7 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         waitForStart();
         // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
-        robot.GoDistanceCM2(65, .7, this);
+        robot.GoDistanceCM2(69, .7, this);
      //   while (opModeIsActive()) {}// debug stop prgram here
 
        // /*  Debug: comment out rest of method  MAx M. 12-24-2020

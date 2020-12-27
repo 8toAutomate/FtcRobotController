@@ -49,6 +49,9 @@ public class Ring_Finder extends LinearOpMode {
 
             sensor2Detected = colors2.red >= redLowerVal && colors2.red <= redUpperVal && colors2.green >= greenLowerVal && colors2.green <= greenUpperVal && colors2.blue >= blueLowerVal && colors2.blue <= blueUpperVal;
 
+            telemetry.addData("Rings Found:", sensor1Detected);
+            telemetry.addData("Rings Found:", sensor2Detected);
+
             if (sensor1Detected && sensor2Detected) {
                 ringsFound = "4";
             } else if (sensor1Detected && !sensor2Detected) {
