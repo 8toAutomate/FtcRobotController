@@ -28,9 +28,9 @@ public class RingTest extends LinearOpMode {
     public void findLine(){
 
 
-        if (robot.colorSensor1 instanceof SwitchableLight)
+        if (robot.topRing instanceof SwitchableLight)
         {
-            ((SwitchableLight)robot.colorSensor1).enableLight(true);
+            ((SwitchableLight)robot.topRing).enableLight(true);
         }
 
         // reset the timeout time and start motion.
@@ -57,8 +57,8 @@ public class RingTest extends LinearOpMode {
             telemetry.addData("blue", colors1.blue);
 
 
-            if (robot.colorSensor1 instanceof DistanceSensor) {
-                telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) robot.colorSensor1).getDistance(DistanceUnit.CM));
+            if (robot.topRing instanceof DistanceSensor) {
+                telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) robot.topRing).getDistance(DistanceUnit.CM));
             }
             telemetry.update();
 
