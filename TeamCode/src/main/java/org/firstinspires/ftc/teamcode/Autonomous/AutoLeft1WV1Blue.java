@@ -23,10 +23,10 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         // Have method(s) that shoot 3 rings here, find out if the team want the 3 rings shot in
         // the Tower Goal, Power Shot Targets, or some mixture of both
         // Driving to the starter stack
-        robot.GoDistanceCM2(120, .5, this);
-     //   while (opModeIsActive()) {}
-        System.exit(1);
-       /*  Debug: comment out rest of method  MAx M. 12-24-2020
+        robot.GoDistanceCM2(65, .7, this);
+     //   while (opModeIsActive()) {}// debug stop prgram here
+
+       // /*  Debug: comment out rest of method  MAx M. 12-24-2020
 
         // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinder();
@@ -35,29 +35,29 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
             ringAt = robot.ringFinder();  // If this fails it will take C path
         }
         // Gets us to the target zone
-        robot.StrafeCM(59, .8, this);
+        robot.StrafeCM(59, .7, this);
         if (ringAt == 'A') {
-            robot.GoDistanceCM(59, .8, this);
+            robot.GoDistanceCM2(59, .7, this);
         }
         else if (ringAt == 'B') {
-            robot.GoDistanceCM(118, .8, this);
-            robot.StrafeCM(59, .8, this);
+            robot.GoDistanceCM2(118, .7, this);
+            robot.StrafeCM(59, .7, this);
         }
         else {
-            robot.GoDistanceCM(177, .8, this);
+            robot.GoDistanceCM2(177, .7, this);
         }
         // Add function that drops a wobble goal
         // Move to the launch line
         if (ringAt == 'A') {
-            robot.StrafeCM(59, .8, this);
-            robot.GoDistanceCM(27, .8, this);
+            robot.StrafeCM(59, .7, this);
+            robot.GoDistanceCM2(27, .7, this);
         }
         else if (ringAt == 'B') {
-            robot.GoDistanceCM(-27, .8, this);
+            robot.GoDistanceCM2(-27, .7, this);
         }
         else {
-            robot.GoDistanceCM(-86, .8, this);
-            robot.StrafeCM(59, .8, this);
+            robot.GoDistanceCM2(-86, .7, this);
+            robot.StrafeCM(59, .7, this);
         }
         // Comment out the below if we don't have time!!!
         // Use our sensor to make sure we are on the line
@@ -67,8 +67,9 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         //robot.findLine(.5);
         // Go forward a tiny bit that way we are more centered on the line
         //robot.GoDistanceCM(5, .8, this);
-        end of Debug: comment out rest of method  FEM 12-24-2020
-        */
+
+        //end of Debug: comment out rest of method  FEM 12-24-2020
+        //*/
         telemetry.addLine();
         telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
                 robot.frontLeftMotor.getCurrentPosition(),

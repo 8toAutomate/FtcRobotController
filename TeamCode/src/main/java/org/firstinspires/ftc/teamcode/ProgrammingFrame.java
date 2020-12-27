@@ -302,7 +302,7 @@ public class ProgrammingFrame
     public void StrafeCM(int centimeters, double power, LinearOpMode linearOpMode){
 
         // conversion factor between ticks and centimeters
-        final double conversion_factor = 27.82;
+        final double conversion_factor = 27.55;  //Corrected freom 27.82 to 27.55 12-26-20
 
         // if the distance is negative, set power negative
         if (centimeters < 0 && power > 0) {
@@ -589,7 +589,7 @@ public class ProgrammingFrame
     // go distance function
     public void GoDistanceCM2(int centimeters, double power, LinearOpMode linearOpMode){
         // holds the conversion factor for TICKS to centimeters
-        final double conversion_factor = 27.75;
+        final double conversion_factor = 27.55;
 
         // sets the power negative if the distance is negative
         if (centimeters < 0 && power > 0) {
@@ -679,7 +679,7 @@ public class ProgrammingFrame
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         systemTools.telemetry.update();
 
-        while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
         /*
         systemTools.telemetry.addData("Path", "Complete");
