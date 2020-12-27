@@ -440,11 +440,11 @@ public class ProgrammingFrame
 
         // return a character determined by the color sensor output
         if (sensor1Detected && sensor2Detected) {
-            path = 'C';
+            path = 'C'; // 4 Rings were there
         } else if (sensor1Detected && !sensor2Detected) {
-            path = 'B';
+            path = 'B'; // 1 Ring was there
         } else if (!sensor1Detected && !sensor2Detected) {
-            path = 'A';
+            path = 'A'; // No rings were there
         } else { // Means there was an error
             path = 'E';
         }
