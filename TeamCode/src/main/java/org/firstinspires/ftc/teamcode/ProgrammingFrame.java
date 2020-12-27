@@ -655,10 +655,15 @@ public class ProgrammingFrame
         // always end the motion as soon as possible.
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (linearOpMode.opModeIsActive() &&
+
+        /*while (linearOpMode.opModeIsActive() &&
                 (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
         }
+        */
 
+        while (linearOpMode.opModeIsActive() &&
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()){
+        }
         stopDriveMotors();
 
 //        frontLeftMotor.setPower(0);
@@ -728,10 +733,10 @@ public class ProgrammingFrame
 
 
         // sets the target position for each of the motor encoders
-        int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
-        int FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
-        int BLtarget = backLeftMotor.getCurrentPosition() - TICKS;
-        int BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+        int FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;   // was positive.  Front Left and Back Right Need negative to strafe right 12-26-20
+        int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;    // was negative.  Front right and Back left Need negative to strafe right 12-26-20
+        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = backRightMotor.getCurrentPosition() - TICKS;
 
         frontLeftMotor.setTargetPosition(FLtarget);
         frontRightMotor.setTargetPosition(FRtarget);
@@ -747,10 +752,10 @@ public class ProgrammingFrame
 
         // reset the timeout time and start motion.
         // Should these be all positive with the targets? Or should they still be negative?
-        frontLeftMotor.setPower(power);
-        frontRightMotor.setPower(-power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(-power);
+        frontLeftMotor.setPower(-power);     // was positive.  Front Left and Back Right Need negative to strafe right 12-26-20
+        frontRightMotor.setPower(power); // was negative.  Front right and Back left Need negative to strafe right 12-26-20
+        backLeftMotor.setPower(power);
+        backRightMotor.setPower(-power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -759,7 +764,7 @@ public class ProgrammingFrame
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (linearOpMode.opModeIsActive() &&
-                (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()){
         }
 
         stopDriveMotors();

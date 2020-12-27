@@ -32,7 +32,7 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
             ringAt = robot.ringFinder();  // If this fails it will take C path
         }
         // Gets us to the target zone
-        robot.StrafeCM(59, .7, this);
+        robot.StrafeCM2(59, .7, this);
         if (ringAt == 'A') {
             robot.GoDistanceCM2(59, .7, this);
         }
