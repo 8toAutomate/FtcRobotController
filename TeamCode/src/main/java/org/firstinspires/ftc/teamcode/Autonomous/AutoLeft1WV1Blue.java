@@ -23,8 +23,11 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         // Have method(s) that shoot 3 rings here, find out if the team want the 3 rings shot in
         // the Tower Goal, Power Shot Targets, or some mixture of both
         // Driving to the starter stack
-        robot.GoDistanceCM(60, .8, this);
+        robot.GoDistanceCM2(120, .5, this);
+     //   while (opModeIsActive()) {}
         System.exit(1);
+       /*  Debug: comment out rest of method  MAx M. 12-24-2020
+
         // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinder();
        // ringAt = 'A';
@@ -64,5 +67,14 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         //robot.findLine(.5);
         // Go forward a tiny bit that way we are more centered on the line
         //robot.GoDistanceCM(5, .8, this);
+        end of Debug: comment out rest of method  FEM 12-24-2020
+        */
+        telemetry.addLine();
+        telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+                robot.frontLeftMotor.getCurrentPosition(),
+                robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
+        telemetry.update();
+        //while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+
     }
 }

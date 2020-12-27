@@ -144,9 +144,16 @@ public class ProgrammingFrame
         // calculates the target amount of motor ticks
         int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
 
+        // Debug: Send telemetry message with calculated ticks;
+        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+     //   systemTools.telemetry.update();
+
+       // Thread.sleep(2000); // debugging: allow time to view telemetry
+
         // Send telemetry message to signify robot waiting;
+        systemTools.telemetry.addLine();
         systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+     //   systemTools.telemetry.update();
 
         resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -156,11 +163,12 @@ public class ProgrammingFrame
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
                 frontLeftMotor.getCurrentPosition(),
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
-
+      //  systemTools.telemetry.update();
+      //  wait(2000); // debugging: allow time to view telemetry
         /*
         // sets the target position for each of the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
@@ -188,20 +196,31 @@ public class ProgrammingFrame
         }
 
         stopDriveMotors();
+
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
 //        backRightMotor.setPower(0);
 //        backLeftMotor.setPower(0);
 
-        startDriveEncoders();
+ // fem 12-24  debug       startDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        systemTools.telemetry.update();
+
+        /*
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.addData("counts", TICKS);
         systemTools.telemetry.update();
+
+         */
     }
 
     // function for rotating the robot
@@ -438,9 +457,10 @@ public class ProgrammingFrame
 
     public void stopDriveMotors() {
         frontLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
         frontRightMotor.setPower(0);
         backLeftMotor.setPower(0);
-        backRightMotor.setPower(0);
+
     }
 
     public void stopAllMotors() {
@@ -474,6 +494,54 @@ public class ProgrammingFrame
             servo.setPosition(0);
         }
     }
+
+    public void GoDistanceTICKS2(int ticks, double power, LinearOpMode linearOpMode) {
+
+
+        // Send telemetry message to signify robot waiting;
+        systemTools.telemetry.addData("Status", "Resetting Encoders");
+       // systemTools.telemetry.update();
+
+        resetDriveEncoders();
+
+        startDriveEncoders();
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+
+               // Wait for the game to start (driver presses PLAY)
+
+
+        // start motion.
+        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(power);
+        backRightMotor.setPower(power);
+        backLeftMotor.setPower(power);
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while (linearOpMode.opModeIsActive() &&
+                (Math.abs(frontLeftMotor.getCurrentPosition()) < ticks && Math.abs(frontRightMotor.getCurrentPosition()) < ticks && Math.abs(backLeftMotor.getCurrentPosition()) < ticks && Math.abs(backRightMotor.getCurrentPosition()) < ticks)) {
+        }
+
+        stopDriveMotors();
+
+        startDriveEncoders();
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Final pos.", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+
+        systemTools.telemetry.addLine().addData("Path", "Complete");
+        systemTools.telemetry.update();
+    }
+
 
     public void GoDistanceTICKS(int ticks, double power, LinearOpMode linearOpMode) {
 
@@ -516,5 +584,108 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("Path", "Complete");
         systemTools.telemetry.update();
     }
- }
 
+    //*********************************************************************************************
+    // go distance function
+    public void GoDistanceCM2(int centimeters, double power, LinearOpMode linearOpMode){
+        // holds the conversion factor for TICKS to centimeters
+        final double conversion_factor = 27.75;
+
+        // sets the power negative if the distance is negative
+        if (centimeters < 0 && power > 0) {
+            power = power * -1;
+        }
+
+        // calculates the target amount of motor TICKS
+        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
+
+        // Debug: Send telemetry message with calculated TICKS;
+        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+        //   systemTools.telemetry.update();
+
+
+        // Send telemetry message to signify robot waiting;
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        //   systemTools.telemetry.update();
+
+        resetDriveEncoders();
+
+//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        //  systemTools.telemetry.update();
+
+
+        // sets the target position for each of the motor encoders
+     int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+            int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
+            int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+            int BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+
+            frontLeftMotor.setTargetPosition(FLtarget);
+            frontRightMotor.setTargetPosition(FRtarget);
+            backLeftMotor.setTargetPosition(BLtarget);
+           backRightMotor.setTargetPosition(BRtarget);
+
+            frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //startDriveEncoders();  // disabled 12-26-20 - This is not needed when driving by RUN_TO_POSITION.  Enabling this causes measurement errors
+
+        // reset the timeout time and start motion.
+        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(power);
+        backRightMotor.setPower(power);
+        backLeftMotor.setPower(power);
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while (linearOpMode.opModeIsActive() &&
+                (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
+        }
+
+        stopDriveMotors();
+
+//        frontLeftMotor.setPower(0);
+//        frontRightMotor.setPower(0);
+//        backRightMotor.setPower(0);
+//        backLeftMotor.setPower(0);
+
+        // fem 12-24  debug       startDriveEncoders();
+//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        systemTools.telemetry.update();
+
+        while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+
+        /*
+        systemTools.telemetry.addData("Path", "Complete");
+        systemTools.telemetry.addData("counts", TICKS);
+        systemTools.telemetry.update();
+
+         */
+    }
+}

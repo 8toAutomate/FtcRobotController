@@ -9,31 +9,30 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 @Autonomous(name="DistanceTest", group="ProgrammingFrame")
 
     public class DistanceTest extends LinearOpMode {
-
+        /* Updated telemetry statements so all lines are displayed on screen  8Toautomate 12-26-20
+         */
         /* Declare OpMode members. */
         ProgrammingFrame robot   = new ProgrammingFrame();   // Use a Pushbot's hardware
         private ElapsedTime runtime = new ElapsedTime();
 
-        static final int        TICKS                   = 1000;
-        static final double     DRIVE_SPEED             = 0.8;
+        //static final int        TICKS                   = 1000;
+        static final double     DRIVE_SPEED             = 0.5;
         static final double     TURN_SPEED              = 0.5;
         static final double     timeoutS                = 20;
 
-
         public void GoDistanceTICKS(int ticks, double power) {
-
 
             // Send telemetry message to signify robot waiting;
             telemetry.addData("Status", "Resetting Encoders");
-            telemetry.update();
+            //telemetry.update();
 
             robot.resetDriveEncoders();
 
             // Send telemetry message to indicate successful Encoder reset
-            telemetry.addData("Path0", "Starting at %7d :%7d",
+            telemetry.addLine().addData("Path0", "Starting at %7d :%7d :%7d :%7d",
                     robot.frontLeftMotor.getCurrentPosition(),
                     robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
-            telemetry.update();
+            //telemetry.update();
 
             // Wait for the game to start (driver presses PLAY)
 
@@ -52,7 +51,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
             robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            // reset the timeout time and start motion.
+         // reset the timeout time and start motion.
             runtime.reset();
             robot.frontLeftMotor.setPower(-power);
             robot.frontRightMotor.setPower(power);
@@ -74,20 +73,23 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
             robot.startDriveEncoders();
 
-            telemetry.addData("Path", "Complete");
-            telemetry.addData("counts", TICKS);
+
+            telemetry.addLine().addData("Path", "Complete");
+            telemetry.addLine().addData("counts", ticks);
+            telemetry.addLine();
+            telemetry.addData("Final pos.", "Starting at %7d :%7d :%7d :%7d",
+                    robot.frontLeftMotor.getCurrentPosition(),
+                    robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
             telemetry.update();
+            while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
         }
-
-
+//*************************************************************************************************
 
         public void runOpMode() {
             robot.init(hardwareMap,this);
             waitForStart();
-            GoDistanceTICKS(2500, 0.8);
+            GoDistanceTICKS(3338, 0.5);
             robot.stopDriveMotors();
         }
-
-
 
 }
