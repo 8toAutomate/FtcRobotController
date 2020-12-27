@@ -9,9 +9,8 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 @Autonomous(name="Left1WobbleTargetBlue", group="Motion")
 public class AutoLeft1WV1Blue extends LinearOpMode {
-    // This program starts on the right line, drops off a wobble goal in it's target,
-    // Goes to shoot at the center shooting spot, grabs second wobble goal and drops in it's target,
-    // than drives to center shooting spot to park at the end.
+    // This program starts on the left blue line, shoots at the high goal, drops off a wobble goal
+    // in it's target, than drives to center shooting spot to park at the end.
     char ringAt;
     ProgrammingFrame robot   = new ProgrammingFrame();
     private ElapsedTime runtime = new ElapsedTime();
@@ -20,8 +19,7 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        // Have method(s) that shoot 3 rings here, find out if the team want the 3 rings shot in
-        // the Tower Goal, Power Shot Targets, or some mixture of both
+        // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
         robot.GoDistanceCM2(65, .7, this);
      //   while (opModeIsActive()) {}// debug stop prgram here
@@ -30,7 +28,6 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
 
         // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinder();
-       // ringAt = 'A';
         if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
             ringAt = robot.ringFinder();  // If this fails it will take C path
         }
