@@ -435,8 +435,8 @@ public class ProgrammingFrame
         Color.colorToHSV(colors2.toColor(), hsvValues2);
 
         // checks if values are within the bounds
-        sensor1Detected = hsvValues[0] > 30;
-        sensor2Detected = hsvValues2[0] > 30;
+        sensor1Detected = hsvValues[0] > hueTarget;
+        sensor2Detected = hsvValues2[0] > hueTarget;
 
         // return a character determined by the color sensor output
         if (sensor1Detected && sensor2Detected) {
