@@ -44,7 +44,7 @@ public class RingTest extends LinearOpMode {
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (opModeIsActive()) {
-            NormalizedRGBA colors1 = robot.colorSensor1.getNormalizedColors();
+            NormalizedRGBA colors1 = robot.topRing.getNormalizedColors();
 
 
             Color.colorToHSV(colors1.toColor(), hsvValues);

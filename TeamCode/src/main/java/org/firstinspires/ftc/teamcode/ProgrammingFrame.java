@@ -627,20 +627,20 @@ public class ProgrammingFrame
 
 
         // sets the target position for each of the motor encoders
-     int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
-            int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
-            int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
-            int BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+        int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
+        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = backRightMotor.getCurrentPosition() + TICKS;
 
-            frontLeftMotor.setTargetPosition(FLtarget);
-            frontRightMotor.setTargetPosition(FRtarget);
-            backLeftMotor.setTargetPosition(BLtarget);
-           backRightMotor.setTargetPosition(BRtarget);
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
 
-            frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //startDriveEncoders();  // disabled 12-26-20 - This is not needed when driving by RUN_TO_POSITION.  Enabling this causes measurement errors
 
