@@ -413,47 +413,47 @@ public class ProgrammingFrame
     }
 
     public char ringFinder() {
-    char path;
-    boolean sensor1Detected;
-    boolean sensor2Detected;
-    float gain = 2;
-    int hueTarget = 30;
-    final float[] hsvValues = new float[3];
-    final float[] hsvValues2 = new float[3];
+        char path;
+        boolean sensor1Detected;
+        boolean sensor2Detected;
+        float gain = 2;
+        int hueTarget = 30;
+        final float[] hsvValues = new float[3];
+        final float[] hsvValues2 = new float[3];
 
-    systemTools.telemetry.addData("Gain", gain);
+        systemTools.telemetry.addData("Gain", gain);
 
-    // set gain on color sensors
-    topRing.setGain(gain);
-    bottomRing.setGain(gain);
+        // set gain on color sensors
+        topRing.setGain(gain);
+        bottomRing.setGain(gain);
 
-    // get color sensors
-    NormalizedRGBA colors2 = topRing.getNormalizedColors();
-    NormalizedRGBA colors1 = bottomRing.getNormalizedColors();
+        // get color sensors
+        NormalizedRGBA colors2 = topRing.getNormalizedColors();
+        NormalizedRGBA colors1 = bottomRing.getNormalizedColors();
 
-    Color.colorToHSV(colors1.toColor(), hsvValues);
-    Color.colorToHSV(colors2.toColor(), hsvValues2);
+        Color.colorToHSV(colors1.toColor(), hsvValues);
+        Color.colorToHSV(colors2.toColor(), hsvValues2);
 
-    // checks if values are within the bounds
-    sensor1Detected = hsvValues[0] > hueTarget;
-    sensor2Detected = hsvValues2[0] > hueTarget;
+        // checks if values are within the bounds
+        sensor1Detected = hsvValues[0] > hueTarget;
+        sensor2Detected = hsvValues2[0] > hueTarget;
 
-    // return a character determined by the color sensor output
-    if (sensor1Detected && sensor2Detected) {
-        path = 'C';
-    } else if (sensor1Detected && !sensor2Detected) {
-        path = 'B';
-    } else if (!sensor1Detected && !sensor2Detected) {
-        path = 'A';
-    } else { // Means there was an error
-        path = 'E';
+        // return a character determined by the color sensor output
+        if (sensor1Detected && sensor2Detected) {
+            path = 'C';
+        } else if (sensor1Detected && !sensor2Detected) {
+            path = 'B';
+        } else if (!sensor1Detected && !sensor2Detected) {
+            path = 'A';
+        } else { // Means there was an error
+            path = 'E';
+        }
+
+        systemTools.telemetry.addData("Path letter (E is Error): ", path);
+        systemTools.telemetry.update();
+        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+        return path;
     }
-
-    systemTools.telemetry.addData("Path letter (E is Error): ", path);
-    systemTools.telemetry.update();
-    //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
-    return path;
-}
 
 
     public void stopDriveMotors() {
@@ -753,10 +753,10 @@ public class ProgrammingFrame
 
         // reset the timeout time and start motion.
         // Should these be all positive with the targets? Or should they still be negative?
-        frontLeftMotor.setPower(power); // was positive.  Front Left and Back Right Need negative to strafe right 12-26-20
-        frontRightMotor.setPower(-power); // was negative.  Front right and Back left Need negative to strafe right 12-26-20
-        backLeftMotor.setPower(-power);
-        backRightMotor.setPower(power);
+        frontLeftMotor.setPower(-power);     // was positive.  Front Left and Back Right Need negative to strafe right 12-26-20
+        frontRightMotor.setPower(power); // was negative.  Front right and Back left Need negative to strafe right 12-26-20
+        backLeftMotor.setPower(power);
+        backRightMotor.setPower(-power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits

@@ -19,23 +19,29 @@ public class AutoLeft1WV1 extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        // Have method(s) that shoot 3 rings here, likely in the high goa;
+        // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
         robot.GoDistanceCM(59, .8, this);
-        robot.StrafeCM2(35, .8, this);
+        robot.StrafeCM(35, .8, this);
         // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinder();
         if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
-            ringAt = robot.ringFinder();  // If this fails it will take C path
+            char tryAgain = robot.ringFinder();  // If this fails it will take C path
+            if (tryAgain == 'E') {
+                ringAt = 'C';
+            }
+            else {
+                ringAt = tryAgain;
+            }
         }
         // Gets us to the target zone
-        robot.StrafeCM2(-59, .8, this);
+        robot.StrafeCM(-59, .8, this);
         if (ringAt == 'A') {
             robot.GoDistanceCM(59, .8, this);
         }
         else if (ringAt == 'B') {
             robot.GoDistanceCM(118, .8, this);
-            robot.StrafeCM2(-59, .8, this);
+            robot.StrafeCM(-59, .8, this);
         }
         else { // The C path
             robot.GoDistanceCM(177, .8, this);
@@ -43,7 +49,7 @@ public class AutoLeft1WV1 extends LinearOpMode {
         // Add function that drops a wobble goal
         // Move to the launch line
         if (ringAt == 'A') {
-            robot.StrafeCM2(-59, .8, this);
+            robot.StrafeCM(-59, .8, this);
             robot.GoDistanceCM(27, .8, this);
         }
         else if (ringAt == 'B') {
@@ -51,7 +57,7 @@ public class AutoLeft1WV1 extends LinearOpMode {
         }
         else {
             robot.GoDistanceCM(-86, .8, this);
-            robot.StrafeCM2(-59, .8, this);
+            robot.StrafeCM(-59, .8, this);
         }
         // Comment out the below if we don't have time!!!
         // Use our sensor to make sure we are on the line
