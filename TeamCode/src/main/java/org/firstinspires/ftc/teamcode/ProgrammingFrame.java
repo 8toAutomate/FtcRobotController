@@ -753,10 +753,10 @@ public class ProgrammingFrame
 
         // reset the timeout time and start motion.
         // Should these be all positive with the targets? Or should they still be negative?
-        frontLeftMotor.setPower(-power);     // was positive.  Front Left and Back Right Need negative to strafe right 12-26-20
-        frontRightMotor.setPower(power); // was negative.  Front right and Back left Need negative to strafe right 12-26-20
-        backLeftMotor.setPower(power);
-        backRightMotor.setPower(-power);
+        frontLeftMotor.setPower(power);     // was positive.  Front Left and Back Right Need negative to strafe right 12-26-20
+        frontRightMotor.setPower(-power); // was negative.  Front right and Back left Need negative to strafe right 12-26-20
+        backLeftMotor.setPower(-power);
+        backRightMotor.setPower(power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
