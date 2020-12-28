@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 public class StrafeDistance extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
-    static final double conversion_factor = 8.46;
+    static final double conversion_factor = 27.82;
     private ElapsedTime runtime = new ElapsedTime();
     private boolean strafingLeft;
 
