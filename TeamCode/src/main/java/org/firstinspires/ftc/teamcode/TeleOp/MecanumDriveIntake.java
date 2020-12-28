@@ -59,6 +59,9 @@ public class MecanumDriveIntake extends OpMode
     boolean isIntakeOn = false;
     boolean isAPressed = false;
     boolean gripperClosed = false;
+    boolean motorOff = false;
+    boolean motorOn = false;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -116,6 +119,32 @@ public class MecanumDriveIntake extends OpMode
         robot.frontRightMotor.setPower(frontRightPower);
         robot.backLeftMotor.setPower(backLeftPower);
         robot.backRightMotor.setPower(backRightPower);
+
+        if (gamepad1.right_bumper) {
+            robot.shooting.setPower(0);
+            if (!motorOff) {
+                motorOff = !motorOn;
+                motorOn = true;
+                robot.shooting.setPower(1);
+            }
+            else {
+                motorOff = true;
+            }
+
+        }
+
+        if (gamepad1.left_bumper) {
+            robot.shooting.setPower(1);
+            if (!motorOn) {
+                motorOn = !motorOff;
+                motorOff = true;
+                robot.shooting.setPower(0);
+            }
+            else {
+                motorOff = false;
+            }
+
+        }
 
         if (gamepad1.a) {
             if (!isAPressed) {
