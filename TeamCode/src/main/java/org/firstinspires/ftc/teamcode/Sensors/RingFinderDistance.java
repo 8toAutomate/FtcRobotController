@@ -15,9 +15,17 @@ public class RingFinderDistance extends LinearOpMode {
 
         robot.init(hardwareMap, this);
 
-        int RingsFound = 0;
+        String ringsFound;
 
         final float[] rgbValues = new float[3];
+
+        double maxRingDistCM = 4.1;
+
+        double sensor1ValueCM;
+        double sensor2ValueCM;
+
+        boolean sensor1Detected;
+        boolean sensor2Detected;
 
 
         float gain = 2;
@@ -29,9 +37,22 @@ public class RingFinderDistance extends LinearOpMode {
             robot.colorSensor1.setGain(gain);
             robot.colorSensor2.setGain(gain);
 
-            if ((((DistanceSensor) robot.colorSensor1).getDistance(DistanceUnit.CM))>0) {
-                RingsFound = 1;
-            } else {
+            sensor1ValueCM = ((DistanceSensor) robot.colorSensor1).getDistance(DistanceUnit.CM);
+            sensor2ValueCM = ((DistanceSensor) robot.colorSensor2).getDistance(DistanceUnit.CM);
+
+            sensor1Detected = sensor1ValueCM < maxRingDistCM;
+            sensor2Detected = sensor2ValueCM < maxRingDistCM;
+
+            if (sensor1Detected && sensor2Detected) {
+                ringsFound = "4 - C Path";
+            } else if (sensor1Detected && !sensor2Detected) {
+                ringsFound = "1 - B Path";
+            } else if (!sensor1Detected && !sensor2Detected) {
+                ringsFound = "0 - A Path";
+            } else { // Means there was an error
+                ringsFound = "error - sensor 2 detects but sensor 1 doesn't";
+            }
+            /*else {
 
                 NormalizedRGBA colors = robot.colorSensor1.getNormalizedColors();
 
@@ -43,9 +64,12 @@ public class RingFinderDistance extends LinearOpMode {
                 if (colors.red == 0 && colors.green == 0 && colors.blue == 0) {
                     RingsFound = 1;
                 }
-            }
+            }*/
 
-            telemetry.addData("Rings Found:", RingsFound);
+            telemetry.addData("Sensor 1 Distance (CM): ", sensor1ValueCM);
+            telemetry.addData("Sensor 2 Distance (CM): ", sensor2ValueCM);
+            telemetry.addData("Maximum Ring Distance (CM): ", maxRingDistCM);
+            telemetry.addData("Rings Found:", ringsFound);
             telemetry.update();
         }
     }
