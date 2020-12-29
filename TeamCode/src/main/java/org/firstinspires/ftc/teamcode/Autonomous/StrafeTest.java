@@ -18,7 +18,7 @@ public class StrafeTest extends LinearOpMode {
     public void StrafeDistanceCM(int centimeters, double power){
 
         boolean left = centimeters > 0;
-        int TICKS = (int) Math.round(centimeters * conversion_factor);
+        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
         int FLtarget = 0;
         int FRtarget = 0;
         int BLtarget = 0;
