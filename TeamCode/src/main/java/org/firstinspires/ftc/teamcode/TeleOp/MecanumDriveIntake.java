@@ -60,8 +60,6 @@ public class MecanumDriveIntake extends OpMode
     boolean isAPressed = false;
     boolean gripperClosed = false;
     boolean motorOff = false;
-    boolean motorOn = false;
-
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -92,9 +90,9 @@ public class MecanumDriveIntake extends OpMode
     public void loop() {
 
         // controller variables
-        double y = -gamepad1.left_stick_y;
-        double x = gamepad1.left_stick_x * strafingConstant; // coefficient counteracts imperfect strafing
-        double rx = gamepad1.right_stick_x;
+        double y = -gamepad1.left_stick_y; // y: inverse of left stick's y value
+        double x = gamepad1.left_stick_x * strafingConstant; // x underscored: left stick's x value multiplied by the strafing coefficient in order to counteract imperfect strafing
+        double rx = gamepad1.right_stick_x; // rx: right stick's x value
 
         if (Math.abs(x) <= .2) x = 0;
 
@@ -121,29 +119,13 @@ public class MecanumDriveIntake extends OpMode
         robot.backRightMotor.setPower(backRightPower);
 
         if (gamepad1.right_bumper) {
-            robot.shooting.setPower(0);
-            if (!motorOff) {
-                motorOff = !motorOn;
-                motorOn = true;
-                robot.shooting.setPower(1);
-            }
-            else {
-                motorOff = true;
-            }
-
+            robot.shooting.setPower(1);
+            motorOff = false;
         }
 
         if (gamepad1.left_bumper) {
-            robot.shooting.setPower(1);
-            if (!motorOn) {
-                motorOn = !motorOff;
-                motorOff = true;
-                robot.shooting.setPower(0);
-            }
-            else {
-                motorOff = false;
-            }
-
+            robot.shooting.setPower(0);
+            motorOff = true;
         }
 
         if (gamepad1.a) {
