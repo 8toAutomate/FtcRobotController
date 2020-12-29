@@ -41,6 +41,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.vuforia.ar.pl.SystemTools;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -796,5 +797,84 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
 
          */
+    }
+
+    public void StrafeDistanceCM(int centimeters, double power, LinearOpMode linearOpMode){
+
+        final double conversion_factor = 27.82;
+        boolean left = centimeters > 0;
+        int TICKS = (int) Math.round(centimeters * conversion_factor);
+        int FLtarget = 0;
+        int FRtarget = 0;
+        int BLtarget = 0;
+        int BRtarget = 0;
+
+        power = Math.abs(power);
+
+
+        // Send telemetry message to signify robot waiting;
+        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        systemTools.telemetry.update();
+
+        resetDriveEncoders();
+
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        systemTools.telemetry.update();
+
+        // Wait for the game to start (driver presses PLAY)
+
+        if (left) {
+            FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
+            FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
+            BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+            BRtarget = backRightMotor.getCurrentPosition() - TICKS;
+        } else {
+            FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+            FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
+            BLtarget = backLeftMotor.getCurrentPosition() - TICKS;
+            BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+        }
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        if (left) {
+            frontLeftMotor.setPower(-power);
+            frontRightMotor.setPower(power);
+            backRightMotor.setPower(-power);
+            backLeftMotor.setPower(power);
+        } else {
+            frontLeftMotor.setPower(power);
+            frontRightMotor.setPower(-power);
+            backRightMotor.setPower(power);
+            backLeftMotor.setPower(-power);
+        }
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while (linearOpMode.opModeIsActive() &&
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+        }
+
+        stopDriveMotors();
+
+        startDriveEncoders();
+
+        systemTools.telemetry.addData("Path", "Complete");
+        systemTools.telemetry.addData("counts", TICKS);
+        systemTools.telemetry.update();
     }
 }
