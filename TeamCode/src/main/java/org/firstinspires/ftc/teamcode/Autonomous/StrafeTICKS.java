@@ -16,7 +16,7 @@ public class StrafeTICKS extends LinearOpMode {
 
     public void StrafeDistanceTICKS(int TICKS, double power){
 
-        boolean left = TICKS > 0;
+        boolean left = TICKS < 0;
         int FLtarget = 0;
         int FRtarget = 0;
         int BLtarget = 0;
@@ -96,7 +96,7 @@ public class StrafeTICKS extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        StrafeDistanceTICKS(20, 0.5);
+        StrafeDistanceTICKS(5000, 0.5);
 
     }
 }

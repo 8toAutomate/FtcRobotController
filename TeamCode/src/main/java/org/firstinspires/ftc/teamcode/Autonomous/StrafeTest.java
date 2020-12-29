@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 public class StrafeTest extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
-    static final double conversion_factor = 27.82;
+    static final double conversion_factor = 31.3;
     private ElapsedTime runtime = new ElapsedTime();
 
     public void StrafeDistanceCM(int centimeters, double power){
@@ -98,7 +98,7 @@ public class StrafeTest extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        StrafeDistanceCM(20, 0.5);
+        StrafeDistanceCM(-158, 0.5);
 
     }
 }
