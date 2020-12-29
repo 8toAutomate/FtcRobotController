@@ -15,9 +15,8 @@ public class StrafeTest extends LinearOpMode {
     static final double conversion_factor = 27.82;
     private ElapsedTime runtime = new ElapsedTime();
 
-    public void StrafeDistanceCM(int centimeters, double power){
+    public void StrafeDistanceCM(int centimeters, double power, boolean left){
 
-        boolean left = centimeters > 0;
         int TICKS = (int) Math.round(centimeters * conversion_factor);
         int FLtarget = 0;
         int FRtarget = 0;
@@ -98,7 +97,7 @@ public class StrafeTest extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        StrafeDistanceCM(20, 0.5);
+        StrafeDistanceCM(20, 0.5, false);
 
     }
 }
