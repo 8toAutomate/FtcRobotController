@@ -58,6 +58,7 @@ public class ProgrammingFrame
     public DcMotor backRightMotor = null;
     public DcMotor intake = null;
     public DcMotor shooting = null;
+    public DcMotor lifting = null;
     public Servo servo = null;
 
     public NormalizedColorSensor colorSensor1;
@@ -87,11 +88,13 @@ public class ProgrammingFrame
         backRightMotor = hwMap.get(DcMotor.class, "back_right_drive");
         intake = hwMap.get(DcMotor.class, "intake");
         shooting = hwMap.get(DcMotor.class, "shooting");
+        lifting = hwMap.get(DcMotor.class, "lifting");
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lifting.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // define and initialize servo
         servo = hwMap.get(Servo.class, "servo");
@@ -495,6 +498,22 @@ public class ProgrammingFrame
             servo.setDirection(Servo.Direction.REVERSE);
             servo.setPosition(0);
         }
+    }
+
+    public void raiseGripper(LinearOpMode linearOpMode) {
+        lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lifting.setTargetPosition(lifting.getCurrentPosition() + 320);
+        lifting.setPower(1);
+        while (linearOpMode.opModeIsActive() && lifting.isBusy()) {}
+        lifting.setPower(0);
+    }
+
+    public void lowerGripper(LinearOpMode linearOpMode) {
+        lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lifting.setTargetPosition(lifting.getCurrentPosition() - 320);
+        lifting.setPower(-1);
+        while (linearOpMode.opModeIsActive() && lifting.isBusy()) {}
+        lifting.setPower(0);
     }
 
     public void GoDistanceTICKS2(int ticks, double power, LinearOpMode linearOpMode) {

@@ -55,11 +55,14 @@ public class MecanumDriveIntake extends OpMode
     double frontRightPower;
     double backLeftPower;
     double backRightPower;
+    // Setup a variable for strafing constant
     double strafingConstant = 1.5;
+    // Setup boolean variables
     boolean isIntakeOn = false;
     boolean isAPressed = false;
     boolean gripperClosed = false;
     boolean motorOff = false;
+    boolean gripperRaised = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -90,9 +93,12 @@ public class MecanumDriveIntake extends OpMode
     public void loop() {
 
         // controller variables
-        double y = -gamepad1.left_stick_y; // y: inverse of left stick's y value
-        double x = gamepad1.left_stick_x * strafingConstant; // x underscored: left stick's x value multiplied by the strafing coefficient in order to counteract imperfect strafing
-        double rx = gamepad1.right_stick_x; // rx: right stick's x value
+        // y: inverse of left stick's y value
+        double y = -gamepad1.left_stick_y;
+        // x underscored: left stick's x value multiplied by the strafing coefficient in order to counteract imperfect strafing
+        double x = gamepad1.left_stick_x * strafingConstant;
+        // rx: right stick's x value
+        double rx = gamepad1.right_stick_x;
 
         if (Math.abs(x) <= .2) x = 0;
 
@@ -118,11 +124,13 @@ public class MecanumDriveIntake extends OpMode
         robot.backLeftMotor.setPower(backLeftPower);
         robot.backRightMotor.setPower(backRightPower);
 
+        // shooting motors turn on by pressing the right bumper
         if (gamepad1.right_bumper) {
             robot.shooting.setPower(1);
             motorOff = false;
         }
 
+        // shooting motors turn off by pressing the left bumper
         if (gamepad1.left_bumper) {
             robot.shooting.setPower(0);
             motorOff = true;
@@ -145,11 +153,21 @@ public class MecanumDriveIntake extends OpMode
             robot.intake.setPower(0);
         }
 
-        if (gamepad1.x && !gripperClosed) {
+        if (gamepad1.dpad_up && !gripperRaised) {
+            robot.lifting.setPower(1);
+            gripperRaised = true;
+        }
+
+        if (gamepad1.dpad_down && gripperRaised) {
+            robot.lifting.setPower(-1);
+            gripperRaised = false;
+        }
+
+        if (gamepad1.dpad_left && !gripperClosed) {
             robot.moveGripper(true);
             gripperClosed = true;
         }
-        if (gamepad1.y && gripperClosed) {
+        if (gamepad1.dpad_right && gripperClosed) {
             robot.moveGripper(false);
             gripperClosed = false;
         }
