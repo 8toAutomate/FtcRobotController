@@ -60,6 +60,11 @@ public class MecanumDriveIntake extends OpMode
     // Setup boolean variables
     boolean isIntakeOn = false;
     boolean isAPressed = false;
+    enum States {
+        Forwards, Backwards, Off
+    }
+    States intakeState = States.Off;
+    boolean intakeButtonDown = false;
     boolean gripperClosed = false;
     boolean motorOff = false;
     boolean gripperRaised = false;
@@ -137,17 +142,26 @@ public class MecanumDriveIntake extends OpMode
         }
 
         if (gamepad1.a) {
-            if (!isAPressed) {
-                isIntakeOn = !isIntakeOn;
-                isAPressed = true;
+            if (!intakeButtonDown && intakeState == States.Forwards) {
+                intakeState = States.Off;
+            } else {
+                intakeState = States.Forwards;
             }
+            intakeButtonDown = true;
+        } else if (gamepad1.b) {
+            if (!intakeButtonDown && intakeState == States.Backwards) {
+                intakeState = States.Off;
+            } else {
+                intakeState = States.Backwards;
+            }
+            intakeButtonDown = true;
         } else {
-            isAPressed = false;
+            intakeButtonDown = false;
         }
 
-        if(isIntakeOn) {
+        if(intakeState == States.Forwards) {
             robot.intake.setPower(1);
-        } else if (gamepad1.b) {
+        } else if (intakeState == States.Backwards) {
             robot.intake.setPower(-1);
         } else {
             robot.intake.setPower(0);
