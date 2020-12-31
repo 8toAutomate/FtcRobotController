@@ -115,7 +115,7 @@ public class ProgrammingFrame
 
 
         // Set all motors to zero power
-        stopDriveMotors();
+        stopAllMotors();
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
 //        backLeftMotor.setPower(0);
@@ -475,6 +475,7 @@ public class ProgrammingFrame
         stopDriveMotors();
         intake.setPower(0);
         shooting.setPower(0);
+        lifting.setPower(0);
     }
 
     public void resetDriveEncoders() {

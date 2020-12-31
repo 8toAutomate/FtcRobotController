@@ -69,7 +69,7 @@ public class MecanumDriveIntake extends OpMode
     States ringPusher = States.Backwards;
     States flywheel = States.Off;
     States intakeState = States.Off;
-    boolean intakeButtonDown = false;
+    States intakeButtonState = States.Off;
     boolean gripperClosed = false;
     boolean gripperRaised = false;
     boolean XClick = false;
@@ -214,21 +214,21 @@ public class MecanumDriveIntake extends OpMode
 
 
         if (gamepad1.a) {
-            if (!intakeButtonDown && intakeState == States.Forwards) {
+            if (intakeButtonState == States.Off && intakeState == States.Forwards) {
                 intakeState = States.Off;
             } else {
                 intakeState = States.Forwards;
             }
-            intakeButtonDown = true;
+            intakeButtonState = States.Forwards;
         } else if (gamepad1.b) {
-            if (!intakeButtonDown && intakeState == States.Backwards) {
+            if (intakeButtonState == States.Off && intakeState == States.Backwards) {
                 intakeState = States.Off;
             } else {
                 intakeState = States.Backwards;
             }
-            intakeButtonDown = true;
+            intakeButtonState = States.Backwards;
         } else {
-            intakeButtonDown = false;
+            intakeButtonState = States.Off;
         }
 
         if(intakeState == States.Forwards) {
