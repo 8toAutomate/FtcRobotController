@@ -75,6 +75,8 @@ public class MecanumDriveIntake extends OpMode
     boolean gripperRaised = false;
     boolean XClick = false;
     boolean shooting = false;
+    boolean shoot_button = false;
+    boolean shooting_reset = true;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -204,7 +206,7 @@ public class MecanumDriveIntake extends OpMode
             flywheel = States.Off;
         }
 //********************Shooting push Arm************************************************************
-        if (!shooting) {
+  /*      if (!shooting) {
             if (gamepad1.left_bumper) {
                 shooting = true;
                 initial = getRuntime();
@@ -217,8 +219,43 @@ public class MecanumDriveIntake extends OpMode
             }
         }
 
+*/
+        if (!shooting) {
+            if (!shoot_button) {
+                if (gamepad1.left_bumper) {
+                    initial = getRuntime();
+                    shooting = true;
+                    shoot_button = true;
+                } // end if gamepad.left_bumoer
 
-        if (gamepad1.a) {
+            } // end if !shoot_button
+        } // end if !shooting
+
+        if (shoot_button){
+            //    telemetry.addData("Shoot Button ", shoot_button);
+            //    telemetry.addData("Shooting ", shooting);
+            //    telemetry.update();
+            if (shooting) {
+                robot.ringPusher.setPosition(1);
+                    if (getRuntime() - initial > .5) {
+                        robot.ringPusher.setPosition(0);
+                        shooting_reset = false;
+                        shooting = false;
+                        initial2 = getRuntime();
+                    }
+            }
+        }
+
+        if(!shooting_reset) {
+
+            if (getRuntime() - initial2 > .5) {
+                shooting_reset = true;
+                shoot_button = false;
+            }
+        }
+//********************************* Intake ********************************************************
+
+            if (gamepad1.a) {
             if (intakeButtonState == States.Off && intakeState == States.Forwards) {
                 intakeState = States.Off;
             } else {
