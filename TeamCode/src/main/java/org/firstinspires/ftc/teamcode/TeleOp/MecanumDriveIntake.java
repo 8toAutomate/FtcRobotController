@@ -194,14 +194,14 @@ public class MecanumDriveIntake extends OpMode
                 XClick = false;
             }
         }
-
+//*******************Flywheel**********************************************************************
         if (flywheel == States.On) {
             robot.shooting.setPower(1);
         }else{
             robot.shooting.setPower(0);
             flywheel = States.Off;
         }
-
+//********************SHooting push Arm************************************************************
         if (gamepad1.left_bumper && ringPusher == States.Backwards && getRuntime() - initial > .5) {
             moveRingPusher(ringPusher);
             ringPusher = States.Forwards;

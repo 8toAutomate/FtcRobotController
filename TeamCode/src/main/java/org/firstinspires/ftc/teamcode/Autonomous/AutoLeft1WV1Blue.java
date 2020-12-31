@@ -24,7 +24,7 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         robot.GoDistanceCM2(69, .7, this);
      //   while (opModeIsActive()) {}// debug stop prgram here
 
-       // /*  Debug: comment out rest of method  MAx M. 12-24-2020
+
 
         // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinder();
@@ -49,6 +49,8 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         else {
             robot.GoDistanceCM2(205, .7, this);
         }
+
+        // /*  Debug: comment out rest of method  MAx M. 12-24-2020
         // Add function that drops a wobble goal
         // Move to the launch line
       /*  if (ringAt == 'A') {

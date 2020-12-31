@@ -99,7 +99,7 @@ public class ProgrammingFrame
         lifting.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // define and initialize servo
-        gripperServo = hwMap.get(Servo.class, "servo");
+        gripperServo = hwMap.get(Servo.class, "gripper");
         ringPusher = hwMap.get(Servo.class, "push_arm");
 
         // set motor directions
