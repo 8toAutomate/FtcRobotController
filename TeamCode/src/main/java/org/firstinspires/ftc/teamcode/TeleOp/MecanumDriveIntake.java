@@ -53,6 +53,7 @@ public class MecanumDriveIntake extends OpMode
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     double initial;
+    double initial2;
     // Setup a variable for each drive wheel to save power level for telemetry
     double frontLeftPower;
     double frontRightPower;
@@ -208,10 +209,12 @@ public class MecanumDriveIntake extends OpMode
                 shooting = true;
                 initial = getRuntime();
                 robot.ringPusher.setPosition(0.25);
+            } else if (getRuntime() - initial > .5) {
+                robot.ringPusher.setPosition(0);
+                initial2 = getRuntime();
+            } else if (getRuntime() - initial2 > .5) {
+                shooting = false;
             }
-        } else if (getRuntime() - initial > .5) {
-            robot.ringPusher.setPosition(0);
-            shooting = false;
         }
 
 
