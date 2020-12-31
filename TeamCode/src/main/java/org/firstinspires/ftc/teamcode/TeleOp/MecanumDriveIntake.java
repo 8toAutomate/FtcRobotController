@@ -136,6 +136,7 @@ public class MecanumDriveIntake extends OpMode
     @Override
     public void start() {
         runtime.reset();
+        initial = 0.5;
     }
 
     @Override
