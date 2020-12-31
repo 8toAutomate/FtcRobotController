@@ -74,9 +74,9 @@ public class MecanumDriveIntake extends OpMode
     boolean gripperClosed = false;
     boolean gripperRaised = false;
     boolean XClick = false;
-    boolean shooting = false;
-    boolean shoot_button = false;
-    boolean shooting_reset = true;
+    boolean shooting = false;   // Flag  is true when shooting process is in progress
+    boolean shoot_button = false;   // shoot button status flag -  true  = button was pressed
+    boolean shooting_reset = true;  // shooting arm return flag - false = shooting arm reset in process
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -198,14 +198,14 @@ public class MecanumDriveIntake extends OpMode
                 XClick = false;
             }
         }
-//*******************Flywheel**********************************************************************
+//*******************Flywheel motor (shooting) **********************************************************************
         if (flywheel == States.On) {
-            robot.shooting.setPower(1);
+            robot.shooting.setPower(0.7);
         }else{
             robot.shooting.setPower(0);
             flywheel = States.Off;
         }
-//********************Shooting push Arm************************************************************
+//********************Shooting Servo************************************************************
   /*      if (!shooting) {
             if (gamepad1.left_bumper) {
                 shooting = true;
@@ -220,40 +220,48 @@ public class MecanumDriveIntake extends OpMode
         }
 
 */
-        if (!shooting) {
-            if (!shoot_button) {
-                if (gamepad1.left_bumper) {
+        /*   The shooting arm servo advances to max position when the LB button is pressed.  Game timer is checked and
+        after 0.5 sec the servo returns to original position getting ready for next shot.  There is an additional time delay of 0.5 seconds
+        while servo is resetting back to original position.   Check for button press is disabled once the process is started
+        to prevent retriggering mid cycle.   Using a button press status flag in the code is a better way than checking the button itself
+        if the code is executed over several cycles to prevent unintentional retriggering the process
+
+        Flags used:
+        boolean shooting = false;   // Flag  is true when shooting process is in progress
+        boolean shoot_button = false;   // shoot button status flag -  true  = button was pressed
+        boolean shooting_reset = true;  // shooting arm return flag - false = shooting arm reset in process
+        */
+
+        if (!shooting) {                    // if shooting process has not started then check button for press
+            if (!shoot_button) {            // if button has been pressed then check current time and set
+                if (gamepad1.left_bumper) { // shooting button and shooting process status flags to true.
                     initial = getRuntime();
                     shooting = true;
                     shoot_button = true;
-                } // end if gamepad.left_bumoer
-
+                } // end if gamepad.left_bumper
             } // end if !shoot_button
         } // end if !shooting
 
-        if (shoot_button){
-            //    telemetry.addData("Shoot Button ", shoot_button);
-            //    telemetry.addData("Shooting ", shooting);
-            //    telemetry.update();
-            if (shooting) {
-                robot.ringPusher.setPosition(1);
-                    if (getRuntime() - initial > .5) {
-                        robot.ringPusher.setPosition(0);
-                        shooting_reset = false;
-                        shooting = false;
-                        initial2 = getRuntime();
+        if (shoot_button){                              // check button status flag. If true
+            if (shooting) {                             //  then check if shooting process is in progress
+                robot.ringPusher.setPosition(1);        // run shooting servo to max position.
+                    if (getRuntime() - initial > .5) {  // check if enough time has passed.
+                        robot.ringPusher.setPosition(0); // return servo to starting position.
+                        shooting = false;               //  Shooting is done.
+                        shooting_reset = false;         //  servo reset is not complete yet so set status flag false.
+                        initial2 = getRuntime();        // check current time
                     }
             }
         }
 
-        if(!shooting_reset) {
-
-            if (getRuntime() - initial2 > .5) {
-                shooting_reset = true;
-                shoot_button = false;
+        if(!shooting_reset) {                   // check if shooting reset has completed.  If not
+            if (getRuntime() - initial2 > .5) { // see if enough time has passed.  If true
+                shooting_reset = true;          // shooting reset process is complete
+                shoot_button = false;           // reset shoot button flag so it can be read on the next cycle
             }
         }
-//********************************* Intake ********************************************************
+
+//********************************* Intake motor ********************************************************
 
             if (gamepad1.a) {
             if (intakeButtonState == States.Off && intakeState == States.Forwards) {
