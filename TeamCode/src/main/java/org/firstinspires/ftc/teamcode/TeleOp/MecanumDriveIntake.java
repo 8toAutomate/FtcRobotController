@@ -136,7 +136,7 @@ public class MecanumDriveIntake extends OpMode
     @Override
     public void start() {
         runtime.reset();
-        initial = 0.5;
+        initial = 0.6;
     }
 
     @Override
@@ -201,7 +201,7 @@ public class MecanumDriveIntake extends OpMode
             robot.shooting.setPower(0);
             flywheel = States.Off;
         }
-//********************SHooting push Arm************************************************************
+//********************Shooting push Arm************************************************************
         if (gamepad1.left_bumper && ringPusher == States.Backwards && getRuntime() - initial > .5) {
             moveRingPusher(ringPusher);
             ringPusher = States.Forwards;
