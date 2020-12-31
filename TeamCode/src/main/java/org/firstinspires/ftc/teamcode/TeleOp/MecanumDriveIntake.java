@@ -328,13 +328,13 @@ public class MecanumDriveIntake extends OpMode
             }
         }
         if (storagePressed && movingStorage) { // checks if the storage is moving and if the storage pressed flag is raised
-            if (!storageUp) { robot.storageServo.setPosition(0); } // if the storage is not up it moves it up, then updates state
-            else if (storageUp) { robot.storageServo.setPosition(1); } // if the storage is up it moves it down, then updates state
+            if (!storageUp) { robot.storageServo.setPosition(0); } // if the storage is not up it moves it up
+            else if (storageUp) { robot.storageServo.setPosition(1); } // if the storage is up it moves it down
         }
         if (getRuntime() - initialST > .3) { // if half a second has passed since the storage has started moving (determined by when the flag is raised)
+            storageUp = !storageUp; // updates state
             movingStorage = false; // moving storage flag is lowered
             storagePressed = false; // storage pressed flag is lowered
-            storageUp = !storageUp;
         }
 
 
