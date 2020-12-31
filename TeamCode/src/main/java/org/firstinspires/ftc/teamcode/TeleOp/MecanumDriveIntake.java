@@ -73,6 +73,7 @@ public class MecanumDriveIntake extends OpMode
     boolean gripperClosed = false;
     boolean gripperRaised = false;
     boolean XClick = false;
+    boolean shooting = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -202,17 +203,16 @@ public class MecanumDriveIntake extends OpMode
             flywheel = States.Off;
         }
 //********************Shooting push Arm************************************************************
-        if (gamepad1.left_bumper && ringPusher == States.Backwards && getRuntime() - initial > .5) {
-            moveRingPusher(ringPusher);
-            ringPusher = States.Forwards;
-            double initial = getRuntime();
-        }
-        if (getRuntime() - initial > .5 && ringPusher == States.Forwards ) {
-                moveRingPusher(ringPusher);
-                ringPusher = States.Backwards;
+        if (!shooting) {
+            if (gamepad1.left_bumper) {
+                shooting = true;
                 initial = getRuntime();
+                robot.ringPusher.setPosition(0.25);
+            }
+        } else if (getRuntime() - initial > .5) {
+            robot.ringPusher.setPosition(0);
+            shooting = false;
         }
-
 
 
         if (gamepad1.a) {
