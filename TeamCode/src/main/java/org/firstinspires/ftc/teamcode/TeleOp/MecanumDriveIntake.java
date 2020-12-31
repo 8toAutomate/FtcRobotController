@@ -29,8 +29,11 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -63,6 +66,7 @@ public class MecanumDriveIntake extends OpMode
     enum States {
         Forwards, Backwards, Off, On
     }
+    States ringPusher = States.Backwards;
     States flywheel = States.Off;
     States intakeState = States.Off;
     boolean intakeButtonDown = false;
@@ -72,6 +76,45 @@ public class MecanumDriveIntake extends OpMode
     /*
      * Code to run ONCE when the driver hits INIT
      */
+    public void moveGripper(boolean close) {
+        robot.servo.scaleRange(0, 1.0);
+        if (close) {
+            robot.servo.setDirection(Servo.Direction.FORWARD);
+            robot.servo.setPosition(0.25);
+        }
+        else {
+            robot.servo.setDirection(Servo.Direction.REVERSE);
+            robot.servo.setPosition(0);
+        }
+    }
+
+    public void moveRingPusher(States state) {
+        robot.servo.scaleRange(0, 1.0);
+        if (state == States.Backwards) {
+            robot.servo.setDirection(Servo.Direction.FORWARD);
+            robot.servo.setPosition(0.25);
+        }
+        else {
+            robot.servo.setDirection(Servo.Direction.REVERSE);
+            robot.servo.setPosition(0);
+        }
+    }
+
+    public void raiseGripper() {
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 320);
+        robot.lifting.setPower(1);
+        while (robot.lifting.isBusy()) {}
+        robot.lifting.setPower(0);
+    }
+
+    public void lowerGripper() {
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 320);
+        robot.lifting.setPower(-1);
+        while (robot.lifting.isBusy()) {}
+        robot.lifting.setPower(0);
+    }
     @Override
     public void init() {
         robot.shooting.setPower(0);
@@ -158,6 +201,13 @@ public class MecanumDriveIntake extends OpMode
             flywheel = States.Off;
         }
 
+        if (gamepad1.left_bumper && ringPusher == States.Backwards) {
+            moveRingPusher(ringPusher);
+            ringPusher = States.Forwards;
+        } else if (gamepad1.left_bumper && ringPusher == States.Forwards) {
+            moveRingPusher(ringPusher);
+            ringPusher = States.Backwards;
+        }
 
 
 
@@ -188,21 +238,21 @@ public class MecanumDriveIntake extends OpMode
         }
 
         if (gamepad1.dpad_up && !gripperRaised) {
-            robot.lifting.setPower(1);
+            lowerGripper();
             gripperRaised = true;
         }
 
         if (gamepad1.dpad_down && gripperRaised) {
-            robot.lifting.setPower(-1);
+            lowerGripper();
             gripperRaised = false;
         }
 
         if (gamepad1.dpad_left && !gripperClosed) {
-            robot.moveGripper(true);
+            moveGripper(true);
             gripperClosed = true;
         }
         if (gamepad1.dpad_right && gripperClosed) {
-            robot.moveGripper(false);
+            moveGripper(false);
             gripperClosed = false;
         }
 
