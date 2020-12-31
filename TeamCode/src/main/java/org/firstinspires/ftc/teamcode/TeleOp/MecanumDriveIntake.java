@@ -68,7 +68,7 @@ public class MecanumDriveIntake extends OpMode
     boolean intakeButtonDown = false;
     boolean gripperClosed = false;
     boolean gripperRaised = false;
-    boolean LBClick = false;
+    boolean XClick = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -137,25 +137,25 @@ public class MecanumDriveIntake extends OpMode
         //}
 
         if (gamepad1.x) {
-            if (LBClick == false) {
-                LBClick = true;
-                if (flywheel == States.on) {
-                    flywheel = States.off
+            if (XClick == false) {
+                XClick = true;
+                if (flywheel == States.On) {
+                    flywheel = States.Off;
                 }
                 else {
                     flywheel = States.On;
                 }
             }
             else{
-                LBClick = false;
+                XClick = false;
             }
         }
 
-        if (flywheel == States.on) {
+        if (flywheel == States.On) {
             robot.shooting.setPower(1);
         }else{
             robot.shooting.setPower(0);
-            flywheel = States.off;
+            flywheel = States.Off;
         }
 
 
