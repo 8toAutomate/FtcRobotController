@@ -117,8 +117,8 @@ public class MecanumDriveIntake extends OpMode
     }
     @Override
     public void init() {
-        robot.shooting.setPower(0);
         robot.init(hardwareMap, this);
+        robot.shooting.setPower(0);
         gamepad1.setJoystickDeadzone(.1f);
         gamepad2.setJoystickDeadzone(.1f);
         // Tell the driver that initialization is complete.
