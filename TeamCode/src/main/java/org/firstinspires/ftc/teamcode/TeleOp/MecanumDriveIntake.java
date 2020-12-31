@@ -206,7 +206,7 @@ public class MecanumDriveIntake extends OpMode
             ringPusher = States.Forwards;
             double initial = getRuntime();
         }
-        if (getRuntime() - initial > .5 && gamepad1.left_bumper && ringPusher == States.Forwards ) {
+        if (getRuntime() - initial > .5 && ringPusher == States.Forwards ) {
                 moveRingPusher(ringPusher);
                 ringPusher = States.Backwards;
         }
