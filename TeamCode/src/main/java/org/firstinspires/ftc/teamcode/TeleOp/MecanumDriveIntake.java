@@ -61,13 +61,14 @@ public class MecanumDriveIntake extends OpMode
     boolean isIntakeOn = false;
     boolean isAPressed = false;
     enum States {
-        Forwards, Backwards, Off
+        Forwards, Backwards, Off, On
     }
+    States ShootingMotor = States.Off;
     States intakeState = States.Off;
     boolean intakeButtonDown = false;
     boolean gripperClosed = false;
-    boolean motorOff = false;
     boolean gripperRaised = false;
+    boolean LBClick = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -130,16 +131,25 @@ public class MecanumDriveIntake extends OpMode
         robot.backRightMotor.setPower(backRightPower);
 
         // shooting motors turn on by pressing the right bumper
-        if (gamepad1.right_bumper) {
+        //if (gamepad1.right_bumper) {
+         //   robot.shooting.setPower(1);
+         //   motorOff = false;
+        //}
+
+        if (gamepad1.left_bumper) {
+            LBClick = !LBClick;
+        }
+        if (LBClick = false) {
+            robot.shooting.setPower(0);
+            ShootingMotor = States.Off;
+        }
+        if (LBClick = true) {
             robot.shooting.setPower(1);
-            motorOff = false;
+            ShootingMotor = States.On;
         }
 
-        // shooting motors turn off by pressing the left bumper
-        if (gamepad1.left_bumper) {
-            robot.shooting.setPower(0);
-            motorOff = true;
-        }
+
+
 
         if (gamepad1.a) {
             if (!intakeButtonDown && intakeState == States.Forwards) {
