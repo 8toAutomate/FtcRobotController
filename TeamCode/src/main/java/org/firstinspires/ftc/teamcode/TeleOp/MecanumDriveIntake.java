@@ -63,7 +63,7 @@ public class MecanumDriveIntake extends OpMode
     enum States {
         Forwards, Backwards, Off, On
     }
-    States ShootingMotor = States.Off;
+    States flywheel = States.Off;
     States intakeState = States.Off;
     boolean intakeButtonDown = false;
     boolean gripperClosed = false;
@@ -74,7 +74,7 @@ public class MecanumDriveIntake extends OpMode
      */
     @Override
     public void init() {
-
+        robot.shooting.setPower(0);
         robot.init(hardwareMap, this);
         gamepad1.setJoystickDeadzone(.1f);
         gamepad2.setJoystickDeadzone(.1f);
@@ -136,16 +136,26 @@ public class MecanumDriveIntake extends OpMode
          //   motorOff = false;
         //}
 
-        if (gamepad1.left_bumper) {
-            LBClick = !LBClick;
+        if (gamepad1.x) {
+            if (LBClick == false) {
+                LBClick = true;
+                if (flywheel == States.on) {
+                    flywheel = States.off
+                }
+                else {
+                    flywheel = States.On;
+                }
+            }
+            else{
+                LBClick = false;
+            }
         }
-        if (LBClick = false) {
-            robot.shooting.setPower(0);
-            ShootingMotor = States.Off;
-        }
-        if (LBClick = true) {
+
+        if (flywheel == States.on) {
             robot.shooting.setPower(1);
-            ShootingMotor = States.On;
+        }else{
+            robot.shooting.setPower(0);
+            flywheel = States.off;
         }
 
 
