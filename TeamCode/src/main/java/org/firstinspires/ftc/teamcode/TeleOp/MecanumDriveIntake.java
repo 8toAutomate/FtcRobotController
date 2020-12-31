@@ -52,7 +52,7 @@ public class MecanumDriveIntake extends OpMode
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-
+    double initial;
     // Setup a variable for each drive wheel to save power level for telemetry
     double frontLeftPower;
     double frontRightPower;
@@ -204,9 +204,11 @@ public class MecanumDriveIntake extends OpMode
         if (gamepad1.left_bumper && ringPusher == States.Backwards) {
             moveRingPusher(ringPusher);
             ringPusher = States.Forwards;
-        } else if (gamepad1.left_bumper && ringPusher == States.Forwards) {
-            moveRingPusher(ringPusher);
-            ringPusher = States.Backwards;
+            double initial = getRuntime();
+        }
+        if (getRuntime() - initial > .5 && gamepad1.left_bumper && ringPusher == States.Forwards ) {
+                moveRingPusher(ringPusher);
+                ringPusher = States.Backwards;
         }
 
 
