@@ -333,10 +333,10 @@ public class MecanumDriveIntake extends OpMode
         }
         if (getRuntime() - initialST > .3) { // if half a second has passed since the storage has started moving (determined by when the flag is raised)
             movingStorage = false; // moving storage flag is lowered
-            if (getRuntime() - initialST > .5) {
-                storagePressed = false; // storage pressed flag is lowered
-                storageUp = !storageUp; // updates state
-            }
+        }
+        if (getRuntime() - initialST > .5) {
+            storagePressed = false; // storage pressed flag is lowered
+            storageUp = !storageUp; // updates state
         }
 
 
