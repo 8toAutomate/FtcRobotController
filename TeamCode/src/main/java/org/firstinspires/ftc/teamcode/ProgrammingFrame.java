@@ -59,7 +59,8 @@ public class ProgrammingFrame
     public DcMotor intake = null;
     public DcMotor shooting = null;
     public DcMotor lifting = null;
-    public Servo servo = null;
+    public Servo gripperServo = null;
+    public Servo ringPusher = null;
 
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
@@ -90,6 +91,7 @@ public class ProgrammingFrame
         shooting = hwMap.get(DcMotor.class, "shooting");
         lifting = hwMap.get(DcMotor.class, "lifting");
 
+
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -97,7 +99,8 @@ public class ProgrammingFrame
         lifting.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // define and initialize servo
-        servo = hwMap.get(Servo.class, "servo");
+        gripperServo = hwMap.get(Servo.class, "servo");
+        ringPusher = hwMap.get(Servo.class, "push_arm");
 
         // set motor directions
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -490,14 +493,14 @@ public class ProgrammingFrame
     }
 
     public void moveGripper(boolean close) {
-        servo.scaleRange(0, 1.0);
+        gripperServo.scaleRange(0, 1.0);
         if (close) {
-            servo.setDirection(Servo.Direction.FORWARD);
-            servo.setPosition(0.25);
+            gripperServo.setDirection(Servo.Direction.FORWARD);
+            gripperServo.setPosition(0.25);
         }
         else {
-            servo.setDirection(Servo.Direction.REVERSE);
-            servo.setPosition(0);
+            gripperServo.setDirection(Servo.Direction.REVERSE);
+            gripperServo.setPosition(0);
         }
     }
 

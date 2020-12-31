@@ -77,26 +77,26 @@ public class MecanumDriveIntake extends OpMode
      * Code to run ONCE when the driver hits INIT
      */
     public void moveGripper(boolean close) {
-        robot.servo.scaleRange(0, 1.0);
+        robot.gripperServo.scaleRange(0, 1.0);
         if (close) {
-            robot.servo.setDirection(Servo.Direction.FORWARD);
-            robot.servo.setPosition(0.25);
+            robot.gripperServo.setDirection(Servo.Direction.FORWARD);
+            robot.gripperServo.setPosition(0.25);
         }
         else {
-            robot.servo.setDirection(Servo.Direction.REVERSE);
-            robot.servo.setPosition(0);
+            robot.gripperServo.setDirection(Servo.Direction.REVERSE);
+            robot.gripperServo.setPosition(0);
         }
     }
 
     public void moveRingPusher(States state) {
-        robot.servo.scaleRange(0, 1.0);
+        robot.ringPusher.scaleRange(0, 1.0);
         if (state == States.Backwards) {
-            robot.servo.setDirection(Servo.Direction.FORWARD);
-            robot.servo.setPosition(0.25);
+            robot.ringPusher.setDirection(Servo.Direction.FORWARD);
+            robot.ringPusher.setPosition(0.25);
         }
         else {
-            robot.servo.setDirection(Servo.Direction.REVERSE);
-            robot.servo.setPosition(0);
+            robot.ringPusher.setDirection(Servo.Direction.REVERSE);
+            robot.ringPusher.setPosition(0);
         }
     }
 
