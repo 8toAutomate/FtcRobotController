@@ -77,6 +77,8 @@ public class MecanumDriveIntake extends OpMode
     boolean shooting = false;   // Flag  is true when shooting process is in progress
     boolean shoot_button = false;   // shoot button status flag -  true  = button was pressed
     boolean shooting_reset = true;  // shooting arm return flag - false = shooting arm reset in process
+    boolean storageUp = false;
+    boolean movingStorage = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -145,7 +147,7 @@ public class MecanumDriveIntake extends OpMode
 
     @Override
     public void loop() {
-
+//********************************* Robot movement ********************************************************
         // controller variables
         // y: inverse of left stick's y value
         double y = -gamepad1.left_stick_y;
@@ -198,14 +200,14 @@ public class MecanumDriveIntake extends OpMode
                 XClick = false;
             }
         }
-//*******************Flywheel motor (shooting) **********************************************************************
+        //*******************Flywheel motor (shooting) **********************************************************************
         if (flywheel == States.On) {
             robot.shooting.setPower(0.7);
         }else{
             robot.shooting.setPower(0);
             flywheel = States.Off;
         }
-//********************Shooting Servo************************************************************
+        //********************Shooting Servo************************************************************
   /*      if (!shooting) {
             if (gamepad1.left_bumper) {
                 shooting = true;
@@ -234,7 +236,7 @@ public class MecanumDriveIntake extends OpMode
 
         if (!shooting) {                    // if shooting process has not started then check button for press
             if (!shoot_button) {            // if button has been pressed then check current time and set
-                if (gamepad1.left_bumper) { // shooting button and shooting process status flags to true.
+                if (gamepad1.right_bumper) { // shooting button and shooting process status flags to true.
                     initial = getRuntime();
                     shooting = true;
                     shoot_button = true;
@@ -261,7 +263,7 @@ public class MecanumDriveIntake extends OpMode
             }
         }
 
-//********************************* Intake motor ********************************************************
+        //********************************* Intake motor ********************************************************
 
             if (gamepad1.a) {
             if (intakeButtonState == States.Off && intakeState == States.Forwards) {
@@ -288,7 +290,7 @@ public class MecanumDriveIntake extends OpMode
         } else {
             robot.intake.setPower(0);
         }
-
+        //********************************* Gripper and Gripper arm ********************************************************
         if (gamepad1.dpad_up && !gripperRaised) {
             lowerGripper();
             gripperRaised = true;
@@ -307,6 +309,29 @@ public class MecanumDriveIntake extends OpMode
             moveGripper(false);
             gripperClosed = false;
         }
+
+        //********************************* Storage Servo ********************************************************
+
+        // this code raises and lowers the storage servo using the left bumper button. This is similar to the ring pusher program, except it is implemented for toggle functionality.
+
+        // FLAGS:
+        // storageUp - holds the state of the storage
+        // movingStorage - holds if the storage servo is in motion
+
+        if (!movingStorage) { // checks if the storage is not already moving
+            if (gamepad1.left_bumper) { // checks if the bumper is pressed
+                movingStorage = true; // raises the moving storage flag
+                initial = getRuntime(); // gets current time
+            }
+        }
+        if (movingStorage) { // checks if the storage is moving
+            if (!storageUp) { robot.storageServo.setPosition(0); storageUp = true; } // if the storage is not up it moves it up, then updates state
+            else if (storageUp) { robot.storageServo.setPosition(1); storageUp = false; } // if the storage is up it moves it down, then updates state
+        }
+        if (getRuntime() - initial > .5) { // if half a second has passed since the storage has started moving (determined by when the flag is raised)
+            movingStorage = false; // moving storage flag is lowered
+        }
+
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

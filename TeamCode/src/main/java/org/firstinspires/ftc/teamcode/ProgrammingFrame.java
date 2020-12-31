@@ -61,6 +61,7 @@ public class ProgrammingFrame
     public DcMotor lifting = null;
     public Servo gripperServo = null;
     public Servo ringPusher = null;
+    public Servo storageServo = null;
 
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
@@ -101,7 +102,7 @@ public class ProgrammingFrame
         // define and initialize servo
         gripperServo = hwMap.get(Servo.class, "gripper");
         ringPusher = hwMap.get(Servo.class, "push_arm");
-
+        storageServo = hwMap.get(Servo.class, "storage_servo");
         // set motor directions
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -136,6 +137,7 @@ public class ProgrammingFrame
         topRing = hwMap.get(NormalizedColorSensor.class, "sensor_color4");
 
         ringPusher.setPosition(0);
+        storageServo.setPosition(1);
     }
 
     // go distance function
