@@ -23,28 +23,26 @@ public class ScrimmageAutonomous extends LinearOpMode {
 
     ScrimmageAutonomous.States ringPusher = ScrimmageAutonomous.States.Backwards;
     ScrimmageAutonomous.States flywheel = ScrimmageAutonomous.States.Off;
-    ScrimmageAutonomous.States lifting = ScrimmageAutonomous.States.Backwards;
-
-
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        // Have method(s) that shoot 3 rings here, likely in the high goal
-        robot.shooting.setPower(1);
+
+        robot.shooting.setPower(.9);
         robot.ringPusher.scaleRange(0, 1.0);
         initialSH = getRuntime();
-        robot.ringPusher.setPosition(1.0);
+        while (getRuntime() - initialSH < 2.0) {}
 
-        while (getRuntime() - initialSH < .5) {
-    }
-        robot.ringPusher.setPosition(0);
-        /* for (int i=1; i<=3; i++)
-        {
-            robot.ringPusher.setPosition(1.0);
+         for (int i=1; i<=3; i++) {
+             initialSH = getRuntime();
+             robot.ringPusher.setPosition(1.0);
+            while (getRuntime() - initialSH < .75) {}
             robot.ringPusher.setPosition(0);
+            initialSH = getRuntime();
+            while (getRuntime() - initialSH < .75) {}
         }
-
-         */
+         robot.shooting.setPower(0);
+robot.GoDistanceCM(160, .7, this);
     }
+
 }

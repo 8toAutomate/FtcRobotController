@@ -137,7 +137,7 @@ public class ProgrammingFrame
         topRing = hwMap.get(NormalizedColorSensor.class, "sensor_color4");
 
         ringPusher.setPosition(0);
-        storageServo.setPosition(1);
+        storageServo.setPosition(0);
     }
 
     // go distance function

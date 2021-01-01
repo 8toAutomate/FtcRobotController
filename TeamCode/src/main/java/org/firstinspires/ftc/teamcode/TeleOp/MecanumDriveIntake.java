@@ -52,8 +52,10 @@ public class MecanumDriveIntake extends OpMode
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    double initialSH;
-    double initialST;
+    double initialSH;  //initial time for shotting button timer
+    double initialST;  //initial time for storage button timer
+    double initialFL;  //initial time for flywheel button timer
+    double initialIN;  //initial time for intake button timer
     // Setup a variable for each drive wheel to save power level for telemetry
     double frontLeftPower;
     double frontRightPower;
@@ -73,13 +75,15 @@ public class MecanumDriveIntake extends OpMode
     States intakeButtonState = States.Off;
     boolean gripperClosed = false;
     boolean gripperRaised = false;
-    boolean XClick = false;
+    boolean xClick = false;
     boolean shooting = false;   // Flag  is true when shooting process is in progress
     boolean shoot_button = false;   // shoot button status flag -  true  = button was pressed
     boolean shooting_reset = true;  // shooting arm return flag - false = shooting arm reset in process
     boolean storageUp = false;
     boolean movingStorage = false;
     boolean storagePressed = false;
+    boolean flyWheel, flyMotor = false;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -181,7 +185,11 @@ public class MecanumDriveIntake extends OpMode
         robot.backLeftMotor.setPower(backLeftPower);
         robot.backRightMotor.setPower(backRightPower);
 
-        // shooting motors turn on by pressing the right bumper
+        //*******************Flywheel motor (shooting) *************************************************
+      /*
+        // shooting motors turn on by pressing the X key
+         Original code for the flywheel.  It worked sometimes and most others it did not.
+
         //if (gamepad1.right_bumper) {
          //   robot.shooting.setPower(1);
          //   motorOff = false;
@@ -201,13 +209,44 @@ public class MecanumDriveIntake extends OpMode
                 XClick = false;
             }
         }
-        //*******************Flywheel motor (shooting) **********************************************************************
+
         if (flywheel == States.On) {
             robot.shooting.setPower(0.7);
         }else{
             robot.shooting.setPower(0);
             flywheel = States.Off;
         }
+*/
+        //Update 1-1-2021
+        // This code turns the flywheel motor on or off.
+        // This is similar to the storage box program except adapted for motor instead of servo
+
+        // FLAGS:
+        // flyWheel - holds the state of the Flywheel operation
+        // flyMotor- holds if the flywheel motor is running or off
+        // xClick - checks if flywheel button is pressed
+
+        if (!flyWheel) { // checks if the flywheel is not already moving
+            if (gamepad1.x) { // checks if the bumper is pressed
+                xClick = true; // raises storage pressed flag
+                flyWheel = true; // raises the moving storage flag
+                //flyMotor = true;
+                initialFL = getRuntime(); // gets current time
+            }
+        }
+
+        if (xClick && flyWheel) { // checks if the storage is moving and if the storage pressed flag is raised
+            if (!flyMotor) {robot.shooting.setPower(0.8);} // if the storage is not up it moves it up
+            else if (flyMotor) {robot.shooting.setPower(0);} // if the storage is up it moves it down
+        }
+        if (flyWheel) {
+            if (getRuntime() - initialFL > .3) {
+                flyWheel = !flyWheel; // updates state
+                flyMotor = !flyMotor;
+                xClick = false; // storage pressed flag is lowered
+            }
+        }
+
         //********************Shooting Servo************************************************************
   /*      if (!shooting) {
             if (gamepad1.left_bumper) {
@@ -291,7 +330,7 @@ public class MecanumDriveIntake extends OpMode
         } else {
             robot.intake.setPower(0);
         }
-        //********************************* Gripper and Gripper arm ********************************************************
+        //********************************* Gripper and Gripper arm ************************************
         if (gamepad1.dpad_up && !gripperRaised) {
             lowerGripper();
             gripperRaised = true;
@@ -311,9 +350,10 @@ public class MecanumDriveIntake extends OpMode
             gripperClosed = false;
         }
 
-        //********************************* Storage Servo ********************************************************
+        //********************************* Storage Servo **********************************************
 
-        // this code raises and lowers the storage servo using the left bumper button. This is similar to the ring pusher program, except it is implemented for toggle functionality.
+        // this code raises and lowers the storage servo using the left bumper button.
+        // This is similar to the ring pusher program, except it is implemented for toggle functionality.
 
         // FLAGS:
         // storageUp - holds the state of the storage
@@ -351,7 +391,7 @@ public class MecanumDriveIntake extends OpMode
                 movingStorage = false;
             }
         }
-
+//************************************************************************************************************
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
