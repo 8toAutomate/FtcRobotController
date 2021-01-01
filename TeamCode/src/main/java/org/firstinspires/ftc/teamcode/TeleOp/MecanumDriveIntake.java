@@ -327,7 +327,7 @@ public class MecanumDriveIntake extends OpMode
                 initialST = getRuntime(); // gets current time
             }
         }
-        if (storagePressed && movingStorage) { // checks if the storage is moving and if the storage pressed flag is raised
+  /*      if (storagePressed && movingStorage) { // checks if the storage is moving and if the storage pressed flag is raised
             if (!storageUp) { robot.storageServo.setPosition(0); } // if the storage is not up it moves it up
             else if (storageUp) { robot.storageServo.setPosition(1); } // if the storage is up it moves it down
         }
@@ -339,13 +339,25 @@ public class MecanumDriveIntake extends OpMode
             storageUp = !storageUp; // updates state
         }
 
+*/
+        if (storagePressed && movingStorage) { // checks if the storage is moving and if the storage pressed flag is raised
+            if (!storageUp) { robot.storageServo.setPosition(0); } // if the storage is not up it moves it up
+            else if (storageUp) { robot.storageServo.setPosition(1); } // if the storage is up it moves it down
+        }
+        if (movingStorage) {
+            if (getRuntime() - initialST > .3) {
+                storagePressed = false; // storage pressed flag is lowered
+                storageUp = !storageUp; // updates state
+                movingStorage = false;
+            }
+        }
+
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
         telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
-
 
     public void stop() {
         robot.stopAllMotors();
