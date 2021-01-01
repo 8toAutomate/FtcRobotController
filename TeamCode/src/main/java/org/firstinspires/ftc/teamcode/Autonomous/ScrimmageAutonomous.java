@@ -28,21 +28,21 @@ public class ScrimmageAutonomous extends LinearOpMode {
         robot.init(hardwareMap, this);
         waitForStart();
 
-        robot.shooting.setPower(.9);
+        robot.shooting.setPower(.8);
         robot.ringPusher.scaleRange(0, 1.0);
         initialSH = getRuntime();
-        while (getRuntime() - initialSH < 2.0) {}
+        while (getRuntime() - initialSH < 4.0) {}
 
          for (int i=1; i<=3; i++) {
              initialSH = getRuntime();
              robot.ringPusher.setPosition(1.0);
-            while (getRuntime() - initialSH < .75) {}
+            while (getRuntime() - initialSH < 2) {}
             robot.ringPusher.setPosition(0);
             initialSH = getRuntime();
-            while (getRuntime() - initialSH < .75) {}
+            while (getRuntime() - initialSH < 2) {}
         }
          robot.shooting.setPower(0);
-robot.GoDistanceCM(160, .7, this);
+         robot.GoDistanceCM(160, .7, this);
     }
 
 }
