@@ -98,7 +98,7 @@ public class MecanumDriveIntake extends OpMode
             robot.gripperServo.setPosition(0);
         }
     }
-
+/*
     public void moveRingPusher(States state) {
         robot.ringPusher.scaleRange(0, 1.0);
         if (state == States.Backwards) {
@@ -110,7 +110,7 @@ public class MecanumDriveIntake extends OpMode
             robot.ringPusher.setPosition(0);
         }
     }
-
+*/
     public void raiseGripper() {
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 320);
@@ -374,7 +374,7 @@ public class MecanumDriveIntake extends OpMode
         if (getRuntime() - initialST > .3) { // if half a second has passed since the storage has started moving (determined by when the flag is raised)
             movingStorage = false; // moving storage flag is lowered
         }
-        if (getRuntime() - initialST > .5) {
+        if (getRuntime() - initialST > .5) { // .2 seconds after movingStorage = false;
             storagePressed = false; // storage pressed flag is lowered
             storageUp = !storageUp; // updates state
         }

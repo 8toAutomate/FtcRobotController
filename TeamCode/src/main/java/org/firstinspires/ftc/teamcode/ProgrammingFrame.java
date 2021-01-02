@@ -69,6 +69,10 @@ public class ProgrammingFrame
     public NormalizedColorSensor topRing;
     public OpMode systemTools;
 
+    enum States {
+        On, Off, Backwards, Forwards
+    }
+
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -902,4 +906,21 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("counts", TICKS);
         systemTools.telemetry.update();
     }
+
+    public void flywheel(boolean on) {
+        if (on) { shooting.setPower(1); }
+        else { shooting.setPower(0); }
+    }
+
+    public void intake(States setting) {
+        if (setting == States.Off) { intake.setPower(0); }
+        else if (setting == States.Forwards) { intake.setPower(1); }
+        else if (setting == States.Backwards) { intake.setPower(-1); }
+    }
+
+    public  void storage(boolean up) {
+        if (up) { storageServo.setPosition(0); }
+        else { storageServo.setPosition(1); }
+    }
+
 }
