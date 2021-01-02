@@ -923,4 +923,12 @@ public class ProgrammingFrame
         else { storageServo.setPosition(1); }
     }
 
+    public void pushRing(double timeout, LinearOpMode linearOpMode) {
+        double initial = linearOpMode.getRuntime();
+        ringPusher.setPosition(1);
+        if (linearOpMode.getRuntime() - initial > timeout) {
+            ringPusher.setPosition(0);
+        }
+    }
+
 }
