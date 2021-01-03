@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="StrafeTICKS", group="Motion")
+@Autonomous(name="StrafeTicks", group="Motion")
 
-public class StrafeTICKS extends LinearOpMode {
+public class StrafeTicks extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
     private ElapsedTime runtime = new ElapsedTime();
