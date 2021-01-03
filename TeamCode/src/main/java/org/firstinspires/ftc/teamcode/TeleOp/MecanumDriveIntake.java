@@ -305,7 +305,7 @@ public class MecanumDriveIntake extends OpMode
 
         //********************************* Intake motor ********************************************************
 
-            if (gamepad1.a) {
+        if (gamepad1.a) {
             if (intakeButtonState == States.Off && intakeState == States.Forwards) {
                 intakeState = States.Off;
             } else {
