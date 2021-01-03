@@ -29,7 +29,7 @@ public class ScrimmageAutonomousV2 extends LinearOpMode {
             robot.pushRing(0.5, this);
         }
 
-        robot.flywheel(false, 0);
+        robot.flywheel(false, 0.8);
 
         robot.GoDistanceCM(160, .7, this);
     }
