@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Sensors;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
+@Autonomous(name="Ring_Finder_Distance", group="Motion")
 public class RingFinderDistance extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
@@ -19,7 +21,7 @@ public class RingFinderDistance extends LinearOpMode {
 
         final float[] rgbValues = new float[3];
 
-        double maxRingDistCM = 4.1;
+        double maxRingDistCM = 6.0;
 
         double sensor1ValueCM;
         double sensor2ValueCM;
