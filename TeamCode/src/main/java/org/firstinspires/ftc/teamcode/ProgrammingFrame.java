@@ -907,8 +907,8 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-    public void flywheel(boolean on) {
-        if (on) { shooting.setPower(1); }
+    public void flywheel(boolean on, double onPower) {
+        if (on) { shooting.setPower(onPower); }
         else { shooting.setPower(0); }
     }
 
