@@ -29,30 +29,27 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
 
+import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
-@TeleOp(name = "ColorTest_Thanish_2_Sensors", group = "Sensor")
+@TeleOp(name = "ColorTestThanish1Sensor", group = "Sensor")
 //@Disabled
-public class ColorTest_Thanish_2_Sensors extends OpMode {
+public class ColorTestThanish1Sensor extends OpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */
   ProgrammingFrame robot   = new ProgrammingFrame();
 
   float gain = 2;
+
+  final float[] hsvValues = new float[3];
 
   @Override public void init() {
 
@@ -61,10 +58,7 @@ public class ColorTest_Thanish_2_Sensors extends OpMode {
     {
       ((SwitchableLight)robot.colorSensor1).enableLight(true);
     }
-    if (robot.colorSensor2 instanceof SwitchableLight)
-    {
-      ((SwitchableLight)robot.colorSensor1).enableLight(true);
-    }
+
     // Tell the driver that initialization is complete.
     telemetry.addData("Status", "Initialized");
 
@@ -76,27 +70,23 @@ public class ColorTest_Thanish_2_Sensors extends OpMode {
     telemetry.addData("Gain", gain);
 
     robot.colorSensor1.setGain(gain);
-    robot.colorSensor2.setGain(gain);
+
 
     NormalizedRGBA colors1 = robot.colorSensor1.getNormalizedColors();
-    NormalizedRGBA colors2 = robot.colorSensor2.getNormalizedColors();
+
+    Color.colorToHSV(colors1.toColor(), hsvValues);
+
 
     float red1 = colors1.red;
-    float red2 = colors2.red;
     float green1 = colors1.green;
-    float green2 = colors2.green;
     float blue1 = colors1.blue;
-    float blue2 = colors2.blue;
+
 
     telemetry.addLine();
     telemetry.addData("red1", red1);
     telemetry.addData("green1", green1);
     telemetry.addData("blue1", blue1);
-    telemetry.addLine();
-    telemetry.addData("red2", red2);
-    telemetry.addData("green2", green2);
-    telemetry.addData("blue2", blue2);
-
+    telemetry.addData("Hue: ", hsvValues);
 
     telemetry.update();
 

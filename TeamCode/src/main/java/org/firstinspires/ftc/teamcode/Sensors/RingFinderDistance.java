@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="Ring_Finder_Distance", group="Motion")
+@Autonomous(name="RingFinderDistance", group="Motion")
 public class RingFinderDistance extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();

@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="Ring_Finder", group="Motion")
-public class Ring_Finder extends LinearOpMode {
+@Autonomous(name="RingFinder", group="Motion")
+public class RingFinder extends LinearOpMode {
 
     ProgrammingFrame robot = new ProgrammingFrame();
 

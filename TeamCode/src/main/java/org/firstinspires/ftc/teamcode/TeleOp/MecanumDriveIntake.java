@@ -77,8 +77,8 @@ public class MecanumDriveIntake extends OpMode
     boolean gripperRaised = false;
     boolean xClick = false;
     boolean shooting = false;   // Flag  is true when shooting process is in progress
-    boolean shoot_button = false;   // shoot button status flag -  true  = button was pressed
-    boolean shooting_reset = true;  // shooting arm return flag - false = shooting arm reset in process
+    boolean shootButton = false;   // shoot button status flag -  true  = button was pressed
+    boolean shootingReset = true;  // shooting arm return flag - false = shooting arm reset in process
     boolean storageUp = false;
     boolean movingStorage = false;
     boolean storagePressed = false;
@@ -275,47 +275,53 @@ public class MecanumDriveIntake extends OpMode
         */
 
         if (!shooting) {                    // if shooting process has not started then check button for press
-            if (!shoot_button) {            // if button has been pressed then check current time and set
+            if (!shootButton) {            // if button has been pressed then check current time and set
                 if (gamepad1.right_bumper) { // shooting button and shooting process status flags to true.
                     initialSH = getRuntime();
                     shooting = true;
-                    shoot_button = true;
+                    shootButton = true;
                 } // end if gamepad.left_bumper
             } // end if !shoot_button
         } // end if !shooting
 
-        if (shoot_button){                              // check button status flag. If true
+        if (shootButton){                              // check button status flag. If true
             if (shooting) {                             //  then check if shooting process is in progress
                 robot.ringPusher.setPosition(1);        // run shooting servo to max position.
                     if (getRuntime() - initialSH > .5) {  // check if enough time has passed.
                         robot.ringPusher.setPosition(0); // return servo to starting position.
                         shooting = false;               //  Shooting is done.
-                        shooting_reset = false;         //  servo reset is not complete yet so set status flag false.
+                        shootingReset = false;         //  servo reset is not complete yet so set status flag false.
                         initialSH = getRuntime();        // check current time
                     }
             }
         }
 
-        if(!shooting_reset) {                   // check if shooting reset has completed.  If not
+        if(!shootingReset) {                   // check if shooting reset has completed.  If not
             if (getRuntime() - initialSH > .5) { // see if enough time has passed.  If true
-                shooting_reset = true;          // shooting reset process is complete
-                shoot_button = false;           // reset shoot button flag so it can be read on the next cycle
+                shootingReset = true;          // shooting reset process is complete
+                shootButton = false;           // reset shoot button flag so it can be read on the next cycle
             }
         }
 
         //********************************* Intake motor ********************************************************
 
         if (gamepad1.a) {
-            if (intakeButtonState == States.Off && intakeState == States.Forwards) {
-                intakeState = States.Off;
-            } else {
+            if (intakeButtonState == States.Off) {
+                if (intakeState == States.Forwards) {
+                    intakeState = States.Off;
+                    intakeButtonState = States.Forwards;
+                }
+            } if (intakeButtonState != States.Forwards) {
                 intakeState = States.Forwards;
             }
             intakeButtonState = States.Forwards;
         } else if (gamepad1.b) {
-            if (intakeButtonState == States.Off && intakeState == States.Backwards) {
-                intakeState = States.Off;
-            } else {
+            if (intakeButtonState == States.Off) {
+                if (intakeState == States.Backwards) {
+                    intakeState = States.Off;
+                    intakeButtonState = States.Backwards;
+                }
+            } if (intakeButtonState != States.Backwards) {
                 intakeState = States.Backwards;
             }
             intakeButtonState = States.Backwards;
