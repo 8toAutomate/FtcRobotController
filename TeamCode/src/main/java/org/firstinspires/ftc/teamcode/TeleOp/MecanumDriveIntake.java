@@ -48,14 +48,12 @@ public class MecanumDriveIntake extends OpMode
 
     ProgrammingFrame robot   = new ProgrammingFrame();
 
-
-
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     double initialSH;  //initial time for shotting button timer
     double initialST;  //initial time for storage button timer
     double initialFL;  //initial time for flywheel button timer
-    double initialIN;  //initial time for intake button timer
+    //double initialIN;  //initial time for intake button timer
     // Setup a variable for each drive wheel to save power level for telemetry
     double frontLeftPower;
     double frontRightPower;
@@ -75,14 +73,14 @@ public class MecanumDriveIntake extends OpMode
     States intakeButtonState = States.Off;
     boolean gripperClosed = false;
     boolean gripperRaised = false;
-    boolean xClick = false;
+    boolean xClick, yClick = false;
     boolean shooting = false;   // Flag  is true when shooting process is in progress
     boolean shootButton = false;   // shoot button status flag -  true  = button was pressed
     boolean shootingReset = true;  // shooting arm return flag - false = shooting arm reset in process
     boolean storageUp = false;
     boolean movingStorage = false;
     boolean storagePressed = false;
-    boolean flyWheel, flyMotor = false;
+    boolean flyWheel, flyMotor, flyWheel2 = false;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -228,22 +226,57 @@ public class MecanumDriveIntake extends OpMode
 
         if (!flyWheel) { // checks if the flywheel is not already moving
             if (gamepad1.x) { // checks if the bumper is pressed
-                xClick = true; // raises storage pressed flag
-                flyWheel = true; // raises the moving storage flag
+                xClick = true; // set X-button flag - X-button was pressed
+                flyWheel = true; // Flywheel process has started
                 //flyMotor = true;
                 initialFL = getRuntime(); // gets current time
+               // telemetry.addData("Status", "xClick " + gamepad1.x);
             }
         }
 
-        if (xClick && flyWheel) { // checks if the storage is moving and if the storage pressed flag is raised
-            if (!flyMotor) {robot.shooting.setPower(0.8);} // if the storage is not up it moves it up
-            else if (flyMotor) {robot.shooting.setPower(0);} // if the storage is up it moves it down
+        if (xClick && flyWheel) { // checks if the sflywheel is moving and if the storage pressed flag is raised
+            if (!flyMotor) {robot.shooting.setPower(0.8);} // if the flywheel is off , turn it on
+            else if (flyMotor) {robot.shooting.setPower(0);} // if the flywheel is on , turn it off
         }
         if (flyWheel) {
             if (getRuntime() - initialFL > .3) {
                 flyWheel = !flyWheel; // updates state
                 flyMotor = !flyMotor;
-                xClick = false; // storage pressed flag is lowered
+                xClick = false; // Flywheel button flag is lowered
+            }
+        }
+        //*******************Flywheel motor (Power shot shooting) *************************************************
+      /*
+
+*/
+        //Update 1-3-2021
+        // This code turns the flywheel motor on or off.
+        // This is similar to the storage box program except adapted for motor instead of servo
+
+        // FLAGS:
+        // flyWheel2 - holds the state of the Flywheel operation
+        // flyMotor- holds if the flywheel motor is running or off
+        // xClick - checks if flywheel button is pressed
+
+        if (!flyWheel2) { // checks if the flywheel is not already moving
+            if (gamepad1.y) { // checks if the bumper is pressed
+                yClick = true; // set X-button flag - X-button was pressed
+                flyWheel2 = true; // Flywheel process has started
+                //flyMotor = true;
+                initialFL = getRuntime(); // gets current time
+             //   telemetry.addData("Status", "yClick " + gamepad1.y);
+            }
+        }
+
+        if (yClick && flyWheel2) { // checks if the storage is moving and if the storage pressed flag is raised
+            if (!flyMotor) {robot.shooting.setPower(0.65);} // if the flywheel is off , turn it on
+            else if (flyMotor) {robot.shooting.setPower(0);} // // if the flywheel is on , turn it off
+        }
+        if (flyWheel2) {
+            if (getRuntime() - initialFL > .3) {
+                flyWheel2 = !flyWheel2; // updates state
+                flyMotor = !flyMotor;
+                yClick = false; // Flywheel button is lowered
             }
         }
 
