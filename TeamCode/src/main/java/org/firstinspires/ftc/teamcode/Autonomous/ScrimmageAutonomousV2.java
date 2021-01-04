@@ -20,7 +20,8 @@ public class ScrimmageAutonomousV2 extends LinearOpMode {
 
         robot.init(hardwareMap, this);
         waitForStart();
-
+        robot.strafeDistanceCM2(50, .7, this);
+        robot.strafeDistanceCM2(-50, .7, this);
         robot.flywheel(true, 0.8);
 
         robot.storage(true);
