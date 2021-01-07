@@ -141,7 +141,7 @@ public class ProgrammingFrame
         topRing = hwMap.get(NormalizedColorSensor.class, "sensor_color4");
 
         ringPusher.setPosition(0);
-        storageServo.setPosition(1);
+        storageServo.setPosition(1.0);
     }
 
     // go distance function
@@ -470,10 +470,11 @@ public class ProgrammingFrame
 
 
     public void stopDriveMotors() {
-        frontLeftMotor.setPower(0);
-        backRightMotor.setPower(0);
-        frontRightMotor.setPower(0);
         backLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+
 
     }
 
@@ -918,18 +919,25 @@ public class ProgrammingFrame
         else if (setting == States.Backwards) { intake.setPower(-1); }
     }
 
-    public  void storage(boolean up) {
+    public  void storage(boolean up, LinearOpMode linearOpMode) {
         if (up) { storageServo.setPosition(0); }
         else { storageServo.setPosition(1); }
     }
 
     public void pushRing(double timeout, LinearOpMode linearOpMode) {
-        double initial = linearOpMode.getRuntime();
+        //double initial = linearOpMode.getRuntime();
         ringPusher.setPosition(1);
+
+        /* the following 2-lines of code do not execute properly. as soon as the time is checked and it is false, the function exits
+        since it is not called recursively, the push arm is never reset.  Use a while loop here
         if (linearOpMode.getRuntime() - initial > timeout) {
             ringPusher.setPosition(0);
-        }
+         */
+        double initial = linearOpMode.getRuntime();
+        while (linearOpMode.getRuntime() - initial < 0.5) {}
+        ringPusher.setPosition(0);
     }
+
     public void strafeDistanceCM2(int centimeters, double power, LinearOpMode linearOpMode){
 
         double conversion_factor = 31.3;
