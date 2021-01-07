@@ -1019,7 +1019,7 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-    public void wait(double initial, double timeout, LinearOpMode linearOpMode) {
-        while (linearOpMode.getRuntime() - initial < timeout) {}
+    public void wait(long timeout, LinearOpMode linearOpMode) {
+        linearOpMode.sleep(timeout);
     }
 }
