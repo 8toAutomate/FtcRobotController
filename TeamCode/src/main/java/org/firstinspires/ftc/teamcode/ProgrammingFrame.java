@@ -1020,6 +1020,6 @@ public class ProgrammingFrame
     }
 
     public void wait(double initial, double timeout, LinearOpMode linearOpMode) {
-        while (linearOpMode.getRuntime() - initial < 0.5) {}
+        while (linearOpMode.getRuntime() - initial < timeout) {}
     }
 }
