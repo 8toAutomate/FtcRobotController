@@ -23,8 +23,8 @@ public class ScrimmageAutonomousV2 extends LinearOpMode {
 
         robot.init(hardwareMap, this);
         waitForStart();
-        robot.GoDistanceCM2(125, 0.5, this);
-        robot.strafeDistanceCM2(45, 0.5, this);
+        robot.GoDistanceCM2(125, 0.5, false, this);
+        robot.strafeDistanceCM2(45, 0.5, false, this);
 
         robot.shooting.setPower(.8);
         robot.ringPusher.scaleRange(0, 1.0);

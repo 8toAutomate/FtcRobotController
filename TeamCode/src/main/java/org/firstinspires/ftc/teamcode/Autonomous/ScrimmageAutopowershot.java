@@ -21,7 +21,7 @@ public class ScrimmageAutopowershot extends LinearOpMode {
         robot.init(hardwareMap, this);
         waitForStart();
         robot.flywheel(true, 0.75);
-        robot.GoDistanceCM2(145, 0.5, this);
+        robot.GoDistanceCM2(145, 0.5, false, this);
         robot.flywheel(true, 0.65);
         robot.storage(true,this);
         double initialSH = getRuntime();
@@ -30,11 +30,11 @@ public class ScrimmageAutopowershot extends LinearOpMode {
         //robot.strafeDistanceCM2(45, 0.5, this);
        // robot.ringPusher.scaleRange(0, 1.0);
         robot.pushRing(0.5,this);
-        robot.strafeDistanceCM2(20, 0.2, this);
+        robot.strafeDistanceCM2(20, 0.2, false,this);
         initialSH = getRuntime();
         while (getRuntime() - initialSH < 0.5) {}
         robot.pushRing(0.5,this);
-        robot.strafeDistanceCM2(20, 0.2, this);
+        robot.strafeDistanceCM2(20, 0.2, false, this);
         initialSH = getRuntime();
         while (getRuntime() - initialSH < 0.5) {}
         robot.pushRing(0.5,this);
@@ -43,7 +43,7 @@ public class ScrimmageAutopowershot extends LinearOpMode {
         robot.pushRing(0.5,this); // push ring again - sometimes the last ring gets stuck
         robot.storage(false,this);
         robot.flywheel(false, 0);
-        robot.GoDistanceCM2(20, 0.5, this);
+        robot.GoDistanceCM2(20, 0.5, false,this);
 
         /*
         robot.flywheel(true, 0.8);

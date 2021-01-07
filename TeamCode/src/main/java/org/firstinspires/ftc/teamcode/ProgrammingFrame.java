@@ -619,7 +619,7 @@ public class ProgrammingFrame
 
     //*********************************************************************************************
     // go distance function
-    public void GoDistanceCM2(int centimeters, double power, LinearOpMode linearOpMode){
+    public void GoDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode){
         // holds the conversion factor for TICKS to centimeters
         final double conversion_factor = 27.55;
 
@@ -696,7 +696,8 @@ public class ProgrammingFrame
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
         }
-        stopDriveMotors();
+
+        if (!handoff) stopDriveMotors();
 
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
@@ -798,8 +799,6 @@ public class ProgrammingFrame
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
         }
-
-        stopDriveMotors();
 
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
@@ -938,7 +937,7 @@ public class ProgrammingFrame
         ringPusher.setPosition(0);
     }
 
-    public void strafeDistanceCM2(int centimeters, double power, LinearOpMode linearOpMode){
+    public void strafeDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode){
 
         double conversion_factor = 31.3;
 
@@ -1010,7 +1009,7 @@ public class ProgrammingFrame
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
         }
 
-        stopDriveMotors();
+        if (!handoff) stopDriveMotors();
 
         startDriveEncoders();
 
