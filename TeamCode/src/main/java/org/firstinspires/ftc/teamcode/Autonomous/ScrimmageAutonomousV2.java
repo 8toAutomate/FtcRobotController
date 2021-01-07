@@ -42,7 +42,7 @@ public class ScrimmageAutonomousV2 extends LinearOpMode {
         robot.storage(true);
 
         for (int i = 0; i < 3; i++) {
-            robot.pushRing(0.5, this);
+            robot.pushRing(this);
         }
 
         robot.flywheel(false, 0.8);
