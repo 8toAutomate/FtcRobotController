@@ -269,7 +269,7 @@ public class MecanumDriveIntake extends OpMode
         }
 
         if (yClick && flyWheel2) { // checks if the storage is moving and if the storage pressed flag is raised
-            if (!flyMotor) {robot.shooting.setPower(0.65);} // if the flywheel is off , turn it on
+            if (!flyMotor) {robot.shooting.setPower(0.70);} // if the flywheel is off , turn it on
             else if (flyMotor) {robot.shooting.setPower(0);} // // if the flywheel is on , turn it off
         }
         if (flyWheel2) {
