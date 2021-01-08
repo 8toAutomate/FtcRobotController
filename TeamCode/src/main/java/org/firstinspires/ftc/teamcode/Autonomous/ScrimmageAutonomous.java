@@ -27,7 +27,7 @@ public class ScrimmageAutonomous extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        robot.GoDistanceCM(130, 0.3, this);
+        robot.GoDistanceCM(135, 0.3, this);
         robot.storageServo.setPosition(0);
         robot.shooting.setPower(.8);
         robot.ringPusher.scaleRange(0, 1.0);
@@ -40,10 +40,10 @@ public class ScrimmageAutonomous extends LinearOpMode {
             while (getRuntime() - initialSH < 1) {}
             robot.ringPusher.setPosition(0);
             initialSH = getRuntime();
-            while (getRuntime() - initialSH < 2) {}
+            while (getRuntime() - initialSH < 1.5) {}
         }
          robot.shooting.setPower(0);
-         robot.GoDistanceCM(30, .7, this);
+         robot.GoDistanceCM(25, .7, this);
     }
 
 }

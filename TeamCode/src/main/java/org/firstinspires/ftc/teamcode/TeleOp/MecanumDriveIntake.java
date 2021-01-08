@@ -53,6 +53,7 @@ public class MecanumDriveIntake extends OpMode
     double initialSH;  //initial time for shotting button timer
     double initialST;  //initial time for storage button timer
     double initialFL;  //initial time for flywheel button timer
+    double initialSR;  //initial time for right strafe 20
     //double initialIN;  //initial time for intake button timer
     // Setup a variable for each drive wheel to save power level for telemetry
     double frontLeftPower;
@@ -81,6 +82,7 @@ public class MecanumDriveIntake extends OpMode
     boolean movingStorage = false;
     boolean storagePressed = false;
     boolean flyWheel, flyMotor, flyWheel2 = false;
+    boolean strafe20,rtClick = false;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -159,7 +161,7 @@ public class MecanumDriveIntake extends OpMode
         // rx: right stick's x value
         double rx = gamepad1.right_stick_x;
 
-        if (Math.abs(x) <= .2) x = 0;
+        if (Math.abs(x) <= .15) x = 0;
 
         // for the programming frame
         // frontLeftPower = y + x + rx;
@@ -280,6 +282,41 @@ public class MecanumDriveIntake extends OpMode
             }
         }
 
+
+        //*******************Strafe right 20CM (Power shot shooting) *************************************************
+        /*
+
+         */
+        //Update 1-8-2021
+        // This code turns the flywheel motor on or off.
+        // This is similar to the storage box program except adapted for motor instead of servo
+
+        // FLAGS:
+        // flyWheel2 - holds the state of the Flywheel operation
+        // flyMotor- holds if the flywheel motor is running or off
+        // xClick - checks if flywheel button is pressed
+
+     /*   if (!strafe20) { // checks if the flywheel is not already moving
+            if (gamepad1.right_trigger>0.6) { // checks if the bumper is pressed
+                rtClick = true; // set X-button flag - X-button was pressed
+                strafe20 = true; // Flywheel process has started
+                //flyMotor = true;
+                initialSR = getRuntime(); // gets current time
+                //   telemetry.addData("Status", "yClick " + gamepad1.y);
+            }
+        }
+
+        if (rtClick && strafe20) { // checks if the storage is moving and if the storage pressed flag is raised
+            robot.strafeDistanceCM2(20, 0.2, false, MecanumDriveIntake);
+        }
+        if (strafe2) {
+            if (getRuntime() - initialSR > 1) {
+                strafe20 = false;
+                rtClick = false; // Flywheel button is lowered
+            }
+        }
+
+      */
         //********************Shooting Servo************************************************************
   /*      if (!shooting) {
             if (gamepad1.left_bumper) {
