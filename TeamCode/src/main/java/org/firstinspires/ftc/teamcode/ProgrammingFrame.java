@@ -937,6 +937,7 @@ public class ProgrammingFrame
         ringPusher.setPosition(0);
     }
 
+//*********************************************************************************************************************************
     public void strafeDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode){
 
         double conversion_factor = 31.3;

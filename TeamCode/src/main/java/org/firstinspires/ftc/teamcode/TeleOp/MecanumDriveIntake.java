@@ -251,7 +251,7 @@ public class MecanumDriveIntake extends OpMode
 */
         //Update 1-3-2021
         // This code turns the flywheel motor on or off.
-        // This is similar to the storage box program except adapted for motor instead of servo
+        // This is similar to the FLywheel program but runs motor at lower power for power-shot
 
         // FLAGS:
         // flyWheel2 - holds the state of the Flywheel operation

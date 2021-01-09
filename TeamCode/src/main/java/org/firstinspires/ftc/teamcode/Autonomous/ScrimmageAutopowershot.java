@@ -21,7 +21,8 @@ public class ScrimmageAutopowershot extends LinearOpMode {
         robot.init(hardwareMap, this);
         waitForStart();
         robot.flywheel(true, 0.75);
-        robot.GoDistanceCM2(145, 0.5, false, this);
+        robot.GoDistanceCM2(120, 0.7, true, this);
+        robot.GoDistanceCM2(25, 0.3, false, this);
         robot.flywheel(true, 0.65);
         robot.storage(true,this);
         double initialSH = getRuntime();
