@@ -159,13 +159,10 @@ public class MecanumDriveIntake2 extends OpMode
         robot.backLeftMotor.setTargetPosition(BLtarget);
         robot.backRightMotor.setTargetPosition(BRtarget);
 
-        /*frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-         */
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // start motion
 
@@ -180,6 +177,8 @@ public class MecanumDriveIntake2 extends OpMode
             robot.backRightMotor.setPower(power);
             robot.backLeftMotor.setPower(-power);
         }
+
+
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
         // its target position, the motion will stop.  This is "safer" in the event that the robot will
@@ -201,10 +200,7 @@ public class MecanumDriveIntake2 extends OpMode
         robot.shooting.setPower(0);
         gamepad1.setJoystickDeadzone(.1f);
         gamepad2.setJoystickDeadzone(.1f);
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
