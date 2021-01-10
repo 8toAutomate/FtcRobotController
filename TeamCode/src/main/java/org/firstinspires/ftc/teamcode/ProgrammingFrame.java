@@ -1019,6 +1019,73 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
+    public void strafeDistanceCM3(int centimeters, double power, boolean handoff){
+
+        double conversion_factor = 31.3;
+
+        boolean left = centimeters < 0;
+        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
+        int FLtarget = 0;
+        int FRtarget = 0;
+        int BLtarget = 0;
+        int BRtarget = 0;
+
+        power = Math.abs(power);
+
+        resetDriveEncoders();
+
+        if (left) {
+            FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
+            FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
+            BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+            BRtarget = backRightMotor.getCurrentPosition() - TICKS;
+        } else {
+            FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+            FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
+            BLtarget = backLeftMotor.getCurrentPosition() - TICKS;
+            BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+        }
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+
+
+        // start motion
+
+        if (left) {
+            frontLeftMotor.setPower(-power);
+            frontRightMotor.setPower(power);
+            backRightMotor.setPower(-power);
+            backLeftMotor.setPower(power);
+        } else {
+            frontLeftMotor.setPower(power);
+            frontRightMotor.setPower(-power);
+            backRightMotor.setPower(power);
+            backLeftMotor.setPower(-power);
+        }
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while  (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()) {
+        }
+
+        if (!handoff) stopDriveMotors();
+
+        startDriveEncoders();
+
+    }
+
     public void wait(long timeout, LinearOpMode linearOpMode) {
         linearOpMode.sleep(timeout);
     }

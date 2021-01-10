@@ -159,13 +159,13 @@ public class MecanumDriveIntake2 extends OpMode
         backLeftMotor.setTargetPosition(BLtarget);
         backRightMotor.setTargetPosition(BRtarget);
 
-        /*frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-         */
+
 
         // start motion
 
@@ -193,7 +193,7 @@ public class MecanumDriveIntake2 extends OpMode
 
         startDriveEncoders();
 
-          }
+    }
     public void stopDriveMotors() {
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
@@ -221,10 +221,10 @@ public class MecanumDriveIntake2 extends OpMode
         robot.shooting.setPower(0);
         gamepad1.setJoystickDeadzone(.1f);
         gamepad2.setJoystickDeadzone(.1f);
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -528,7 +528,7 @@ public class MecanumDriveIntake2 extends OpMode
 //************************************************************************************************************
         if (gamepad1.right_trigger>0.6) {
             strafeDistanceCM2(20,0.2,false);
-             }
+        }
 
 
        // Show the elapsed game time and wheel power.
