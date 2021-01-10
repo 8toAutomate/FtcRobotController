@@ -141,59 +141,61 @@ public class MecanumDriveIntake2 extends OpMode
 
         power = Math.abs(power);
 
-        resetDriveEncoders();
+        robot.resetDriveEncoders();
 
          if (left) {
-            FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
-            FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
-            BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
-            BRtarget = backRightMotor.getCurrentPosition() - TICKS;
+            FLtarget = robot.frontLeftMotor.getCurrentPosition() - TICKS;
+            FRtarget = robot.frontRightMotor.getCurrentPosition() + TICKS;
+            BLtarget = robot.backLeftMotor.getCurrentPosition() + TICKS;
+            BRtarget = robot.backRightMotor.getCurrentPosition() - TICKS;
         } else {
-            FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
-            FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
-            BLtarget = backLeftMotor.getCurrentPosition() - TICKS;
-            BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+            FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
+            FRtarget = robot.frontRightMotor.getCurrentPosition() - TICKS;
+            BLtarget = robot.backLeftMotor.getCurrentPosition() - TICKS;
+            BRtarget = robot.backRightMotor.getCurrentPosition() + TICKS;
         }
         frontLeftMotor.setTargetPosition(FLtarget);
         frontRightMotor.setTargetPosition(FRtarget);
         backLeftMotor.setTargetPosition(BLtarget);
         backRightMotor.setTargetPosition(BRtarget);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        /*frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-
+         */
 
         // start motion
 
         if (left) {
-            frontLeftMotor.setPower(-power);
-            frontRightMotor.setPower(power);
-            backRightMotor.setPower(-power);
-            backLeftMotor.setPower(power);
+            robot.frontLeftMotor.setPower(-power);
+            robot.frontRightMotor.setPower(power);
+            robot.backRightMotor.setPower(-power);
+            robot.backLeftMotor.setPower(power);
         } else {
-            frontLeftMotor.setPower(power);
-            frontRightMotor.setPower(-power);
-            backRightMotor.setPower(power);
-            backLeftMotor.setPower(-power);
+            robot.frontLeftMotor.setPower(power);
+            robot.frontRightMotor.setPower(-power);
+            robot.backRightMotor.setPower(power);
+            robot.backLeftMotor.setPower(-power);
         }
+
+
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
         // its target position, the motion will stop.  This is "safer" in the event that the robot will
         // always end the motion as soon as possible.
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while  (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()) {
+        while  (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy()) {
         }
 
-        if (!handoff) stopDriveMotors();
+        if (!handoff) robot.stopDriveMotors();
 
-        startDriveEncoders();
+        robot.startDriveEncoders();
 
-    }
+          }
     public void stopDriveMotors() {
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
@@ -221,10 +223,10 @@ public class MecanumDriveIntake2 extends OpMode
         robot.shooting.setPower(0);
         gamepad1.setJoystickDeadzone(.1f);
         gamepad2.setJoystickDeadzone(.1f);
-        // frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        // frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        // backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        // backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -528,7 +530,7 @@ public class MecanumDriveIntake2 extends OpMode
 //************************************************************************************************************
         if (gamepad1.right_trigger>0.6) {
             strafeDistanceCM2(20,0.2,false);
-        }
+             }
 
 
        // Show the elapsed game time and wheel power.
