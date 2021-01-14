@@ -223,10 +223,6 @@ public class MecanumDriveIntake2 extends OpMode
         robot.shooting.setPower(0);
         gamepad1.setJoystickDeadzone(.1f);
         gamepad2.setJoystickDeadzone(.1f);
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -528,8 +524,8 @@ public class MecanumDriveIntake2 extends OpMode
             }
         }
 //************************************************************************************************************
-        if (gamepad1.right_trigger>0.6) {
-            strafeDistanceCM2(20,0.2,false);
+        if (gamepad1.right_trigger>0.9) {
+            robot.strafeDistanceCM3(20,0.2,false);
              }
 
 
