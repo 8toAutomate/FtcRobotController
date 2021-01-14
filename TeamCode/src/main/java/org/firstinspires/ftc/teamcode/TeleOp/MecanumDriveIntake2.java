@@ -154,10 +154,10 @@ public class MecanumDriveIntake2 extends OpMode
             BLtarget = robot.backLeftMotor.getCurrentPosition() - TICKS;
             BRtarget = robot.backRightMotor.getCurrentPosition() + TICKS;
         }
-        robot.frontRightMotor.setTargetPosition(FLtarget);
-        robot.frontRightMotor.setTargetPosition(FRtarget);
-        robot.backLeftMotor.setTargetPosition(BLtarget);
-        robot.backRightMotor.setTargetPosition(BRtarget);
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
 
         /*frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -180,6 +180,8 @@ public class MecanumDriveIntake2 extends OpMode
             robot.backRightMotor.setPower(power);
             robot.backLeftMotor.setPower(-power);
         }
+
+
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
         // its target position, the motion will stop.  This is "safer" in the event that the robot will
@@ -193,6 +195,26 @@ public class MecanumDriveIntake2 extends OpMode
 
         robot.startDriveEncoders();
 
+          }
+    public void stopDriveMotors() {
+        backLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+    }
+
+    public void resetDriveEncoders() {
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void startDriveEncoders() {
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     //*****************************************************************************************
     @Override
