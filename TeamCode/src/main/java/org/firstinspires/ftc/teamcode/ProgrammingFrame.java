@@ -468,6 +468,51 @@ public class ProgrammingFrame
         return path;
     }
 
+    public char ringFinderDistance() {
+        char path;
+
+        final float[] rgbValues = new float[3];
+
+        double maxRingDistCM = 6.0;
+
+        double sensor1ValueCM;
+        double sensor2ValueCM;
+
+        boolean sensor1Detected;
+        boolean sensor2Detected;
+
+
+        float gain = 2;
+
+        systemTools.telemetry.addData("Gain", gain);
+
+        colorSensor1.setGain(gain);
+        colorSensor2.setGain(gain);
+
+        sensor1ValueCM = ((DistanceSensor) colorSensor1).getDistance(DistanceUnit.CM);
+        sensor2ValueCM = ((DistanceSensor) colorSensor2).getDistance(DistanceUnit.CM);
+
+        sensor1Detected = sensor1ValueCM < maxRingDistCM;
+        sensor2Detected = sensor2ValueCM < maxRingDistCM;
+
+        if (sensor1Detected && sensor2Detected) {
+            path = 'C';
+        } else if (sensor1Detected && !sensor2Detected) {
+            path = 'B';
+        } else if (!sensor1Detected && !sensor2Detected) {
+            path = 'A';
+        } else { // Means there was an error
+            path = 'E';
+        }
+
+        systemTools.telemetry.addData("Sensor 1 Distance (CM): ", sensor1ValueCM);
+        systemTools.telemetry.addData("Sensor 2 Distance (CM): ", sensor2ValueCM);
+        systemTools.telemetry.addData("Maximum Ring Distance (CM): ", maxRingDistCM);
+        systemTools.telemetry.addData("Path: ", path);
+        systemTools.telemetry.update();
+
+        return path;
+    }
 
     public void stopDriveMotors() {
         backLeftMotor.setPower(0);
