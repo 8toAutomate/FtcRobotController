@@ -347,6 +347,7 @@ public class MecanumDriveIntake extends OpMode
 
         //********************************* Intake motor ********************************************************
 
+        /* Old toggle design
         if (gamepad1.right_trigger > .8) {
             if (intakeButtonState == States.Off) {
                 if (intakeState == States.Forwards) {
@@ -369,6 +370,14 @@ public class MecanumDriveIntake extends OpMode
             intakeButtonState = States.Backwards;
         } else {
             intakeButtonState = States.Off;
+        } */
+
+        if (gamepad1.right_trigger > .8) {
+            intakeState = States.Forwards;
+        } else if (gamepad1.left_trigger > .8) {
+            intakeState = States.Backwards;
+        } else {
+            intakeState = States.Off;
         }
 
         if(intakeState == States.Forwards) {
@@ -379,21 +388,21 @@ public class MecanumDriveIntake extends OpMode
             robot.intake.setPower(0);
         }
         //********************************* Gripper and Gripper arm ************************************
-        if (gamepad1.dpad_up && !gripperRaised) {
+        if (gamepad2.dpad_up && !gripperRaised) {
             lowerGripper();
             gripperRaised = true;
         }
 
-        if (gamepad1.dpad_down && gripperRaised) {
+        if (gamepad2.dpad_down && gripperRaised) {
             lowerGripper();
             gripperRaised = false;
         }
 
-        if (gamepad1.dpad_left && !gripperClosed) {
+        if (gamepad2.dpad_left && !gripperClosed) {
             moveGripper(true);
             gripperClosed = true;
         }
-        if (gamepad1.dpad_right && gripperClosed) {
+        if (gamepad2.dpad_right && gripperClosed) {
             moveGripper(false);
             gripperClosed = false;
         }
