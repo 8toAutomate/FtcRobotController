@@ -233,7 +233,7 @@ public class MecanumDriveIntake extends OpMode
         // xClick - checks if flywheel button is pressed
 
         if (!flyWheel) { // checks if the flywheel is not already moving
-            if (gamepad1.x) { // checks if the bumper is pressed
+            if (gamepad2.x) { // checks if the bumper is pressed
                 xClick = true; // set X-button flag - X-button was pressed
                 flyWheel = true; // Flywheel process has started
                 //flyMotor = true;
@@ -242,7 +242,7 @@ public class MecanumDriveIntake extends OpMode
             }
         }
 
-        if (xClick && flyWheel) { // checks if the sflywheel is moving and if the storage pressed flag is raised
+        if (xClick && flyWheel) { // checks if the flywheel is moving and if the storage pressed flag is raised
             if (!flyMotor) {robot.shooting.setPower(0.8);} // if the flywheel is off , turn it on
             else if (flyMotor) {robot.shooting.setPower(0);} // if the flywheel is on , turn it off
         }
@@ -267,7 +267,7 @@ public class MecanumDriveIntake extends OpMode
         // xClick - checks if flywheel button is pressed
 
         if (!flyWheel2) { // checks if the flywheel is not already moving
-            if (gamepad1.y) { // checks if the bumper is pressed
+            if (gamepad2.y) { // checks if the bumper is pressed
                 yClick = true; // set X-button flag - X-button was pressed
                 flyWheel2 = true; // Flywheel process has started
                 //flyMotor = true;
@@ -318,7 +318,7 @@ public class MecanumDriveIntake extends OpMode
 
         if (!shooting) {                    // if shooting process has not started then check button for press
             if (!shootButton) {            // if button has been pressed then check current time and set
-                if (gamepad1.right_bumper) { // shooting button and shooting process status flags to true.
+                if (gamepad2.right_trigger > .8) { // shooting button and shooting process status flags to true.
                     initialSH = getRuntime();
                     shooting = true;
                     shootButton = true;
@@ -347,7 +347,7 @@ public class MecanumDriveIntake extends OpMode
 
         //********************************* Intake motor ********************************************************
 
-        if (gamepad1.a) {
+        if (gamepad1.right_trigger > .8) {
             if (intakeButtonState == States.Off) {
                 if (intakeState == States.Forwards) {
                     intakeState = States.Off;
@@ -357,7 +357,7 @@ public class MecanumDriveIntake extends OpMode
                 intakeState = States.Forwards;
             }
             intakeButtonState = States.Forwards;
-        } else if (gamepad1.b) {
+        } else if (gamepad1.left_trigger > .8) {
             if (intakeButtonState == States.Off) {
                 if (intakeState == States.Backwards) {
                     intakeState = States.Off;
@@ -409,7 +409,7 @@ public class MecanumDriveIntake extends OpMode
         // storagePressed - checks if storage button is pressed
 
         if (!movingStorage) { // checks if the storage is not already moving
-            if (gamepad1.left_bumper) { // checks if the bumper is pressed
+            if (gamepad2.b) { // checks if the b button is pressed
                 storagePressed = true; // raises storage pressed flag
                 movingStorage = true; // raises the moving storage flag
                 initialST = getRuntime(); // gets current time
@@ -440,8 +440,11 @@ public class MecanumDriveIntake extends OpMode
             }
         }
 
-        if (gamepad1.right_trigger>0.9) {
+        if (gamepad2.right_bumper) {
             robot.strafeDistanceCM3(20,0.2,false);
+        }
+        else if (gamepad2.left_bumper) {
+            robot.strafeDistanceCM3(-20,0.2,false);
         }
 //************************************************************************************************************
 
