@@ -286,7 +286,7 @@ public class MecanumDriveIntake2 extends OpMode
          //   motorOff = false;
         //}
 
-        if (gamepad1.x) {
+        if (gamepad2.x) {
             if (XClick == false) {
                 XClick = true;
                 if (flywheel == States.On) {
@@ -318,12 +318,12 @@ public class MecanumDriveIntake2 extends OpMode
         // xClick - checks if flywheel button is pressed
 
         if (!flyWheel) { // checks if the flywheel is not already moving
-            if (gamepad1.x) { // checks if the bumper is pressed
+            if (gamepad2.x) { // checks if the bumper is pressed
                 xClick = true; // set X-button flag - X-button was pressed
                 flyWheel = true; // Flywheel process has started
                 //flyMotor = true;
                 initialFL = getRuntime(); // gets current time
-               // telemetry.addData("Status", "xClick " + gamepad1.x);
+               // telemetry.addData("Status", "xClick " + gamepad2.x);
             }
         }
 
@@ -352,12 +352,12 @@ public class MecanumDriveIntake2 extends OpMode
         // xClick - checks if flywheel button is pressed
 
         if (!flyWheel2) { // checks if the flywheel is not already moving
-            if (gamepad1.y) { // checks if the bumper is pressed
+            if (gamepad2.y) { // checks if the bumper is pressed
                 yClick = true; // set X-button flag - X-button was pressed
                 flyWheel2 = true; // Flywheel process has started
                 //flyMotor = true;
                 initialFL = getRuntime(); // gets current time
-             //   telemetry.addData("Status", "yClick " + gamepad1.y);
+             //   telemetry.addData("Status", "yClick " + gamepad2.y);
             }
         }
 
@@ -402,7 +402,7 @@ public class MecanumDriveIntake2 extends OpMode
 
         if (!shooting) {                    // if shooting process has not started then check button for press
             if (!shootButton) {            // if button has been pressed then check current time and set
-                if (gamepad1.right_bumper) { // shooting button and shooting process status flags to true.
+                if (gamepad2.right_trigger > 0.5) { // shooting button and shooting process status flags to true.
                     initialSH = getRuntime();
                     shooting = true;
                     shootButton = true;
@@ -431,7 +431,7 @@ public class MecanumDriveIntake2 extends OpMode
 
         //********************************* Intake motor ********************************************************
 
-        if (gamepad1.a) {
+        if (gamepad1.right_trigger > 0.5) {
             if (intakeButtonState == States.Off) {
                 if (intakeState == States.Forwards) {
                     intakeState = States.Off;
@@ -441,7 +441,7 @@ public class MecanumDriveIntake2 extends OpMode
                 intakeState = States.Forwards;
             }
             intakeButtonState = States.Forwards;
-        } else if (gamepad1.b) {
+        } else if (gamepad1.left_trigger > 0.5) {
             if (intakeButtonState == States.Off) {
                 if (intakeState == States.Backwards) {
                     intakeState = States.Off;
@@ -493,7 +493,7 @@ public class MecanumDriveIntake2 extends OpMode
         // storagePressed - checks if storage button is pressed
 
         if (!movingStorage) { // checks if the storage is not already moving
-            if (gamepad1.left_bumper) { // checks if the bumper is pressed
+            if (gamepad2.b) { // checks if the bumper is pressed
                 storagePressed = true; // raises storage pressed flag
                 movingStorage = true; // raises the moving storage flag
                 initialST = getRuntime(); // gets current time

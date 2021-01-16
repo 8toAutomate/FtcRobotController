@@ -98,6 +98,10 @@ public class MecanumDriveIntake extends OpMode
             robot.gripperServo.setPosition(0);
         }
     }
+
+
+
+
 /*
     public void moveRingPusher(States state) {
         robot.ringPusher.scaleRange(0, 1.0);
@@ -160,6 +164,8 @@ public class MecanumDriveIntake extends OpMode
         double x = gamepad1.left_stick_x * strafingConstant;
         // rx: right stick's x value
         double rx = gamepad1.right_stick_x;
+
+
 
         if (Math.abs(x) <= .15) x = 0;
 
@@ -283,40 +289,6 @@ public class MecanumDriveIntake extends OpMode
         }
 
 
-        //*******************Strafe right 20CM (Power shot shooting) *************************************************
-        /*
-
-         */
-        //Update 1-8-2021
-        // This code turns the flywheel motor on or off.
-        // This is similar to the storage box program except adapted for motor instead of servo
-
-        // FLAGS:
-        // flyWheel2 - holds the state of the Flywheel operation
-        // flyMotor- holds if the flywheel motor is running or off
-        // xClick - checks if flywheel button is pressed
-
-     /*   if (!strafe20) { // checks if the flywheel is not already moving
-            if (gamepad1.right_trigger>0.6) { // checks if the bumper is pressed
-                rtClick = true; // set X-button flag - X-button was pressed
-                strafe20 = true; // Flywheel process has started
-                //flyMotor = true;
-                initialSR = getRuntime(); // gets current time
-                //   telemetry.addData("Status", "yClick " + gamepad1.y);
-            }
-        }
-
-        if (rtClick && strafe20) { // checks if the storage is moving and if the storage pressed flag is raised
-            robot.strafeDistanceCM2(20, 0.2, false, MecanumDriveIntake);
-        }
-        if (strafe2) {
-            if (getRuntime() - initialSR > 1) {
-                strafe20 = false;
-                rtClick = false; // Flywheel button is lowered
-            }
-        }
-
-      */
         //********************Shooting Servo************************************************************
   /*      if (!shooting) {
             if (gamepad1.left_bumper) {
@@ -466,6 +438,10 @@ public class MecanumDriveIntake extends OpMode
                 storageUp = !storageUp; // updates state
                 movingStorage = false;
             }
+        }
+
+        if (gamepad1.right_trigger>0.9) {
+            robot.strafeDistanceCM3(20,0.2,false);
         }
 //************************************************************************************************************
 
