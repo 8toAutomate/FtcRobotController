@@ -84,6 +84,7 @@ public class MecanumDriveIntake extends OpMode
     boolean flyWheel, flyMotor, flyWheel2 = false;
     boolean strafe20,rtClick = false;
     boolean shootingReverse = false;
+    double liftingPower;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -173,7 +174,7 @@ public class MecanumDriveIntake extends OpMode
         // rx: right stick's x value
         double rx = exponential(gamepad1.right_stick_x,1);
 
-
+        double y2 = exponential(gamepad2.right_stick_y, 1);
 
         if (Math.abs(x) <= .15) x = 0;
 
@@ -189,15 +190,26 @@ public class MecanumDriveIntake extends OpMode
         backLeftPower = y - x + rx;
         backRightPower = y + x - rx;
 
+        liftingPower = y2;
+
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
         backLeftPower = Range.clip(backLeftPower, -1.0, 1.0);
         backRightPower   = Range.clip(backRightPower, -1.0, 1.0);
+        liftingPower = Range.clip(liftingPower, -1.0,1.0);
 
         robot.frontLeftMotor.setPower(frontLeftPower);
         robot.frontRightMotor.setPower(frontRightPower);
         robot.backLeftMotor.setPower(backLeftPower);
         robot.backRightMotor.setPower(backRightPower);
+
+
+        if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
+            robot.lifting.setPower(y2);
+        }
+        if (robot.lowSwitch1.isPressed() && robot.lowSwitch2.isPressed()) {
+            liftingPower = Range.clip(liftingPower, -1.0,0);
+        }
 
         //*******************Flywheel motor (shooting) *************************************************
       /*
@@ -396,6 +408,8 @@ public class MecanumDriveIntake extends OpMode
             robot.intake.setPower(0);
         }
         //********************************* Gripper and Gripper arm ************************************
+        // logic version
+        /*
         if (gamepad2.dpad_up && !gripperRaised) {
             raiseGripper();
             gripperRaised = true;
@@ -414,7 +428,25 @@ public class MecanumDriveIntake extends OpMode
             moveGripper(false);
             gripperClosed = false;
         }
+        */
 
+        // no logic version
+        if (gamepad2.dpad_up) {
+            raiseGripper();
+        }
+
+        if (gamepad2.dpad_down) {
+            lowerGripper();
+        }
+
+        if (gamepad2.dpad_left && !gripperClosed) {
+            moveGripper(true);
+            gripperClosed = true;
+        }
+        if (gamepad2.dpad_right && gripperClosed) {
+            moveGripper(false);
+            gripperClosed = false;
+        }
         //********************************* Storage Servo **********************************************
 
         // this code raises and lowers the storage servo using the left bumper button.
