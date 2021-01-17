@@ -35,11 +35,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.vuforia.ar.pl.SystemTools;
 
@@ -68,6 +70,10 @@ public class ProgrammingFrame
     public NormalizedColorSensor colorSensor2;
     public NormalizedColorSensor bottomRing;
     public NormalizedColorSensor topRing;
+    public TouchSensor lowSwitch1;
+    public TouchSensor highSwitch1;
+    public TouchSensor lowSwitch2;
+    public TouchSensor highSwitch2;
     public OpMode systemTools;
 
 
@@ -141,6 +147,11 @@ public class ProgrammingFrame
         colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
         bottomRing = hwMap.get(NormalizedColorSensor.class, "bottomRing");
         topRing = hwMap.get(NormalizedColorSensor.class, "topRing");
+
+        lowSwitch1 = hwMap.get(TouchSensor.class, "limit_low1");
+        // highSwitch1 = hwMap.get(TouchSensor.class, "limit_hi1");
+        lowSwitch2 = hwMap.get(TouchSensor.class, "limit_low2");
+        // highSwitch2 = hwMap.get(TouchSensor.class, "limit_hi2");
 
         ringPusher.setPosition(0);
         storageServo.setPosition(1.0);
