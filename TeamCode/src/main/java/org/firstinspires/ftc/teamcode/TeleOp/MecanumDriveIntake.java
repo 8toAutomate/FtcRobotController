@@ -92,7 +92,7 @@ public class MecanumDriveIntake extends OpMode
         robot.gripperServo.setDirection(Servo.Direction.REVERSE);
         robot.gripperServo.scaleRange(0, 1.0);
         if (close) {
-            robot.gripperServo.setPosition(0.25);
+            robot.gripperServo.setPosition(1);
         }
         else {
             robot.gripperServo.setPosition(0);
@@ -122,7 +122,7 @@ public class MecanumDriveIntake extends OpMode
     }
 */
     public void raiseGripper() {
-        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 320);
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 600);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setPower(-1);
         while (robot.lifting.isBusy()) {}
@@ -172,6 +172,7 @@ public class MecanumDriveIntake extends OpMode
         double x = exponential(gamepad1.left_stick_x,1);
         // rx: right stick's x value
         double rx = exponential(gamepad1.right_stick_x,1);
+
 
 
         if (Math.abs(x) <= .15) x = 0;
