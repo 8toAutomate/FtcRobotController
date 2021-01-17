@@ -208,7 +208,7 @@ public class MecanumDriveIntake extends OpMode
             robot.lifting.setPower(y2);
         }
         if (robot.lowSwitch1.isPressed() && robot.lowSwitch2.isPressed()) {
-            liftingPower = Range.clip(liftingPower, -1.0,0);
+            robot.lifting.setPower(Range.clip(liftingPower, -1.0,0));
         }
 
         //*******************Flywheel motor (shooting) *************************************************
