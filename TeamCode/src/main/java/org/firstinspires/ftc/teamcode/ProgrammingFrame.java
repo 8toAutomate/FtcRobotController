@@ -135,10 +135,10 @@ public class ProgrammingFrame
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
-        colorSensor1 = hwMap.get(NormalizedColorSensor.class, "sensor_color");
-        colorSensor2 = hwMap.get(NormalizedColorSensor.class, "sensor_color2");
-        bottomRing = hwMap.get(NormalizedColorSensor.class, "sensor_color3");
-        topRing = hwMap.get(NormalizedColorSensor.class, "sensor_color4");
+        colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
+        colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
+        bottomRing = hwMap.get(NormalizedColorSensor.class, "bottomRing");
+        topRing = hwMap.get(NormalizedColorSensor.class, "topRing");
 
         ringPusher.setPosition(0);
         storageServo.setPosition(1.0);

@@ -83,6 +83,7 @@ public class MecanumDriveIntake extends OpMode
     boolean storagePressed = false;
     boolean flyWheel, flyMotor, flyWheel2 = false;
     boolean strafe20,rtClick = false;
+    boolean shootingReverse = false;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -97,6 +98,12 @@ public class MecanumDriveIntake extends OpMode
             robot.gripperServo.setDirection(Servo.Direction.REVERSE);
             robot.gripperServo.setPosition(0);
         }
+    }
+
+    // exponential function for joystick inputs
+    public double exponential(double value, int constant) {
+        double cubed =  value*value*value;
+        return cubed * constant;
     }
 
 
@@ -157,14 +164,14 @@ public class MecanumDriveIntake extends OpMode
     @Override
     public void loop() {
 //********************************* Robot movement ********************************************************
+
         // controller variables
         // y: inverse of left stick's y value
-        double y = -gamepad1.left_stick_y;
+        double y = exponential(-gamepad1.left_stick_y, 1);
         // x underscored: left stick's x value multiplied by the strafing coefficient in order to counteract imperfect strafing
-        double x = gamepad1.left_stick_x * strafingConstant;
+        double x = exponential(gamepad1.left_stick_x,1);
         // rx: right stick's x value
-        double rx = gamepad1.right_stick_x;
-
+        double rx = exponential(gamepad1.right_stick_x,1);
 
 
         if (Math.abs(x) <= .15) x = 0;
@@ -318,7 +325,7 @@ public class MecanumDriveIntake extends OpMode
 
         if (!shooting) {                    // if shooting process has not started then check button for press
             if (!shootButton) {            // if button has been pressed then check current time and set
-                if (gamepad2.right_trigger > .8) { // shooting button and shooting process status flags to true.
+                if (gamepad2.right_bumper) { // shooting button and shooting process status flags to true.
                     initialSH = getRuntime();
                     shooting = true;
                     shootButton = true;
@@ -418,7 +425,7 @@ public class MecanumDriveIntake extends OpMode
         // storagePressed - checks if storage button is pressed
 
         if (!movingStorage) { // checks if the storage is not already moving
-            if (gamepad2.b) { // checks if the b button is pressed
+            if (gamepad2.left_bumper) { // checks if the b button is pressed
                 storagePressed = true; // raises storage pressed flag
                 movingStorage = true; // raises the moving storage flag
                 initialST = getRuntime(); // gets current time
@@ -449,13 +456,29 @@ public class MecanumDriveIntake extends OpMode
             }
         }
 
-        if (gamepad2.right_bumper) {
+        if (gamepad2.right_trigger > 0.5) {
             robot.strafeDistanceCM3(20,0.2,false);
         }
-        else if (gamepad2.left_bumper) {
+        else if (gamepad2.left_trigger > 0.5) {
             robot.strafeDistanceCM3(-20,0.2,false);
         }
-//************************************************************************************************************
+
+//*******************************Reverse shooting while LT is held, and turn off when released*********************************************
+        /*
+        while (gamepad2.left_trigger > 0.5) {
+            robot.shooting.setPower(-1);
+            if (shootingReverse = false); {
+                robot.shooting.setPower(0);
+            }
+        }
+        // manages state
+        if (gamepad1.left_trigger > 0.5) {
+            shootingReverse = true;
+        } else {
+            shootingReverse = false;
+        }
+        */
+        //************************************************************************************************************
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
