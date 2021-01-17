@@ -119,7 +119,7 @@ public class ProgrammingFrame
         //backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
+        lifting.setDirection(DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         stopAllMotors();
