@@ -63,11 +63,13 @@ public class ProgrammingFrame
     public Servo ringPusher = null;
     public Servo storageServo = null;
 
+
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
     public NormalizedColorSensor bottomRing;
     public NormalizedColorSensor topRing;
     public OpMode systemTools;
+
 
     enum States {
         On, Off, Backwards, Forwards

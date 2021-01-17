@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="DistanceTest", group="ProgrammingFrame")
+@Autonomous(name="ArmTest", group="ProgrammingFrame")
 
     public class ArmTest extends LinearOpMode {
         /* Updated telemetry statements so all lines are displayed on screen  8Toautomate 12-26-20
@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
         private ElapsedTime runtime = new ElapsedTime();
 
         //static final int        TICKS                   = 1000;
-        static final double     DRIVE_SPEED             = 0.5;
+        static final double     DRIVE_SPEED             = 0.2;
         static final double     TURN_SPEED              = 0.5;
         static final double     timeoutS                = 20;
 
@@ -69,7 +69,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
         public void runOpMode() {
             robot.init(hardwareMap,this);
             waitForStart();
-            ArmTICKS(100, 0.1);
+            ArmTICKS(-100, 0.1);
             robot.stopDriveMotors();
         }
 

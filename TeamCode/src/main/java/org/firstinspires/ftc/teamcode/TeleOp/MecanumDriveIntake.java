@@ -123,16 +123,16 @@ public class MecanumDriveIntake extends OpMode
     }
 */
     public void raiseGripper() {
-        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 320);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setPower(1);
         while (robot.lifting.isBusy()) {}
         robot.lifting.setPower(0);
     }
 
     public void lowerGripper() {
-        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 320);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setPower(-1);
         while (robot.lifting.isBusy()) {}
         robot.lifting.setPower(0);
@@ -396,7 +396,7 @@ public class MecanumDriveIntake extends OpMode
         }
         //********************************* Gripper and Gripper arm ************************************
         if (gamepad2.dpad_up && !gripperRaised) {
-            lowerGripper();
+            raiseGripper();
             gripperRaised = true;
         }
 
