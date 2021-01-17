@@ -174,7 +174,7 @@ public class MecanumDriveIntake extends OpMode
         // rx: right stick's x value
         double rx = exponential(gamepad1.right_stick_x,1);
 
-        double y2 = exponential(gamepad2.right_stick_y, 1);
+        double y2 = gamepad2.right_stick_y;
 
         if (Math.abs(x) <= .15) x = 0;
 
@@ -196,7 +196,7 @@ public class MecanumDriveIntake extends OpMode
         frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
         backLeftPower = Range.clip(backLeftPower, -1.0, 1.0);
         backRightPower   = Range.clip(backRightPower, -1.0, 1.0);
-        liftingPower = Range.clip(liftingPower, -1.0,1.0);
+        liftingPower = Range.clip(liftingPower, -0.3,0.3);
 
         robot.frontLeftMotor.setPower(frontLeftPower);
         robot.frontRightMotor.setPower(frontRightPower);
@@ -208,7 +208,7 @@ public class MecanumDriveIntake extends OpMode
             robot.lifting.setPower(y2);
         }
         if (robot.lowSwitch1.isPressed() && robot.lowSwitch2.isPressed()) {
-            robot.lifting.setPower(Range.clip(liftingPower, -1.0,0));
+            robot.lifting.setPower(Range.clip(liftingPower, -0.3,0));
         }
 
         //*******************Flywheel motor (shooting) *************************************************
