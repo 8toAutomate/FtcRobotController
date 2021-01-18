@@ -22,14 +22,14 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
 
+        robot.gripperOpen();
+        robot.wait(1000L,this);
         robot.raiseGripper();
+
+        robot.gripperClose();
+        robot.wait(1000L,this);
         robot.raiseGripper();
 
-        robot.moveGripper(true);
-
-        robot.moveGripper(true);
-
-        System.exit(8220);
         robot.GoDistanceCM2(69, .7, false,this);
      //   while (opModeIsActive()) {}// debug stop prgram here
 
@@ -47,7 +47,19 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             }
         }
         // Gets us to the target zone
-        robot.StrafeCM2(-22, .7, this);
+        robot.GoDistanceCM2(80, .7, false, this);
+
+        robot.storage(true, this);
+        robot.flywheel(true, 0.8);
+        robot.wait(3000,this);
+        robot.pushRing(0.5,this);
+        robot.wait(3000,this);
+        robot.pushRing(0.5,this);
+        robot.wait(3000,this);
+        robot.pushRing(0.5,this);
+        robot.wait(3000,this);
+
+
         if (ringAt == 'A') {
             robot.GoDistanceCM2(80, .7, false, this);
         }
@@ -84,7 +96,6 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         //robot.findLine(.5);
         // Go forward a tiny bit that way we are more centered on the line
         //robot.GoDistanceCM(5, .8, this);
-
         //end of Debug: comment out rest of method  FEM 12-24-2020
         //*/
         telemetry.addLine();

@@ -155,6 +155,14 @@ public class ProgrammingFrame
 
         ringPusher.setPosition(0);
         storageServo.setPosition(1.0);
+
+        gripperServo.setPosition(0);
+        lifting.setTargetPosition(lifting.getCurrentPosition() + 1000);
+        lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lifting.setPower(1);
+        while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {}
+        lifting.setPower(0);
+        lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     // go distance function
@@ -567,8 +575,20 @@ public class ProgrammingFrame
             gripperServo.setPosition(0);
         }
     }
+
+    public void gripperClose() {
+        gripperServo.setDirection(Servo.Direction.REVERSE);
+        gripperServo.scaleRange(0, 1.0);
+        gripperServo.setPosition(1);
+    }
+
+    public void gripperOpen() {
+        gripperServo.setDirection(Servo.Direction.REVERSE);
+        gripperServo.scaleRange(0, 1.0);
+        gripperServo.setPosition(0);
+    }
     public void raiseGripper() {
-        lifting.setTargetPosition(lifting.getCurrentPosition() - 600);
+        lifting.setTargetPosition(lifting.getCurrentPosition() - 850);
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lifting.setPower(-1);
         while (lifting.isBusy()) {}
@@ -576,7 +596,7 @@ public class ProgrammingFrame
     }
 
     public void lowerGripper() {
-        lifting.setTargetPosition(lifting.getCurrentPosition() + 600);
+        lifting.setTargetPosition(lifting.getCurrentPosition() + 2000);
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lifting.setPower(1);
         while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {}

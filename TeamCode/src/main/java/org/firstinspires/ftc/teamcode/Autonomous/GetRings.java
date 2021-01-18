@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="RingTest", group="Motion")
+@Autonomous(name="GetRings", group="Motion")
 
-public class RingTest extends LinearOpMode {
+public class GetRings extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
     static final double conversion_factor = 8.46;
@@ -44,7 +44,22 @@ public class RingTest extends LinearOpMode {
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (opModeIsActive()) {
-            telemetry.addData("rings detected", robot.ringFinder());
+            NormalizedRGBA colors1 = robot.topRing.getNormalizedColors();
+
+
+            Color.colorToHSV(colors1.toColor(), hsvValues);
+
+
+
+            telemetry.addData("Hval", hsvValues[0]);
+            telemetry.addData("red", colors1.red);
+            telemetry.addData("green", colors1.green);
+            telemetry.addData("blue", colors1.blue);
+
+
+            if (robot.topRing instanceof DistanceSensor) {
+                telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) robot.topRing).getDistance(DistanceUnit.CM));
+            }
             telemetry.update();
 
         }

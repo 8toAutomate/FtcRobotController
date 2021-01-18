@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="Left1WobbleTargetBlue", group="Motion")
+@Autonomous(name="Left1WobbleTargetBlueTest", group="Motion")
 public class AutoLeft1WV1BlueTest extends LinearOpMode {
     // This program starts on the left blue line, shoots at the high goal, drops off a wobble goal
     // in it's target, than drives to center shooting spot to park at the end.
