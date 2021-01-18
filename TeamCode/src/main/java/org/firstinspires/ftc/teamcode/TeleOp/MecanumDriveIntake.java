@@ -128,6 +128,7 @@ public class MecanumDriveIntake extends OpMode
         robot.lifting.setPower(-1);
         while (robot.lifting.isBusy()) {}
         robot.lifting.setPower(0);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void lowerGripper() {
@@ -136,6 +137,7 @@ public class MecanumDriveIntake extends OpMode
         robot.lifting.setPower(1);
         while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
         robot.lifting.setPower(0);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     @Override
@@ -159,6 +161,7 @@ public class MecanumDriveIntake extends OpMode
     @Override
     public void start() {
         runtime.reset();
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         initialSH = 0.6;
     }
 
