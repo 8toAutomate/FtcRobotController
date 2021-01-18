@@ -439,13 +439,11 @@ public class MecanumDriveIntake extends OpMode
             lowerGripper();
         }
 
-        if (gamepad2.dpad_left && !gripperClosed) {
+        if (gamepad2.dpad_left) {
             moveGripper(true);
-            gripperClosed = true;
         }
-        if (gamepad2.dpad_right && gripperClosed) {
+        if (gamepad2.dpad_right) {
             moveGripper(false);
-            gripperClosed = false;
         }
         //********************************* Storage Servo **********************************************
 
