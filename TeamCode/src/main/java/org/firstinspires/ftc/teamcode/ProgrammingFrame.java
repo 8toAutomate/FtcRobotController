@@ -558,30 +558,28 @@ public class ProgrammingFrame
     }
 
     public void moveGripper(boolean close) {
+        gripperServo.setDirection(Servo.Direction.REVERSE);
         gripperServo.scaleRange(0, 1.0);
         if (close) {
-            gripperServo.setDirection(Servo.Direction.FORWARD);
-            gripperServo.setPosition(0.25);
+            gripperServo.setPosition(1);
         }
         else {
-            gripperServo.setDirection(Servo.Direction.REVERSE);
             gripperServo.setPosition(0);
         }
     }
-
-    public void raiseGripper(LinearOpMode linearOpMode) {
+    public void raiseGripper() {
+        lifting.setTargetPosition(lifting.getCurrentPosition() - 600);
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lifting.setTargetPosition(lifting.getCurrentPosition() + 320);
-        lifting.setPower(1);
-        while (linearOpMode.opModeIsActive() && lifting.isBusy()) {}
+        lifting.setPower(-1);
+        while (lifting.isBusy()) {}
         lifting.setPower(0);
     }
 
-    public void lowerGripper(LinearOpMode linearOpMode) {
+    public void lowerGripper() {
+        lifting.setTargetPosition(lifting.getCurrentPosition() + 600);
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lifting.setTargetPosition(lifting.getCurrentPosition() - 320);
-        lifting.setPower(-1);
-        while (linearOpMode.opModeIsActive() && lifting.isBusy()) {}
+        lifting.setPower(1);
+        while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {}
         lifting.setPower(0);
     }
 
@@ -1143,6 +1141,7 @@ public class ProgrammingFrame
         startDriveEncoders();
 
     }
+
 
     public void wait(long timeout, LinearOpMode linearOpMode) {
         linearOpMode.sleep(timeout);

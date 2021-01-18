@@ -146,6 +146,13 @@ public class MecanumDriveIntake extends OpMode
         robot.shooting.setPower(0);
         gamepad1.setJoystickDeadzone(.1f);
         gamepad2.setJoystickDeadzone(.1f);
+        robot.gripperServo.setPosition(0);
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 1000);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lifting.setPower(1);
+        while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
+        robot.lifting.setPower(0);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
