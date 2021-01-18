@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="StrafeDistance", group="Motion")
-
+// @Autonomous(name="StrafeDistance", group="Motion")
+@Disabled
 public class StrafeDistance extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();

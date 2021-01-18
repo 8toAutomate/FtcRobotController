@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
- * {@link Thanish2mDistance} illustrates how to use the REV Robotics
+ * {@link Thanish2MDistance} illustrates how to use the REV Robotics
  * Time-of-Flight Range Sensor.
  *
  * The op mode assumes that the range sensor is configured with a name of "sensor_range".
@@ -50,9 +50,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  *
  * @see <a href="http://revrobotics.com">REV Robotics Web Page</a>
  */
-@TeleOp(name = "Thanish2mDistance", group = "Sensor")
+@TeleOp(name = "Thanish2MDistance", group = "Sensor")
 //@Disabled
-public class Thanish2mDistance extends LinearOpMode {
+public class Thanish2MDistance extends LinearOpMode {
 
     private DistanceSensor sensorRange;
 
