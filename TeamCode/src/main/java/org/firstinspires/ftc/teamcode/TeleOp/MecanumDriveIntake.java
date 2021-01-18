@@ -435,7 +435,7 @@ public class MecanumDriveIntake extends OpMode
             raiseGripper();
         }
 
-        if (gamepad2.dpad_down) {
+        if (gamepad2.dpad_down && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {
             lowerGripper();
         }
 
@@ -517,6 +517,8 @@ public class MecanumDriveIntake extends OpMode
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
         telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+        telemetry.addData("Switch 1 Status", robot.lowSwitch1.isPressed());
+        telemetry.addData("Switch 2 Status", robot.lowSwitch2.isPressed());
     }
 
     public void stop() {
