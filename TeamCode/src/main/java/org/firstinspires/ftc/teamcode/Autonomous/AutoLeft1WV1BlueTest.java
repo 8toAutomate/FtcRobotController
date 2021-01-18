@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 @Autonomous(name="Left1WobbleTargetBlueTest", group="Motion")
 public class AutoLeft1WV1BlueTest extends LinearOpMode {
-    // This program starts on the left blue line, shoots at the high goal, drops off a wobble goal
-    // in it's target, than drives to center shooting spot to park at the end.
+    /* This program starts on the left blue line, shoots at the high goal, drops off a wobble goal
+    in its target. Then, it drives to center shooting spot to park at the end. */
     char ringAt;
     ProgrammingFrame robot   = new ProgrammingFrame();
     private ElapsedTime runtime = new ElapsedTime();
@@ -22,7 +22,7 @@ public class AutoLeft1WV1BlueTest extends LinearOpMode {
         // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
         robot.GoDistanceCM2(69, .7, false,this);
-     //   while (opModeIsActive()) {}// debug stop prgram here
+     //   while (opModeIsActive()) {}// debug stop program here
 
 
 
@@ -50,10 +50,10 @@ public class AutoLeft1WV1BlueTest extends LinearOpMode {
             robot.GoDistanceCM2(205, .7, false,this);
         }
 
-        // /*  Debug: comment out rest of method  MAx M. 12-24-2020
-        // Add function that drops a wobble goal
-        // Move to the launch line
-      /*  if (ringAt == 'A') {
+         /*  Debug: comment out rest of method  MAx M. 12-24-2020
+         Add function that drops a wobble goal
+         Move to the launch line
+        if (ringAt == 'A') {
             robot.StrafeCM2(-22, .7, this);
             robot.GoDistanceCM2(27, .7, this);
         }
@@ -64,7 +64,7 @@ public class AutoLeft1WV1BlueTest extends LinearOpMode {
             robot.GoDistanceCM2(-86, .7, this);
             robot.StrafeCM2(-59, .7, this);
         }
-       */
+
 
 
         // Comment out the below if we don't have time!!!
@@ -73,13 +73,13 @@ public class AutoLeft1WV1BlueTest extends LinearOpMode {
         //robot.GoDistanceCM(-15, .8, this);
         // Line up to the line
         //robot.findLine(.5);
-        // Go forward a tiny bit that way we are more centered on the line
+        // Go forward a tiny bit. That way, we are more centered on the line
         //robot.GoDistanceCM(5, .8, this);
+        */
         robot.moveGripper(true);
         robot.lowerGripper();
 
         //end of Debug: comment out rest of method  FEM 12-24-2020
-        //*/
         telemetry.addLine();
         telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
                 robot.frontLeftMotor.getCurrentPosition(),
