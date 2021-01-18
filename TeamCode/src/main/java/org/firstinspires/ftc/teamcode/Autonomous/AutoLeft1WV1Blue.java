@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 @Autonomous(name="Left1WobbleTargetBlue", group="Motion")
 public class AutoLeft1WV1Blue extends LinearOpMode {
     // This program starts on the left blue line, shoots at the high goal, drops off a wobble goal
-    // in it's target, than drives to center shooting spot to park at the end.
+    // in its target. Then, it drives to center shooting spot to park at the end.
     char ringAt;
     ProgrammingFrame robot   = new ProgrammingFrame();
     private ElapsedTime runtime = new ElapsedTime();
@@ -22,7 +22,7 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
         // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
         robot.GoDistanceCM2(69, .7, false,this);
-     //   while (opModeIsActive()) {}// debug stop prgram here
+        // while (opModeIsActive()) {}// debug stop prgram here
 
 
 
@@ -50,10 +50,10 @@ public class AutoLeft1WV1Blue extends LinearOpMode {
             robot.GoDistanceCM2(205, .7, false,this);
         }
 
-        // /*  Debug: comment out rest of method  MAx M. 12-24-2020
-        // Add function that drops a wobble goal
-        // Move to the launch line
-      /*  if (ringAt == 'A') {
+        /*  Debug: comment out rest of method  MAx M. 12-24-2020
+        Add function that drops a wobble goal
+        Move to the launch line
+        if (ringAt == 'A') {
             robot.StrafeCM2(-22, .7, this);
             robot.GoDistanceCM2(27, .7, this);
         }
