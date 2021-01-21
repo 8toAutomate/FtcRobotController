@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="ScrimmageAutoPowershot", group="Motion")
-public class ScrimmageAutopowershot extends LinearOpMode {
+@Autonomous(name="ScrimmageAutoPowerShot", group="Motion")
+public class ScrimmageAutoPowerShot extends LinearOpMode {
     // This program starts on the left red line, shoots at the high goal, drops off a wobble goal in
     // it's target, than drives to center shooting spot to park at the end.
     char ringAt;

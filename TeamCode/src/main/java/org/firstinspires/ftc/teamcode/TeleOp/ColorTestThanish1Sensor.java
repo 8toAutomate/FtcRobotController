@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -40,8 +41,8 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
-@TeleOp(name = "ColorTestThanish1Sensor", group = "Sensor")
-//@Disabled
+// @TeleOp(name = "ColorTestThanish1Sensor", group = "Sensor")
+@Disabled
 public class ColorTestThanish1Sensor extends OpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */

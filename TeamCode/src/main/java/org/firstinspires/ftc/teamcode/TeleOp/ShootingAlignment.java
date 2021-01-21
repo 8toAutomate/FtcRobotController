@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -36,8 +37,8 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@TeleOp(name="ShootingAlignment", group="Iterative OpMode")
-//@Disabled
+// @TeleOp(name="ShootingAlignment", group="Iterative OpMode")
+@Disabled
 public class ShootingAlignment extends OpMode
 {
 

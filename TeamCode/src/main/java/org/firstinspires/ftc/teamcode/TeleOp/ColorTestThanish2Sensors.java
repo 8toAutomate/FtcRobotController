@@ -33,7 +33,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -45,8 +45,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
-@TeleOp(name = "ColorTestThanish2Sensors", group = "Sensor")
-//@Disabled
+// @TeleOp(name = "ColorTestThanish2Sensors", group = "Sensor")
+@Disabled
 public class ColorTestThanish2Sensors extends OpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */

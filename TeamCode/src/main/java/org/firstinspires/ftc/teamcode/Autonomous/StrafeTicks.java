@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="StrafeTicks", group="Motion")
-
+// @Autonomous(name="StrafeTicks", group="Motion")
+@Disabled
 public class StrafeTicks extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();

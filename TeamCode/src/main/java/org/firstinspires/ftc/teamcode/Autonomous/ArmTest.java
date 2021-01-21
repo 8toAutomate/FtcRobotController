@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="ArmTest", group="ProgrammingFrame")
-
+// @Autonomous(name="ArmTest", group="ProgrammingFrame")
+@Disabled
     public class ArmTest extends LinearOpMode {
         /* Updated telemetry statements so all lines are displayed on screen  8Toautomate 12-26-20
          */
