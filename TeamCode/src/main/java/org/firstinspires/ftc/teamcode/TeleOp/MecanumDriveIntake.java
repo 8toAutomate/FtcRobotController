@@ -106,38 +106,22 @@ public class MecanumDriveIntake extends OpMode
         return cubed * constant;
     }
 
-
-
-
-/*
-    public void moveRingPusher(States state) {
-        robot.ringPusher.scaleRange(0, 1.0);
-        if (state == States.Backwards) {
-            robot.ringPusher.setDirection(Servo.Direction.FORWARD);
-            robot.ringPusher.setPosition(0.25);
-        }
-        else {
-            robot.ringPusher.setDirection(Servo.Direction.REVERSE);
-            robot.ringPusher.setPosition(0);
-        }
-    }
-*/
     public void raiseGripper() {
-        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 600);
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 850);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.lifting.setPower(-1);
-        while (robot.lifting.isBusy()) {}
+        robot.lifting.setPower(-0.8);
+        while (robot.lifting.isBusy() && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {}
         robot.lifting.setPower(0);
-        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void lowerGripper() {
-        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 600);
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 850);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.lifting.setPower(1);
+        robot.lifting.setPower(.5);
         while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
         robot.lifting.setPower(0);
-        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -149,10 +133,10 @@ public class MecanumDriveIntake extends OpMode
         robot.gripperServo.setPosition(0);
         robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 1000);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.lifting.setPower(1);
+        robot.lifting.setPower(.8);
         while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
         robot.lifting.setPower(0);
-        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -168,7 +152,7 @@ public class MecanumDriveIntake extends OpMode
     @Override
     public void start() {
         runtime.reset();
-        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         initialSH = 0.6;
     }
 
@@ -200,25 +184,27 @@ public class MecanumDriveIntake extends OpMode
         backLeftPower = y - x + rx;
         backRightPower = y + x - rx;
 
-        liftingPower = y2;
+        liftingPower = y2/2;
 
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
         frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
         backLeftPower = Range.clip(backLeftPower, -1.0, 1.0);
         backRightPower   = Range.clip(backRightPower, -1.0, 1.0);
-        liftingPower = Range.clip(liftingPower, -0.3,0.3);
+        liftingPower = Range.clip(liftingPower, -1,1);
 
         robot.frontLeftMotor.setPower(frontLeftPower);
         robot.frontRightMotor.setPower(frontRightPower);
         robot.backLeftMotor.setPower(backLeftPower);
         robot.backRightMotor.setPower(backRightPower);
 
+        robot.lifting.setPower(liftingPower);
 
         if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
-            robot.lifting.setPower(y2);
+            robot.lifting.setPower(y2/2);
         }
         if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
-            robot.lifting.setPower(Range.clip(liftingPower, -0.3,0));
+            robot.lifting.setPower(Range.clip(liftingPower, -.5,0));
+            //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
         }
 
         //*******************Flywheel motor (shooting) *************************************************
@@ -441,7 +427,7 @@ public class MecanumDriveIntake extends OpMode
         */
 
         // no logic version
-        if (gamepad2.dpad_up) {
+        if (gamepad2.dpad_up && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {
             raiseGripper();
         }
 
