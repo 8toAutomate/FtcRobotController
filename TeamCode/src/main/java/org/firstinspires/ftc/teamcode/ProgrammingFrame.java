@@ -149,9 +149,9 @@ public class ProgrammingFrame
         topRing = hwMap.get(NormalizedColorSensor.class, "topRing");
 
         lowSwitch1 = hwMap.get(TouchSensor.class, "limit_low1");
-        // highSwitch1 = hwMap.get(TouchSensor.class, "limit_hi1");
+        highSwitch1 = hwMap.get(TouchSensor.class, "limit_hi1");
         lowSwitch2 = hwMap.get(TouchSensor.class, "limit_low2");
-        // highSwitch2 = hwMap.get(TouchSensor.class, "limit_hi2");
+        highSwitch2 = hwMap.get(TouchSensor.class, "limit_hi2");
 
         ringPusher.setPosition(0);
         storageServo.setPosition(1.0);
@@ -587,16 +587,16 @@ public class ProgrammingFrame
         gripperServo.scaleRange(0, 1.0);
         gripperServo.setPosition(0);
     }
-    public void raiseGripper() {
-        lifting.setTargetPosition(lifting.getCurrentPosition() - 850);
+    public void raiseGripper(int maxTicks) {
+        lifting.setTargetPosition(lifting.getCurrentPosition() - maxTicks); // maxTicks was 850
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lifting.setPower(-1);
-        while (lifting.isBusy()) {}
+        while (lifting.isBusy() && highSwitch1.isPressed() == false && highSwitch2.isPressed() == false) {}
         lifting.setPower(0);
     }
 
-    public void lowerGripper() {
-        lifting.setTargetPosition(lifting.getCurrentPosition() + 2000);
+    public void lowerGripper(int maxTicks) {
+        lifting.setTargetPosition(lifting.getCurrentPosition() + maxTicks); // maxTicks was 2000
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lifting.setPower(1);
         while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {}
