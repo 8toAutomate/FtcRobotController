@@ -36,7 +36,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
 
 
         // Detect the rings here and return A, B, C, or E for Error
-        ringAt = robot.ringFinder();
+        ringAt = robot.ringFinderDistance();
         telemetry.addData("Target zone", ringAt);
         telemetry.update();
         if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
