@@ -79,7 +79,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.gripperOpen();
             robot.wait(1000L,this);
             robot.lowerGripper(900);
-            robot.GoDistanceCM2(-33, .7, false,this);
+            robot.GoDistanceCM2(-33, -.7, false,this);
         }
         else {
             robot.GoDistanceCM2(120, .7, false,this);
@@ -89,7 +89,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.gripperOpen();
             robot.wait(1000L,this);
             robot.lowerGripper(900);
-            robot.GoDistanceCM2(-90, .7, false,this);
+            robot.GoDistanceCM2(-90, -.7, false,this);
         }
         robot.gripperClose();
         robot.wait(1500L,this);  //allow time for servo to finish closing grip before terminating
