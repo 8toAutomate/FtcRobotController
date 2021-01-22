@@ -33,7 +33,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         robot.GoDistanceCM2(69, .5, false,this);
 
             // Detect the rings here and return A, B, C, or E for Error
-
+        ringAt = robot.ringFinderDistance();
         if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
             char tryAgain = robot.ringFinderDistance();  // If this fails it will take C path
             if (tryAgain == 'E') {
