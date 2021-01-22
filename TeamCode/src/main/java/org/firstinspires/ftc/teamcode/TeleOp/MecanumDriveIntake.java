@@ -73,6 +73,8 @@ public class MecanumDriveIntake extends OpMode
     States intakeState = States.Off;
     States intakeButtonState = States.Off;
     boolean gripperClosed = true;
+    boolean gripperMoving = false;
+    boolean gripperPressed = false;
     boolean gripperRaised = false;
     boolean xClick, yClick = false;
     boolean shooting = false;   // Flag  is true when shooting process is in progress
@@ -439,6 +441,7 @@ public class MecanumDriveIntake extends OpMode
         if (gamepad2.dpad_down && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {
             lowerGripper();
         }
+/*
 
         if (gamepad2.dpad_right) {
             moveGripper(true);
@@ -446,6 +449,26 @@ public class MecanumDriveIntake extends OpMode
         if (gamepad2.dpad_left) {
             moveGripper(false);
         }
+*/
+        if (!gripperMoving) { // checks if the storage is not already moving
+            if (gamepad2.b) { // checks if the b button is pressed
+                gripperPressed = true; // raises storage pressed flag
+                gripperMoving = true; // raises the moving storage flag
+                initialST = getRuntime(); // gets current time
+            }
+        }
+        if (gripperPressed && gripperMoving) { // checks if the storage is moving and if the storage pressed flag is raised
+            if (!gripperClosed) { moveGripper(true); } // if the storage is not up it moves it up
+            else if (gripperClosed) { moveGripper(false); } // if the storage is up it moves it down
+        }
+        if (gripperMoving) {
+            if (getRuntime() - initialST > .3) {
+                gripperPressed = false; // storage pressed flag is lowered
+                gripperClosed = !gripperClosed; // updates state
+                gripperMoving = false;
+            }
+        }
+
 
         //********************************* Storage Servo **********************************************
 
