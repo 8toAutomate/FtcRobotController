@@ -155,7 +155,7 @@ public class ProgrammingFrame
 
         ringPusher.setPosition(0);
         storageServo.setPosition(1.0);
-
+        /*
         gripperServo.setPosition(0);
         lifting.setTargetPosition(lifting.getCurrentPosition() + 1000);
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -163,6 +163,8 @@ public class ProgrammingFrame
         while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {}
         lifting.setPower(0);
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        */
+
     }
 
     // go distance function

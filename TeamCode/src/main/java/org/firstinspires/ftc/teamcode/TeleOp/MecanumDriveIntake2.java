@@ -68,6 +68,7 @@ public class MecanumDriveIntake2 extends OpMode
     boolean isIntakeOn = false;
     boolean isAPressed = false;
     enum States {
+
         Forwards, Backwards, Off, On
     }
     States ringPusher = States.Backwards;
