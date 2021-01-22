@@ -498,38 +498,38 @@ public class ProgrammingFrame
 
         double maxRingDistCM = 2.5;
 
-        double sensor1ValueCM;
-        double sensor2ValueCM;
+        double bottomRingValueCM;
+        double topRingValueCM;
 
-        boolean sensor1Detected;
-        boolean sensor2Detected;
+        boolean bottomRingDetected;
+        boolean topRingDetected;
 
 
         float gain = 2;
 
         systemTools.telemetry.addData("Gain", gain);
 
-        colorSensor1.setGain(gain);
-        colorSensor2.setGain(gain);
+        bottomRing.setGain(gain);
+        topRing.setGain(gain);
 
-        sensor1ValueCM = ((DistanceSensor) colorSensor1).getDistance(DistanceUnit.CM);
-        sensor2ValueCM = ((DistanceSensor) colorSensor2).getDistance(DistanceUnit.CM);
+        bottomRingValueCM = ((DistanceSensor) bottomRing).getDistance(DistanceUnit.CM);
+        topRingValueCM = ((DistanceSensor) topRing).getDistance(DistanceUnit.CM);
 
-        sensor1Detected = sensor1ValueCM < maxRingDistCM;
-        sensor2Detected = sensor2ValueCM < maxRingDistCM;
+        bottomRingDetected = bottomRingValueCM < maxRingDistCM;
+        topRingDetected = topRingValueCM < maxRingDistCM;
 
-        if (sensor1Detected && sensor2Detected) {
+        if (bottomRingDetected && topRingDetected) {
             path = 'C';
-        } else if (sensor1Detected && !sensor2Detected) {
+        } else if (bottomRingDetected && !topRingDetected) {
             path = 'B';
-        } else if (!sensor1Detected && !sensor2Detected) {
+        } else if (!bottomRingDetected && !topRingDetected) {
             path = 'A';
         } else { // Means there was an error
             path = 'E';
         }
 
-        systemTools.telemetry.addData("Sensor 1 Distance (CM): ", sensor1ValueCM);
-        systemTools.telemetry.addData("Sensor 2 Distance (CM): ", sensor2ValueCM);
+        systemTools.telemetry.addData("Sensor 1 Distance (CM): ", bottomRingValueCM);
+        systemTools.telemetry.addData("Sensor 2 Distance (CM): ", topRingValueCM);
         systemTools.telemetry.addData("Maximum Ring Distance (CM): ", maxRingDistCM);
         systemTools.telemetry.addData("Path: ", path);
         systemTools.telemetry.update();
