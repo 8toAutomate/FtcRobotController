@@ -63,7 +63,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         }
         else if (ringAt == 'B') {
             robot.GoDistanceCM2(140, .7, false,this);
-            robot.StrafeCM2(40, .7, this);
+            robot.strafeDistanceCM2(40, .7,false, this);
         }
         else {
             robot.GoDistanceCM2(205, .7, false,this);
@@ -97,12 +97,12 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         //end of Debug: comment out rest of method  FEM 12-24-2020
         //*/
         telemetry.addLine();
-        telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-                robot.frontLeftMotor.getCurrentPosition(),
-                robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
+        //telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+        //        robot.frontLeftMotor.getCurrentPosition(),
+        //        robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
         telemetry.addData("Target zone", ringAt);
         telemetry.update();
-        //while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+        while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
     }
 
