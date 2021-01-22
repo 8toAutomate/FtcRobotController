@@ -47,7 +47,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             }
         }
         // Gets us to the target zone
-        robot.GoDistanceCM2(80, .7, false, this);
+        robot.GoDistanceCM2(50, .7, false, this);
 
         robot.storage(true, this);
         robot.flywheel(true, 0.8);
@@ -100,6 +100,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
                 robot.frontLeftMotor.getCurrentPosition(),
                 robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
+        telemetry.addData("Target zone", ringAt);
         telemetry.update();
         //while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
