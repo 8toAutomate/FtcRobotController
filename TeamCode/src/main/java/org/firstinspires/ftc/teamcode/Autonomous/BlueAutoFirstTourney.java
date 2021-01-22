@@ -28,19 +28,14 @@ public class BlueAutoFirstTourney extends LinearOpMode {
 
         robot.gripperClose();
         robot.wait(1000L,this);
-        robot.raiseGripper(850);
+        robot.raiseGripper(500);
 
         robot.GoDistanceCM2(69, .5, false,this);
-     //   while (opModeIsActive()) {}// debug stop prgram here
 
+            // Detect the rings here and return A, B, C, or E for Error
 
-
-        // Detect the rings here and return A, B, C, or E for Error
-        ringAt = robot.ringFinderDistance();
-        telemetry.addData("Target zone", ringAt);
-        telemetry.update();
         if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
-            char tryAgain = robot.ringFinder();  // If this fails it will take C path
+            char tryAgain = robot.ringFinderDistance();  // If this fails it will take C path
             if (tryAgain == 'E') {
                 ringAt = 'C';
             }
@@ -48,10 +43,13 @@ public class BlueAutoFirstTourney extends LinearOpMode {
                 ringAt = tryAgain;
             }
         }
+       // ringAt = robot.ringFinderDistance();
+        telemetry.addData("Target zone", ringAt);
+        telemetry.update();
 
         // Gets us to the target zone
         robot.GoDistanceCM2(65, .5, false, this);
-
+  /*
         robot.storage(true, this);
         robot.flywheel(true, 0.8);
         robot.wait(3000,this);
@@ -61,17 +59,40 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.wait(1500, this);
         }
         robot.flywheel(false, 0.0);
+   */
         if (ringAt == 'A') {
-            robot.GoDistanceCM2(80, .7, false, this);
+            robot.GoDistanceCM2(25, .7, false, this);
+            robot.strafeDistanceCM2(-37, .7,false, this);
+            // drop wobble stick here
+            robot.lowerGripper(450);
+            robot.gripperOpen();
+            robot.wait(1000L,this);
+            robot.lowerGripper(900);
+            robot.strafeDistanceCM2(37, .7,false, this);  // go sidways and forward  to launch line without
+            robot.GoDistanceCM2(10, .7, false, this);   // disturbing wobble (strafe needed for Target zone A only)
         }
         else if (ringAt == 'B') {
-            robot.GoDistanceCM2(140, .7, false,this);
-            robot.strafeDistanceCM2(40, .7,false, this);
+            robot.GoDistanceCM2(58, .7, false,this);
+            robot.strafeDistanceCM2(25, .7,false, this);
+            // drop wobble goal here
+            robot.lowerGripper(450);
+            robot.gripperOpen();
+            robot.wait(1000L,this);
+            robot.lowerGripper(900);
+            robot.GoDistanceCM2(-33, .7, false,this);
         }
         else {
-            robot.GoDistanceCM2(205, .7, false,this);
+            robot.GoDistanceCM2(120, .7, false,this);
+            robot.strafeDistanceCM2(-37, .7,false, this);
+            // drop wobble goal here
+            robot.lowerGripper(450);
+            robot.gripperOpen();
+            robot.wait(1000L,this);
+            robot.lowerGripper(900);
+            robot.GoDistanceCM2(-90, .7, false,this);
         }
-
+        robot.gripperClose();
+        robot.wait(1500L,this);  //allow time for servo to finish closing grip before terminating
         // /*  Debug: comment out rest of method  MAx M. 12-24-2020
         // Add function that drops a wobble goal
         // Move to the launch line
@@ -99,11 +120,13 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         //robot.GoDistanceCM(5, .8, this);
         //end of Debug: comment out rest of method  FEM 12-24-2020
         //*/
-        telemetry.addLine();
+       // telemetry.addLine();
         //telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
         //        robot.frontLeftMotor.getCurrentPosition(),
         //        robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
 
+        ringAt = robot.ringFinderDistance();
+        telemetry.addData("Target zone", ringAt);
         telemetry.update();
         while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 

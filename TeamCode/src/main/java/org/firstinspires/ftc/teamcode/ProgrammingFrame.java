@@ -496,7 +496,7 @@ public class ProgrammingFrame
 
         final float[] rgbValues = new float[3];
 
-        double maxRingDistCM = 2.5;
+        double maxRingDistCM = 3;
 
         double bottomRingValueCM;
         double topRingValueCM;
@@ -505,12 +505,12 @@ public class ProgrammingFrame
         boolean topRingDetected;
 
 
-        float gain = 2;
+       // float gain = 2;
 
-        systemTools.telemetry.addData("Gain", gain);
+      //  systemTools.telemetry.addData("Gain", gain);
 
-        bottomRing.setGain(gain);
-        topRing.setGain(gain);
+       // bottomRing.setGain(gain);
+       // topRing.setGain(gain);
 
         bottomRingValueCM = ((DistanceSensor) bottomRing).getDistance(DistanceUnit.CM);
         topRingValueCM = ((DistanceSensor) topRing).getDistance(DistanceUnit.CM);
