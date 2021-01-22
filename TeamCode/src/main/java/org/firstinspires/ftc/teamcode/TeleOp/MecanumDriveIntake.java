@@ -72,7 +72,7 @@ public class MecanumDriveIntake extends OpMode
     States flywheel = States.Off;
     States intakeState = States.Off;
     States intakeButtonState = States.Off;
-    boolean gripperClosed = false;
+    boolean gripperClosed = true;
     boolean gripperRaised = false;
     boolean xClick, yClick = false;
     boolean shooting = false;   // Flag  is true when shooting process is in progress
@@ -440,12 +440,14 @@ public class MecanumDriveIntake extends OpMode
             lowerGripper();
         }
 
-        if (gamepad2.dpad_left) {
-            moveGripper(true);
+        if (gamepad2.b) {
+            if (gripperClosed) {
+                moveGripper(false);
+            } else {
+                moveGripper(true);
+            }
         }
-        if (gamepad2.dpad_right) {
-            moveGripper(false);
-        }
+
         //********************************* Storage Servo **********************************************
 
         // this code raises and lowers the storage servo using the left bumper button.
