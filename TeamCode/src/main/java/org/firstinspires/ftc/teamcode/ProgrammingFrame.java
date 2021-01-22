@@ -496,7 +496,7 @@ public class ProgrammingFrame
 
         final float[] rgbValues = new float[3];
 
-        double maxRingDistCM = 6.0;
+        double maxRingDistCM = 2.5;
 
         double sensor1ValueCM;
         double sensor2ValueCM;
