@@ -24,7 +24,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
 
         robot.gripperOpen();
         robot.wait(1000L,this);
-        robot.raiseGripper(850);
+        robot.raiseGripper(800);
 
         robot.gripperClose();
         robot.wait(1000L,this);
@@ -49,7 +49,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
 
         // Gets us to the target zone
         robot.GoDistanceCM2(65, .5, false, this);
-  /*
+
         robot.storage(true, this);
         robot.flywheel(true, 0.8);
         robot.wait(3000,this);
@@ -59,7 +59,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.wait(1500, this);
         }
         robot.flywheel(false, 0.0);
-   */
+
         if (ringAt == 'A') {
             robot.GoDistanceCM2(25, .7, false, this);
             robot.strafeDistanceCM2(-37, .7,false, this);
@@ -68,7 +68,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.gripperOpen();
             robot.wait(1000L,this);
             robot.lowerGripper(900);
-            robot.strafeDistanceCM2(37, .7,false, this);  // go sidways and forward  to launch line without
+            robot.strafeDistanceCM2(30, .7,false, this);  // go sidways and forward  to launch line without
             robot.GoDistanceCM2(10, .7, false, this);   // disturbing wobble (strafe needed for Target zone A only)
         }
         else if (ringAt == 'B') {
@@ -79,7 +79,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.gripperOpen();
             robot.wait(1000L,this);
             robot.lowerGripper(900);
-            robot.GoDistanceCM2(-33, -.7, false,this);
+            robot.GoDistanceCM2(-25, -.7, false,this);
         }
         else {
             robot.GoDistanceCM2(120, .7, false,this);
@@ -89,7 +89,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.gripperOpen();
             robot.wait(1000L,this);
             robot.lowerGripper(900);
-            robot.GoDistanceCM2(-90, -.7, false,this);
+            robot.GoDistanceCM2(-80, -.7, false,this);
         }
         robot.gripperClose();
         robot.wait(1500L,this);  //allow time for servo to finish closing grip before terminating
