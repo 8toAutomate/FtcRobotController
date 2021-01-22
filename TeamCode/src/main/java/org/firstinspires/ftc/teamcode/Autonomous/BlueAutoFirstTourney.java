@@ -60,7 +60,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.pushRing(0.5, this);
             robot.wait(1500, this);
         }
-
+        robot.flywheel(false, 0.0);
         if (ringAt == 'A') {
             robot.GoDistanceCM2(80, .7, false, this);
         }

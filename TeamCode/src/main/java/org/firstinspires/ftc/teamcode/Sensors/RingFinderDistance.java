@@ -21,7 +21,7 @@ public class RingFinderDistance extends LinearOpMode {
 
         final float[] rgbValues = new float[3];
 
-        double maxRingDistCM = 6.0;
+        double maxRingDistCM = 2.75;
 
         double sensor1ValueCM;
         double sensor2ValueCM;
@@ -30,17 +30,17 @@ public class RingFinderDistance extends LinearOpMode {
         boolean sensor2Detected;
 
 
-        float gain = 2;
+        float gain = 1;
 
         waitForStart();
         while (opModeIsActive()) {
             telemetry.addData("Gain", gain);
 
-            robot.colorSensor1.setGain(gain);
-            robot.colorSensor2.setGain(gain);
+            robot.bottomRing.setGain(gain);
+            robot.topRing.setGain(gain);
 
-            sensor1ValueCM = ((DistanceSensor) robot.colorSensor1).getDistance(DistanceUnit.CM);
-            sensor2ValueCM = ((DistanceSensor) robot.colorSensor2).getDistance(DistanceUnit.CM);
+            sensor1ValueCM = ((DistanceSensor) robot.bottomRing).getDistance(DistanceUnit.CM);
+            sensor2ValueCM = ((DistanceSensor) robot.topRing).getDistance(DistanceUnit.CM);
 
             sensor1Detected = sensor1ValueCM < maxRingDistCM;
             sensor2Detected = sensor2ValueCM < maxRingDistCM;

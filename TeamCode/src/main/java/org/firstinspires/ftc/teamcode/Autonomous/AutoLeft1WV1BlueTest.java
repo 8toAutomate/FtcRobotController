@@ -79,7 +79,7 @@ public class AutoLeft1WV1BlueTest extends LinearOpMode {
         //robot.GoDistanceCM(5, .8, this);
         */
         robot.moveGripper(true);
-        robot.lowerGripper();
+        robot.lowerGripper(500);
 
         //end of Debug: comment out rest of method  FEM 12-24-2020
         telemetry.addLine();
