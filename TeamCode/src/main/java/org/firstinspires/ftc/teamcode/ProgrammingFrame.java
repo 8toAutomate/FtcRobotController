@@ -707,7 +707,7 @@ public class ProgrammingFrame
         }
 
         // calculates the target amount of motor TICKS
-        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
+        int TICKS = (int) Math.round(centimeters * conversion_factor);
 
         // Debug: Send telemetry message with calculated TICKS;
         systemTools.telemetry.addData("Calculated Counts =", TICKS);
