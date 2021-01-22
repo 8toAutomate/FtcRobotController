@@ -30,7 +30,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         robot.wait(1000L,this);
         robot.raiseGripper(850);
 
-        robot.GoDistanceCM2(69, .7, false,this);
+        robot.GoDistanceCM2(69, .5, false,this);
      //   while (opModeIsActive()) {}// debug stop prgram here
 
 
@@ -47,7 +47,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             }
         }
         // Gets us to the target zone
-        robot.GoDistanceCM2(50, .7, false, this);
+        robot.GoDistanceCM2(65, .5, false, this);
 
         robot.storage(true, this);
         robot.flywheel(true, 0.8);
@@ -55,7 +55,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
 
         for (int i = 0; i<3; i++) {
             robot.pushRing(0.5, this);
-            robot.wait(3000, this);
+            robot.wait(1500, this);
         }
 
         if (ringAt == 'A') {
