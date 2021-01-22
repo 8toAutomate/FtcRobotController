@@ -82,6 +82,8 @@ public class WobbleControl extends OpMode
     boolean flyWheel, flyMotor, flyWheel2 = false;
     boolean strafe20,rtClick = false;
     boolean shootingReverse = false;
+    boolean gripperMoving = false;
+    boolean gripperPressed = false;
     double liftingPower;
 
     /*
@@ -206,11 +208,23 @@ public class WobbleControl extends OpMode
             lowerGripper();
         }
 
-        if (gamepad2.dpad_left) {
-            moveGripper(true);
+        if (!gripperMoving) { // checks if the storage is not already moving
+            if (gamepad2.b) { // checks if the b button is pressed
+                gripperPressed = true; // raises storage pressed flag
+                gripperMoving = true; // raises the moving storage flag
+                initialST = getRuntime(); // gets current time
+            }
         }
-        if (gamepad2.dpad_right) {
-            moveGripper(false);
+        if (gripperPressed && gripperMoving) { // checks if the storage is moving and if the storage pressed flag is raised
+            if (!gripperClosed) { moveGripper(true); } // if the storage is not up it moves it up
+            else if (gripperClosed) { moveGripper(false); } // if the storage is up it moves it down
+        }
+        if (gripperMoving) {
+            if (getRuntime() - initialST > .3) {
+                gripperPressed = false; // storage pressed flag is lowered
+                gripperClosed = !gripperClosed; // updates state
+                gripperMoving = false;
+            }
         }
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
