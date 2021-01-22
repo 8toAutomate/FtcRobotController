@@ -37,6 +37,8 @@ public class BlueAutoFirstTourney extends LinearOpMode {
 
         // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinder();
+        telemetry.addData("Target zone", ringAt);
+        telemetry.update();
         if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
             char tryAgain = robot.ringFinder();  // If this fails it will take C path
             if (tryAgain == 'E') {
@@ -46,6 +48,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
                 ringAt = tryAgain;
             }
         }
+
         // Gets us to the target zone
         robot.GoDistanceCM2(65, .5, false, this);
 
@@ -100,7 +103,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         //telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
         //        robot.frontLeftMotor.getCurrentPosition(),
         //        robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
-        telemetry.addData("Target zone", ringAt);
+
         telemetry.update();
         while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
