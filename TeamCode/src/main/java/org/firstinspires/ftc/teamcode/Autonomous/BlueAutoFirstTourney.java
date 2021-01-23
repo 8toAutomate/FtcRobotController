@@ -49,7 +49,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
 
         // Gets us to the target zone
         robot.GoDistanceCM2(65, .5, false, this);
-  /*
+
         robot.storage(true, this);
         robot.flywheel(true, 0.8);
         robot.wait(3000,this);
@@ -59,7 +59,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.wait(1500, this);
         }
         robot.flywheel(false, 0.0);
-   */
+
         if (ringAt == 'A') {
             robot.GoDistanceCM2(25, .7, false, this);
             robot.strafeDistanceCM2(-37, .7,false, this);
