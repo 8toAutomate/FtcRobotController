@@ -520,20 +520,20 @@ public class MecanumDriveIntake extends OpMode
         }
 
 //*******************************Reverse shooting while LT is held, and turn off when released*********************************************
-        /*
-        while (gamepad2.left_trigger > 0.5) {
+
+        while (gamepad1.x) {
             robot.shooting.setPower(-1);
             if (shootingReverse = false); {
                 robot.shooting.setPower(0);
             }
         }
         // manages state
-        if (gamepad1.left_trigger > 0.5) {
+        if (gamepad1.x) {
             shootingReverse = true;
         } else {
             shootingReverse = false;
         }
-        */
+
         //************************************************************************************************************
 
        // Show the elapsed game time and wheel power.
