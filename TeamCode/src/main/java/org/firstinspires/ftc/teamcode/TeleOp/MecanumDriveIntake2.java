@@ -328,7 +328,7 @@ public class MecanumDriveIntake2 extends OpMode
             }
         }
 
-        if (xClick && flyWheel) { // checks if the sflywheel is moving and if the storage pressed flag is raised
+        if (xClick && flyWheel) { // checks if the flywheel is moving and if the storage pressed flag is raised
             if (!flyMotor) {robot.shooting.setPower(0.8);} // if the flywheel is off , turn it on
             else if (flyMotor) {robot.shooting.setPower(0);} // if the flywheel is on , turn it off
         }
@@ -345,7 +345,7 @@ public class MecanumDriveIntake2 extends OpMode
 */
         //Update 1-3-2021
         // This code turns the flywheel motor on or off.
-        // This is similar to the FLywheel program but runs motor at lower power for power-shot
+        // This is similar to the Flywheel program but runs motor at lower power for power-shot
 
         // FLAGS:
         // flyWheel2 - holds the state of the Flywheel operation
