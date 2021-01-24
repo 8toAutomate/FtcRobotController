@@ -28,7 +28,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
 
         robot.gripperClose();
         robot.wait(1000L,this);
-        robot.raiseGripper(500);
+        robot.raiseGripper(300);
 
         robot.GoDistanceCM2(69, .5, false,this);
 
@@ -61,35 +61,35 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         robot.flywheel(false, 0.0);
 
         if (ringAt == 'A') {
-            robot.GoDistanceCM2(25, .7, false, this);
+            robot.GoDistanceCM2(15, .7, false, this);
             robot.strafeDistanceCM2(-37, .7,false, this);
             // drop wobble stick here
-            robot.lowerGripper(450);
+            robot.lowerGripper(250);
             robot.gripperOpen();
             robot.wait(1000L,this);
             robot.lowerGripper(900);
             robot.strafeDistanceCM2(30, .7,false, this);  // go sidways and forward  to launch line without
-            robot.GoDistanceCM2(10, .7, false, this);   // disturbing wobble (strafe needed for Target zone A only)
+            robot.GoDistanceCM2(20, .7, false, this);   // disturbing wobble (strafe needed for Target zone A only)
         }
         else if (ringAt == 'B') {
-            robot.GoDistanceCM2(58, .7, false,this);
-            robot.strafeDistanceCM2(25, .7,false, this);
+            robot.GoDistanceCM2(68, .7, false,this);
+            robot.strafeDistanceCM2(35, .7,false, this);
             // drop wobble goal here
-            robot.lowerGripper(450);
+            robot.lowerGripper(250);
             robot.gripperOpen();
             robot.wait(1000L,this);
             robot.lowerGripper(900);
-            robot.GoDistanceCM2(-25, -.7, false,this);
+            robot.GoDistanceCM2(-35, -.7, false,this);
         }
         else {
-            robot.GoDistanceCM2(120, .7, false,this);
+            robot.GoDistanceCM2(127, .7, false,this);
             robot.strafeDistanceCM2(-37, .7,false, this);
             // drop wobble goal here
-            robot.lowerGripper(450);
+            robot.lowerGripper(250);
             robot.gripperOpen();
             robot.wait(1000L,this);
-            robot.lowerGripper(900);
-            robot.GoDistanceCM2(-80, -.7, false,this);
+            robot.lowerGripper(950);
+            robot.GoDistanceCM2(-87, -.7, false,this);
         }
         robot.gripperClose();
         robot.wait(1500L,this);  //allow time for servo to finish closing grip before terminating
@@ -109,7 +109,6 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         }
        */
 
-
         // Comment out the below if we don't have time!!!
         // Use our sensor to make sure we are on the line
         // Backup to make sure we are behind the line
@@ -125,10 +124,10 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         //        robot.frontLeftMotor.getCurrentPosition(),
         //        robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
 
-        ringAt = robot.ringFinderDistance();
+       // ringAt = robot.ringFinderDistance();
         telemetry.addData("Target zone", ringAt);
         telemetry.update();
-        while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+       // while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
     }
 

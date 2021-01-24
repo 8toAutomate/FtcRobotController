@@ -174,7 +174,7 @@ public class MecanumDriveIntake extends OpMode
 
         double y2 = gamepad2.right_stick_y;
 
-        if (Math.abs(x) <= .15) x = 0;
+        //if (Math.abs(x) <= .15) x = 0;
 
         // for the programming frame
         // frontLeftPower = y + x + rx;
