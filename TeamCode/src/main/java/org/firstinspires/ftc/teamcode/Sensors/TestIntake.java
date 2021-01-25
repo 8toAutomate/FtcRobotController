@@ -27,9 +27,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.Sensors;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -40,22 +39,18 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
-@TeleOp(name="MecanumDriveIntake2", group="Sensor")
-//@Disabled
-public class MecanumDriveIntake2 extends OpMode
+@TeleOp(name="TestIntake", group="Sensor")
+public class TestIntake extends OpMode
 {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    public DcMotor frontLeftMotor = null;
-    public DcMotor frontRightMotor = null;
-    public DcMotor backLeftMotor = null;
-    public DcMotor backRightMotor = null;
     double initialSH;  //initial time for shotting button timer
     double initialST;  //initial time for storage button timer
     double initialFL;  //initial time for flywheel button timer
+    double initialSR;  //initial time for right strafe 20
     //double initialIN;  //initial time for intake button timer
     // Setup a variable for each drive wheel to save power level for telemetry
     double frontLeftPower;
@@ -68,14 +63,15 @@ public class MecanumDriveIntake2 extends OpMode
     boolean isIntakeOn = false;
     boolean isAPressed = false;
     enum States {
-
         Forwards, Backwards, Off, On
     }
     States ringPusher = States.Backwards;
     States flywheel = States.Off;
     States intakeState = States.Off;
     States intakeButtonState = States.Off;
-    boolean gripperClosed = false;
+    boolean gripperClosed = true;
+    boolean gripperMoving = false;
+    boolean gripperPressed = false;
     boolean gripperRaised = false;
     boolean xClick, yClick = false;
     boolean shooting = false;   // Flag  is true when shooting process is in progress
@@ -85,145 +81,63 @@ public class MecanumDriveIntake2 extends OpMode
     boolean movingStorage = false;
     boolean storagePressed = false;
     boolean flyWheel, flyMotor, flyWheel2 = false;
+    boolean strafe20,rtClick = false;
+    boolean shootingReverse = false;
+    double liftingPower;
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
     public void moveGripper(boolean close) {
+        robot.gripperServo.setDirection(Servo.Direction.REVERSE);
         robot.gripperServo.scaleRange(0, 1.0);
         if (close) {
-            robot.gripperServo.setDirection(Servo.Direction.FORWARD);
-            robot.gripperServo.setPosition(0.25);
+            robot.gripperServo.setPosition(1);
         }
         else {
-            robot.gripperServo.setDirection(Servo.Direction.REVERSE);
             robot.gripperServo.setPosition(0);
         }
     }
-/*
-    public void moveRingPusher(States state) {
-        robot.ringPusher.scaleRange(0, 1.0);
-        if (state == States.Backwards) {
-            robot.ringPusher.setDirection(Servo.Direction.FORWARD);
-            robot.ringPusher.setPosition(0.25);
-        }
-        else {
-            robot.ringPusher.setDirection(Servo.Direction.REVERSE);
-            robot.ringPusher.setPosition(0);
-        }
+
+    // exponential function for joystick inputs
+    public double exponential(double value, int constant) {
+        double cubed =  value*value*value;
+        return cubed * constant;
     }
-*/
+
     public void raiseGripper() {
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 850);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 320);
-        robot.lifting.setPower(1);
-        while (robot.lifting.isBusy()) {}
+        robot.lifting.setPower(-0.8);
+        while (robot.lifting.isBusy() && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {}
         robot.lifting.setPower(0);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void lowerGripper() {
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 850);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 320);
-        robot.lifting.setPower(-1);
-        while (robot.lifting.isBusy()) {}
+        robot.lifting.setPower(.5);
+        while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
         robot.lifting.setPower(0);
-    }
-    //*********************************************************************************************************************************
-    public void strafeDistanceCM2(int centimeters, double power, boolean handoff){
-
-        double conversion_factor = 31.3;
-
-        boolean left = centimeters < 0;
-        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
-        int FLtarget = 0;
-        int FRtarget = 0;
-        int BLtarget = 0;
-        int BRtarget = 0;
-
-        power = Math.abs(power);
-
-        robot.resetDriveEncoders();
-
-         if (left) {
-            FLtarget = robot.frontLeftMotor.getCurrentPosition() - TICKS;
-            FRtarget = robot.frontRightMotor.getCurrentPosition() + TICKS;
-            BLtarget = robot.backLeftMotor.getCurrentPosition() + TICKS;
-            BRtarget = robot.backRightMotor.getCurrentPosition() - TICKS;
-        } else {
-            FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
-            FRtarget = robot.frontRightMotor.getCurrentPosition() - TICKS;
-            BLtarget = robot.backLeftMotor.getCurrentPosition() - TICKS;
-            BRtarget = robot.backRightMotor.getCurrentPosition() + TICKS;
-        }
-        frontLeftMotor.setTargetPosition(FLtarget);
-        frontRightMotor.setTargetPosition(FRtarget);
-        backLeftMotor.setTargetPosition(BLtarget);
-        backRightMotor.setTargetPosition(BRtarget);
-
-        /*frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-         */
-
-        // start motion
-
-        if (left) {
-            robot.frontLeftMotor.setPower(-power);
-            robot.frontRightMotor.setPower(power);
-            robot.backRightMotor.setPower(-power);
-            robot.backLeftMotor.setPower(power);
-        } else {
-            robot.frontLeftMotor.setPower(power);
-            robot.frontRightMotor.setPower(-power);
-            robot.backRightMotor.setPower(power);
-            robot.backLeftMotor.setPower(-power);
-        }
-
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while  (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy()) {
-        }
-
-        if (!handoff) robot.stopDriveMotors();
-
-        robot.startDriveEncoders();
-
-          }
-    public void stopDriveMotors() {
-        backLeftMotor.setPower(0);
-        backRightMotor.setPower(0);
-        frontLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void resetDriveEncoders() {
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-
-    public void startDriveEncoders() {
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-    //*****************************************************************************************
     @Override
     public void init() {
         robot.init(hardwareMap, this);
         robot.shooting.setPower(0);
         gamepad1.setJoystickDeadzone(.1f);
         gamepad2.setJoystickDeadzone(.1f);
+        /*
+        robot.gripperServo.setPosition(0);
+        robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 1000);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lifting.setPower(.8);
+        while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
+        robot.lifting.setPower(0);
+        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        */
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -239,21 +153,25 @@ public class MecanumDriveIntake2 extends OpMode
     @Override
     public void start() {
         runtime.reset();
+        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         initialSH = 0.6;
     }
 
     @Override
     public void loop() {
 //********************************* Robot movement ********************************************************
+
         // controller variables
         // y: inverse of left stick's y value
-        double y = -gamepad1.left_stick_y;
+        double y = exponential(-gamepad1.left_stick_y, 1);
         // x underscored: left stick's x value multiplied by the strafing coefficient in order to counteract imperfect strafing
-        double x = gamepad1.left_stick_x * strafingConstant;
+        double x = exponential(gamepad1.left_stick_x,1);
         // rx: right stick's x value
-        double rx = gamepad1.right_stick_x;
+        double rx = exponential(gamepad1.right_stick_x,1);
 
-        if (Math.abs(x) <= .2) x = 0;
+        double y2 = gamepad2.right_stick_y;
+
+        //if (Math.abs(x) <= .15) x = 0;
 
         // for the programming frame
         // frontLeftPower = y + x + rx;
@@ -262,20 +180,37 @@ public class MecanumDriveIntake2 extends OpMode
         // backRightPower = -y + x - rx;
 
         // for actual robot
-        frontLeftPower = y + x + rx;
-        frontRightPower = y - x - rx;
-        backLeftPower = y - x + rx;
-        backRightPower = y + x - rx;
+      //  frontLeftPower = y + x + rx;
+       // frontRightPower = y - x - rx;
+       // backLeftPower = y - x + rx;
+       // backRightPower = y + x - rx;
 
-        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
-        frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
-        backLeftPower = Range.clip(backLeftPower, -1.0, 1.0);
-        backRightPower   = Range.clip(backRightPower, -1.0, 1.0);
+        liftingPower = y2/2;
 
-        robot.frontLeftMotor.setPower(frontLeftPower);
-        robot.frontRightMotor.setPower(frontRightPower);
-        robot.backLeftMotor.setPower(backLeftPower);
-        robot.backRightMotor.setPower(backRightPower);
+       // frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
+       // frontRightPower   = Range.clip(frontRightPower, -1.0, 1.0);
+      //  backLeftPower = Range.clip(backLeftPower, -1.0, 1.0);
+      //  backRightPower   = Range.clip(backRightPower, -1.0, 1.0);
+
+        liftingPower = Range.clip(liftingPower, -1,1);
+
+       // robot.frontLeftMotor.setPower(frontLeftPower);
+       // robot.frontRightMotor.setPower(frontRightPower);
+       // robot.backLeftMotor.setPower(backLeftPower);
+       // robot.backRightMotor.setPower(backRightPower);
+
+        robot.lifting.setPower(liftingPower);
+
+        if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
+            robot.lifting.setPower(y2/2);
+        }
+        if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
+            robot.lifting.setPower(Range.clip(liftingPower, -.5,0));
+            //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
+        }
+        if (robot.highSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
+            robot.lifting.setPower(Range.clip(liftingPower,0, 0.3));
+        }
 
         //*******************Flywheel motor (shooting) *************************************************
       /*
@@ -287,7 +222,7 @@ public class MecanumDriveIntake2 extends OpMode
          //   motorOff = false;
         //}
 
-        if (gamepad2.x) {
+        if (gamepad1.x) {
             if (XClick == false) {
                 XClick = true;
                 if (flywheel == States.On) {
@@ -324,7 +259,7 @@ public class MecanumDriveIntake2 extends OpMode
                 flyWheel = true; // Flywheel process has started
                 //flyMotor = true;
                 initialFL = getRuntime(); // gets current time
-               // telemetry.addData("Status", "xClick " + gamepad2.x);
+               // telemetry.addData("Status", "xClick " + gamepad1.x);
             }
         }
 
@@ -358,7 +293,7 @@ public class MecanumDriveIntake2 extends OpMode
                 flyWheel2 = true; // Flywheel process has started
                 //flyMotor = true;
                 initialFL = getRuntime(); // gets current time
-             //   telemetry.addData("Status", "yClick " + gamepad2.y);
+             //   telemetry.addData("Status", "yClick " + gamepad1.y);
             }
         }
 
@@ -373,6 +308,7 @@ public class MecanumDriveIntake2 extends OpMode
                 yClick = false; // Flywheel button is lowered
             }
         }
+
 
         //********************Shooting Servo************************************************************
   /*      if (!shooting) {
@@ -403,7 +339,7 @@ public class MecanumDriveIntake2 extends OpMode
 
         if (!shooting) {                    // if shooting process has not started then check button for press
             if (!shootButton) {            // if button has been pressed then check current time and set
-                if (gamepad2.right_trigger > 0.5) { // shooting button and shooting process status flags to true.
+                if (gamepad2.right_bumper) { // shooting button and shooting process status flags to true.
                     initialSH = getRuntime();
                     shooting = true;
                     shootButton = true;
@@ -432,7 +368,9 @@ public class MecanumDriveIntake2 extends OpMode
 
         //********************************* Intake motor ********************************************************
 
-        if (gamepad1.right_trigger > 0.5) {
+        // Old toggle design
+        /*
+        if (gamepad1.right_trigger > .8) {
             if (intakeButtonState == States.Off) {
                 if (intakeState == States.Forwards) {
                     intakeState = States.Off;
@@ -442,7 +380,7 @@ public class MecanumDriveIntake2 extends OpMode
                 intakeState = States.Forwards;
             }
             intakeButtonState = States.Forwards;
-        } else if (gamepad1.left_trigger > 0.5) {
+        } else if (gamepad1.left_trigger > .8) {
             if (intakeButtonState == States.Off) {
                 if (intakeState == States.Backwards) {
                     intakeState = States.Off;
@@ -456,6 +394,16 @@ public class MecanumDriveIntake2 extends OpMode
             intakeButtonState = States.Off;
         }
 
+         */
+  //momentary toggle design
+        if (gamepad1.right_trigger > .8) {
+            intakeState = States.Forwards;
+        } else if (gamepad1.left_trigger > .8) {
+            intakeState = States.Backwards;
+        } else {
+            intakeState = States.Off;
+        }
+
         if(intakeState == States.Forwards) {
             robot.intake.setPower(1);
         } else if (intakeState == States.Backwards) {
@@ -463,25 +411,46 @@ public class MecanumDriveIntake2 extends OpMode
         } else {
             robot.intake.setPower(0);
         }
+
+
         //********************************* Gripper and Gripper arm ************************************
-        if (gamepad1.dpad_up && !gripperRaised) {
-            lowerGripper();
-            gripperRaised = true;
+
+        // no logic version
+        if (gamepad2.dpad_up && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {
+            raiseGripper();
         }
 
-        if (gamepad1.dpad_down && gripperRaised) {
+        if (gamepad2.dpad_down && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {
             lowerGripper();
-            gripperRaised = false;
         }
+/*
 
-        if (gamepad1.dpad_left && !gripperClosed) {
+        if (gamepad2.dpad_right) {
             moveGripper(true);
-            gripperClosed = true;
         }
-        if (gamepad1.dpad_right && gripperClosed) {
+        if (gamepad2.dpad_left) {
             moveGripper(false);
-            gripperClosed = false;
         }
+*/
+        if (!gripperMoving) { // checks if the storage is not already moving
+            if (gamepad2.b) { // checks if the b button is pressed
+                gripperPressed = true; // raises storage pressed flag
+                gripperMoving = true; // raises the moving storage flag
+                initialST = getRuntime(); // gets current time
+            }
+        }
+        if (gripperPressed && gripperMoving) { // checks if the storage is moving and if the storage pressed flag is raised
+            if (!gripperClosed) { moveGripper(true); } // if the storage is not up it moves it up
+            else if (gripperClosed) { moveGripper(false); } // if the storage is up it moves it down
+        }
+        if (gripperMoving) {
+            if (getRuntime() - initialST > .3) {
+                gripperPressed = false; // storage pressed flag is lowered
+                gripperClosed = !gripperClosed; // updates state
+                gripperMoving = false;
+            }
+        }
+
 
         //********************************* Storage Servo **********************************************
 
@@ -494,7 +463,7 @@ public class MecanumDriveIntake2 extends OpMode
         // storagePressed - checks if storage button is pressed
 
         if (!movingStorage) { // checks if the storage is not already moving
-            if (gamepad2.b) { // checks if the bumper is pressed
+            if (gamepad2.left_bumper) { // checks if the b button is pressed
                 storagePressed = true; // raises storage pressed flag
                 movingStorage = true; // raises the moving storage flag
                 initialST = getRuntime(); // gets current time
@@ -524,16 +493,37 @@ public class MecanumDriveIntake2 extends OpMode
                 movingStorage = false;
             }
         }
-//************************************************************************************************************
-        if (gamepad1.right_trigger>0.9) {
+/*
+        if (gamepad2.right_trigger > 0.5) {
             robot.strafeDistanceCM3(20,0.2,false);
-             }
+        }
+        else if (gamepad2.left_trigger > 0.5) {
+            robot.strafeDistanceCM3(-20,0.2,false);
+        }
+ */
+//*******************************Reverse shooting while LT is held, and turn off when released*********************************************
 
+        while (gamepad1.x) {
+            robot.shooting.setPower(-1);
+            if (shootingReverse = false); {
+                robot.shooting.setPower(0);
+            }
+        }
+        // manages state
+        if (gamepad1.x) {
+            shootingReverse = true;
+        } else {
+            shootingReverse = false;
+        }
+
+        //************************************************************************************************************
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
-        telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+       // telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
+       // telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+        telemetry.addData("Switch 1 Status", robot.lowSwitch1.isPressed());
+        telemetry.addData("Switch 2 Status", robot.lowSwitch2.isPressed());
     }
 
     public void stop() {
