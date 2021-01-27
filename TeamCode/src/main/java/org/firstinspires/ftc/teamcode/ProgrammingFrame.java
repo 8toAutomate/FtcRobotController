@@ -33,6 +33,7 @@ import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -48,7 +49,8 @@ import com.vuforia.ar.pl.SystemTools;
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-
+import static com.qualcomm.robotcore.hardware.configuration.ConfigurationType.DeviceFlavor.I2C;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 
 public class ProgrammingFrame
 {
@@ -65,17 +67,19 @@ public class ProgrammingFrame
     public Servo ringPusher = null;
     public Servo storageServo = null;
 
-
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
-    public NormalizedColorSensor bottomRing;
-    public NormalizedColorSensor topRing;
+    public NormalizedColorSensor bottomRingColor;
+    public NormalizedColorSensor topRingColor;
+
     public TouchSensor lowSwitch1;
     public TouchSensor highSwitch1;
     public TouchSensor lowSwitch2;
     public TouchSensor highSwitch2;
     public OpMode systemTools;
 
+    public DistanceSensor bottomRing;
+    public DistanceSensor topRing;
 
     enum States {
         On, Off, Backwards, Forwards
@@ -145,8 +149,12 @@ public class ProgrammingFrame
         // Define and initialize ALL installed servos.
         colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
         colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
-        bottomRing = hwMap.get(NormalizedColorSensor.class, "bottomRing");
-        topRing = hwMap.get(NormalizedColorSensor.class, "topRing");
+       // bottomRing = hwMap.get(NormalizedColorSensor.class, "bottomRing");
+        //topRing = hwMap.get(NormalizedColorSensor.class, "topRing");
+      // bottomRing = hwMap.get(RevColorSensorV3.class, "bottomRing");
+       //topRing = hwMap.get(RevColorSensorV3.class, "topRing");
+        bottomRing = hwMap.get(DistanceSensor.class, "bottomRing");
+        topRing = hwMap.get(DistanceSensor.class, "topRing");
 
         lowSwitch1 = hwMap.get(TouchSensor.class, "limit_low1");
         highSwitch1 = hwMap.get(TouchSensor.class, "limit_hi1");
@@ -460,12 +468,12 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("Gain", gain);
 
         // set gain on color sensors
-        topRing.setGain(gain);
-        bottomRing.setGain(gain);
+        topRingColor.setGain(gain);
+        bottomRingColor.setGain(gain);
 
         // get color sensors
-        NormalizedRGBA colors2 = topRing.getNormalizedColors();
-        NormalizedRGBA colors1 = bottomRing.getNormalizedColors();
+        NormalizedRGBA colors2 = topRingColor.getNormalizedColors();
+        NormalizedRGBA colors1 = bottomRingColor.getNormalizedColors();
 
         Color.colorToHSV(colors1.toColor(), hsvValues);
         Color.colorToHSV(colors2.toColor(), hsvValues2);
@@ -496,7 +504,9 @@ public class ProgrammingFrame
 
         final float[] rgbValues = new float[3];
 
-        double maxRingDistCM = 3;
+        //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
+        double maxTopRingDistCM = 6;
+        double maxBotRingDistCM = 6;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
 
         double bottomRingValueCM;
         double topRingValueCM;
@@ -512,11 +522,11 @@ public class ProgrammingFrame
        // bottomRing.setGain(gain);
        // topRing.setGain(gain);
 
-        bottomRingValueCM = ((DistanceSensor) bottomRing).getDistance(DistanceUnit.CM);
-        topRingValueCM = ((DistanceSensor) topRing).getDistance(DistanceUnit.CM);
+        bottomRingValueCM = bottomRing.getDistance(DistanceUnit.CM);
+        topRingValueCM =  topRing.getDistance(DistanceUnit.CM);
 
-        bottomRingDetected = bottomRingValueCM < maxRingDistCM;
-        topRingDetected = topRingValueCM < maxRingDistCM;
+        bottomRingDetected = bottomRingValueCM < maxBotRingDistCM;
+        topRingDetected = topRingValueCM < maxTopRingDistCM;
 
         if (bottomRingDetected && topRingDetected) {
             path = 'C';
@@ -530,10 +540,9 @@ public class ProgrammingFrame
 
         systemTools.telemetry.addData("Sensor 1 Distance (CM): ", bottomRingValueCM);
         systemTools.telemetry.addData("Sensor 2 Distance (CM): ", topRingValueCM);
-        systemTools.telemetry.addData("Maximum Ring Distance (CM): ", maxRingDistCM);
+        systemTools.telemetry.addData("Maximum Top Ring Distance (CM): ", maxTopRingDistCM + "Maximum Bottom Ring Distance (CM): ", maxBotRingDistCM);
         systemTools.telemetry.addData("Path: ", path);
         systemTools.telemetry.update();
-
         return path;
     }
 

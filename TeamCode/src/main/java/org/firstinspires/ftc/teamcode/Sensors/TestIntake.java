@@ -84,6 +84,7 @@ public class TestIntake extends OpMode
     boolean strafe20,rtClick = false;
     boolean shootingReverse = false;
     double liftingPower;
+    int liftTarget;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -106,20 +107,46 @@ public class TestIntake extends OpMode
     }
 
     public void raiseGripper() {
+        gripperRaised=true;
         robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 850);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setPower(-0.8);
-        while (robot.lifting.isBusy() && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {}
-        robot.lifting.setPower(0);
-        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        while (robot.lifting.isBusy() && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {
+            telemetry.addData("lifting motor busy status", robot.lifting.isBusy() + " target position: " + robot.lifting.getTargetPosition());
+            telemetry.addLine().addData("Gripper raised", gripperRaised);
+        }
+           /*   if (gamepad2.dpad_up && gripperRaised==false) {
+            gripperRaised = true;
+            liftTarget = robot.lifting.getCurrentPosition() - 850;
+                   }
+            if (gripperRaised && robot.lifting.isBusy()==false){
+         //   raiseGripper();
+           // robot.lifting.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+          //  robot.lifting.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.lifting.setTargetPosition(liftTarget);
+            robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.lifting.setPower(-0.8);
+             //   if (robot.lifting.isBusy()==false) {
+               //     robot.lifting.setPower(0);
+               //    robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                //}
+        }
+
+      */
+        //while (robot.lifting.isBusy() && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) }{
+ //       if (robot.lifting.isBusy()==false || robot.highSwitch1.isPressed() == true || robot.highSwitch2.isPressed() == true) {
+   //     robot.lifting.setPower(0);
+    //    robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}
     }
 
     public void lowerGripper() {
         robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 850);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setPower(.5);
+        telemetry.addData("lifting motor busy befor lower",robot.lifting.isBusy());
         while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
         robot.lifting.setPower(0);
+        telemetry.addData("lifting motor busy after lower",robot.lifting.isBusy());
         robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -198,9 +225,9 @@ public class TestIntake extends OpMode
        // robot.frontRightMotor.setPower(frontRightPower);
        // robot.backLeftMotor.setPower(backLeftPower);
        // robot.backRightMotor.setPower(backRightPower);
-
-        robot.lifting.setPower(liftingPower);
-
+        if (robot.lifting.isBusy()==false) {
+              robot.lifting.setPower(liftingPower);
+            }
         if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
             robot.lifting.setPower(y2/2);
         }
@@ -416,9 +443,41 @@ public class TestIntake extends OpMode
         //********************************* Gripper and Gripper arm ************************************
 
         // no logic version
-        if (gamepad2.dpad_up && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {
-            raiseGripper();
+     if (gamepad2.dpad_up && !gripperRaised && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {
+          raiseGripper();
         }
+      //  telemetry.addData("lifting motor busy status",robot.lifting.isBusy());
+
+       // if (robot.lifting.isBusy()==false || robot.highSwitch1.isPressed() == true || robot.highSwitch2.isPressed() == true) {
+            //     robot.lifting.setPower(0);
+            //    robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}
+
+     /*   if (gamepad2.dpad_up && gripperRaised==false) {
+            gripperRaised = true;
+            liftTarget = robot.lifting.getCurrentPosition() - 850;
+                   }
+            if (gripperRaised && robot.lifting.isBusy()==false){
+         //   raiseGripper();
+           // robot.lifting.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+          //  robot.lifting.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.lifting.setTargetPosition(liftTarget);
+            robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.lifting.setPower(-0.8);
+             //   if (robot.lifting.isBusy()==false) {
+               //     robot.lifting.setPower(0);
+               //    robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                //}
+        }
+
+      */
+      //  telemetry.addData("lifting motor busy status",robot.lifting.isBusy() + " target position: " + robot.lifting.getTargetPosition());
+            //while (robot.lifting.isBusy() && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) }{
+           // if (Math.abs(robot.lifting.getTargetPosition()-liftTarget) <5|| robot.highSwitch1.isPressed() == true || robot.highSwitch2.isPressed() == true) {
+        if (robot.lifting.isBusy()==false|| robot.highSwitch1.isPressed() == true || robot.highSwitch2.isPressed() == true) {
+                robot.lifting.setPower(0);
+                robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+               gripperRaised=false;
+            }
 
         if (gamepad2.dpad_down && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {
             lowerGripper();
@@ -523,7 +582,9 @@ public class TestIntake extends OpMode
        // telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
        // telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
         telemetry.addData("Switch 1 Status", robot.lowSwitch1.isPressed());
-        telemetry.addData("Switch 2 Status", robot.lowSwitch2.isPressed());
+        telemetry.addData("Switch 2 Status", robot.highSwitch1.isPressed());
+        telemetry.addData("current position", robot.lifting.getCurrentPosition());
+        telemetry.addData("lifting motor busy status",robot.lifting.isBusy());
     }
 
     public void stop() {

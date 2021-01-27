@@ -30,7 +30,7 @@ public class GetRings extends LinearOpMode {
 
         if (robot.topRing instanceof SwitchableLight)
         {
-            ((SwitchableLight)robot.topRing).enableLight(true);
+            ((SwitchableLight)robot.topRingColor).enableLight(true);
         }
 
         // reset the timeout time and start motion.
@@ -44,7 +44,7 @@ public class GetRings extends LinearOpMode {
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (opModeIsActive()) {
-            NormalizedRGBA colors1 = robot.topRing.getNormalizedColors();
+            NormalizedRGBA colors1 = robot.topRingColor.getNormalizedColors();
 
 
             Color.colorToHSV(colors1.toColor(), hsvValues);
@@ -55,11 +55,8 @@ public class GetRings extends LinearOpMode {
             telemetry.addData("red", colors1.red);
             telemetry.addData("green", colors1.green);
             telemetry.addData("blue", colors1.blue);
+            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) robot.topRing).getDistance(DistanceUnit.CM));
 
-
-            if (robot.topRing instanceof DistanceSensor) {
-                telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) robot.topRing).getDistance(DistanceUnit.CM));
-            }
             telemetry.update();
 
         }

@@ -30,7 +30,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         robot.wait(1000L,this);
         robot.raiseGripper(300);
 
-        robot.GoDistanceCM2(69, .5, false,this);
+        robot.GoDistanceCM2(72, .5, false,this);
 
             // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinderDistance();
@@ -48,15 +48,15 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         telemetry.update();
 
         // Gets us to the target zone
-        robot.GoDistanceCM2(65, .5, false, this);
+        robot.GoDistanceCM2(62, .5, false, this);
 
         robot.storage(true, this);
         robot.flywheel(true, 0.8);
         robot.wait(3000,this);
 
-        for (int i = 0; i<3; i++) {
+        for (int i = 0; i<4; i++) {                             // added extra shot in case last ring is stuck.
             robot.pushRing(0.5, this);
-            robot.wait(1500, this);
+            robot.wait(1200, this);
         }
         robot.flywheel(false, 0.0);
 
@@ -72,8 +72,9 @@ public class BlueAutoFirstTourney extends LinearOpMode {
             robot.GoDistanceCM2(20, .7, false, this);   // disturbing wobble (strafe needed for Target zone A only)
         }
         else if (ringAt == 'B') {
-            robot.GoDistanceCM2(68, .7, false,this);
+            robot.GoDistanceCM2(83, .7, false,this);   // added extra 15 cm to get ring out of the way.  Wobble was landing on top of ring 1-27-2021
             robot.strafeDistanceCM2(35, .7,false, this);
+            robot.GoDistanceCM2(-15, -.7, false,this);  //  back up and drop wobble away from ring
             // drop wobble goal here
             robot.lowerGripper(250);
             robot.gripperOpen();
@@ -130,6 +131,5 @@ public class BlueAutoFirstTourney extends LinearOpMode {
        // while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
     }
-
 
 }
