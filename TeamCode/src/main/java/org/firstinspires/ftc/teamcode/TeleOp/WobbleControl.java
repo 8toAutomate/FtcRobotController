@@ -66,6 +66,7 @@ public class WobbleControl extends OpMode
     enum States {
         Forwards, Backwards, Off, On
     }
+    States autoLifterState = States.Off;
     States ringPusher = States.Backwards;
     States flywheel = States.Off;
     States intakeState = States.Off;
@@ -107,21 +108,23 @@ public class WobbleControl extends OpMode
     }
 
     public void raiseGripper() {
+        autoLifterState = States.Forwards;
         robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() - 850);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setPower(-0.8);
-        while (robot.lifting.isBusy() && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {}
-        robot.lifting.setPower(0);
-        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // while (robot.lifting.isBusy() && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {}
+        // robot.lifting.setPower(0);
+        // robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void lowerGripper() {
+        autoLifterState = States.Backwards;
         robot.lifting.setTargetPosition(robot.lifting.getCurrentPosition() + 850);
         robot.lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lifting.setPower(.5);
-        while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
-        robot.lifting.setPower(0);
-        robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // while (robot.lifting.isBusy() && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {}
+        // robot.lifting.setPower(0);
+        // robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -164,17 +167,40 @@ public class WobbleControl extends OpMode
         double y2 = gamepad2.right_stick_y;
 
 
-        robot.lifting.setPower(liftingPower);
+        if (autoLifterState == States.Off) { // don't do manual movements if moving automatically
+            robot.lifting.setPower(liftingPower);
 
-        if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
-            robot.lifting.setPower(y2/2);
-        }
-        if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
-            robot.lifting.setPower(Range.clip(liftingPower, -.5,0));
-            //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
-        }
-        if (robot.highSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
-            robot.lifting.setPower(Range.clip(liftingPower,0, 0.3));
+            if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
+                robot.lifting.setPower(y2/2);
+            }
+            if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
+                robot.lifting.setPower(Range.clip(liftingPower, -.5,0));
+                //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
+            }
+            if (robot.highSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
+                robot.lifting.setPower(Range.clip(liftingPower,0, 0.3));
+            }
+        } else {
+            if (autoLifterState == States.Forwards) {
+                // Don't break the robot check
+                if (robot.highSwitch1.isPressed() || robot.highSwitch2.isPressed()) {
+                    robot.lifting.setPower(0);
+                    robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    autoLifterState = States.Off;
+                }
+            } else { // lifter is going backwards, aka down
+                // Don't break the robot check
+                if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
+                    robot.lifting.setPower(0);
+                    robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    autoLifterState = States.Off;
+                }
+            }
+            if (!robot.lifting.isBusy()) {
+                robot.lifting.setPower(0);
+                robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                autoLifterState = States.Off;
+            }
         }
 
         // logic version
@@ -200,11 +226,11 @@ public class WobbleControl extends OpMode
         */
 
         // no logic version
-        if (gamepad2.dpad_up && robot.highSwitch1.isPressed() == false && robot.highSwitch2.isPressed() == false) {
+        if (gamepad2.dpad_up && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed() && autoLifterState == States.Off) {
             raiseGripper();
         }
 
-        if (gamepad2.dpad_down && robot.lowSwitch1.isPressed() == false && robot.lowSwitch2.isPressed() == false) {
+        if (gamepad2.dpad_down && !robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && autoLifterState == States.Off) {
             lowerGripper();
         }
 
