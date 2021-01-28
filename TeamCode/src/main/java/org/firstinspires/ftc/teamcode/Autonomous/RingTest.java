@@ -29,10 +29,9 @@ public class RingTest extends LinearOpMode {
 
     public void findLine(){
 
-
-        if (robot.topRing instanceof SwitchableLight)
+        if (robot.topRingColor instanceof SwitchableLight)
         {
-            ((SwitchableLight)robot.topRing).enableLight(true);
+            ((SwitchableLight)robot.topRingColor).enableLight(true);
         }
 
         // reset the timeout time and start motion.
@@ -45,11 +44,12 @@ public class RingTest extends LinearOpMode {
         // always end the motion as soon as possible.
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (opModeIsActive()) {
-            telemetry.addData("rings detected", robot.ringFinder());
-            telemetry.update();
 
-        }
+      //  while (opModeIsActive()) {
+       //     telemetry.addData("rings detected", robot.ringFinder());
+       //     telemetry.update();
+
+     //   }
 
 
         telemetry.addData("Path", "Complete");

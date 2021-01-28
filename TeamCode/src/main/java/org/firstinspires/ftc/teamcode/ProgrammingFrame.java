@@ -69,8 +69,8 @@ public class ProgrammingFrame
 
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
-    public NormalizedColorSensor bottomRingColor;
-    public NormalizedColorSensor topRingColor;
+   public NormalizedColorSensor bottomRingColor;
+   public NormalizedColorSensor topRingColor;
 
     public TouchSensor lowSwitch1;
     public TouchSensor highSwitch1;
@@ -84,7 +84,6 @@ public class ProgrammingFrame
     enum States {
         On, Off, Backwards, Forwards
     }
-
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -149,9 +148,7 @@ public class ProgrammingFrame
         // Define and initialize ALL installed servos.
         colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
         colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
-       // bottomRing = hwMap.get(NormalizedColorSensor.class, "bottomRing");
-        //topRing = hwMap.get(NormalizedColorSensor.class, "topRing");
-      // bottomRing = hwMap.get(RevColorSensorV3.class, "bottomRing");
+        // bottomRing = hwMap.get(RevColorSensorV3.class, "bottomRing");
        //topRing = hwMap.get(RevColorSensorV3.class, "topRing");
         bottomRing = hwMap.get(DistanceSensor.class, "bottomRing");
         topRing = hwMap.get(DistanceSensor.class, "topRing");
@@ -161,10 +158,10 @@ public class ProgrammingFrame
         lowSwitch2 = hwMap.get(TouchSensor.class, "limit_low2");
         highSwitch2 = hwMap.get(TouchSensor.class, "limit_hi2");
 
-        ringPusher.setPosition(0);
-        storageServo.setPosition(1.0);
-        /*
+        ringPusher.setPosition(0);      // reset ring pussher arm
+        storageServo.setPosition(1.0);  // lower storage
         gripperServo.setPosition(0);
+        /*
         lifting.setTargetPosition(lifting.getCurrentPosition() + 1000);
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lifting.setPower(.6);
@@ -456,7 +453,7 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-    public char ringFinder() {
+  /*  public char ringFinder() {
         char path;
         boolean sensor1Detected;
         boolean sensor2Detected;
@@ -499,10 +496,12 @@ public class ProgrammingFrame
         return path;
     }
 
-    public char ringFinderDistance() {
+   */
+//**********************************************************************************************************************
+    public char ringFinderDistance(LinearOpMode linearOpMode) {
         char path;
 
-        final float[] rgbValues = new float[3];
+       // final float[] rgbValues = new float[3];
 
         //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
         double maxTopRingDistCM = 6;
@@ -513,8 +512,6 @@ public class ProgrammingFrame
 
         boolean bottomRingDetected;
         boolean topRingDetected;
-
-
        // float gain = 2;
 
       //  systemTools.telemetry.addData("Gain", gain);
@@ -543,10 +540,12 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("Maximum Top Ring Distance (CM): ", maxTopRingDistCM + "Maximum Bottom Ring Distance (CM): ", maxBotRingDistCM);
         systemTools.telemetry.addData("Path: ", path);
         systemTools.telemetry.update();
+     //   while (linearOpMode.opModeIsActive()) { }
         return path;
     }
+      //*******************************************************************************************************************************************************
 
-    public void stopDriveMotors() {
+        public void stopDriveMotors() {
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
         frontLeftMotor.setPower(0);

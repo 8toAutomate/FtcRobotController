@@ -36,20 +36,11 @@ public class GetRings extends LinearOpMode {
         // reset the timeout time and start motion.
         runtime.reset();
 
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (opModeIsActive()) {
             NormalizedRGBA colors1 = robot.topRingColor.getNormalizedColors();
 
-
             Color.colorToHSV(colors1.toColor(), hsvValues);
-
-
 
             telemetry.addData("Hval", hsvValues[0]);
             telemetry.addData("red", colors1.red);
@@ -60,7 +51,6 @@ public class GetRings extends LinearOpMode {
             telemetry.update();
 
         }
-
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

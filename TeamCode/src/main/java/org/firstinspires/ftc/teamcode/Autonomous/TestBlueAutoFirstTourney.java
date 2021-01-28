@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="AutonomousFirstTourney", group="Motion")
-public class BlueAutoFirstTourney extends LinearOpMode {
+@Autonomous(name="Test Autonomous FirstTourney", group="Motion")
+public class TestBlueAutoFirstTourney extends LinearOpMode {
     // This program starts on the left blue line, shoots at the high goal, drops off a wobble goal
     // in it's target, than drives to center shooting spot to park at the end.
     char ringAt;
@@ -48,10 +48,10 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         telemetry.update();
 
         // Gets us to the target zone
-        robot.GoDistanceCM2(60, .5, false, this);
+ //       robot.GoDistanceCM2(60, .5, false, this);
 
         robot.storage(true, this);
-        robot.flywheel(true, 0.8);
+ /*       robot.flywheel(true, 0.8);
         robot.wait(3000,this);
 
         for (int i = 0; i<4; i++) {                             // added extra shot in case last ring is stuck.
@@ -96,41 +96,16 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         robot.storage(false, this);
         robot.wait(1500L,this);  //allow time for servo to finish closing grip before terminating
         // /*  Debug: comment out rest of method  MAx M. 12-24-2020
-        // Add function that drops a wobble goal
-        // Move to the launch line
-      /*  if (ringAt == 'A') {
-            robot.StrafeCM2(-22, .7, this);
-            robot.GoDistanceCM2(27, .7, this);
-        }
-        else if (ringAt == 'B') {
-            robot.GoDistanceCM2(-27, .7, this);
-        }
-        else {
-            robot.GoDistanceCM2(-86, .7, this);
-            robot.StrafeCM2(-59, .7, this);
-        }
-       */
 
-        // Comment out the below if we don't have time!!!
-        // Use our sensor to make sure we are on the line
-        // Backup to make sure we are behind the line
-        //robot.GoDistanceCM(-15, .8, this);
-        // Line up to the line
-        //robot.findLine(.5);
-        // Go forward a tiny bit that way we are more centered on the line
-        //robot.GoDistanceCM(5, .8, this);
-        //end of Debug: comment out rest of method  FEM 12-24-2020
-        //*/
-       // telemetry.addLine();
-        //telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-        //        robot.frontLeftMotor.getCurrentPosition(),
-        //        robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
+       // telemetry.addData("Target zone", ringAt);
+       // telemetry.update();
 
-       // ringAt = robot.ringFinderDistance();
-        telemetry.addData("Target zone", ringAt);
-        telemetry.update();
+ */
+        robot.wait(5000L,this);
        // while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
-
+        robot.gripperClose();
+        robot.storage(false, this);
+        robot.wait(1500L,this);
     }
 
 }
