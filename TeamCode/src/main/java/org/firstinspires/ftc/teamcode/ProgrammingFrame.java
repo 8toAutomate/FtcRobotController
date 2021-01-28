@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
+import android.telephony.mbms.MbmsErrors;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -90,6 +91,8 @@ public class ProgrammingFrame
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
+//*************************************************************************************************
+//*******************************  Initialization *************************************************
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap, OpMode systemToolsIn) {
@@ -171,7 +174,8 @@ public class ProgrammingFrame
         */
 
     }
-
+//****************************************************************************************************
+//****************************************************************************************************
     // go distance function
     public void GoDistanceCM(int centimeters, double power, LinearOpMode linearOpMode){
         // holds the conversion factor for ticks to centimeters
@@ -504,8 +508,8 @@ public class ProgrammingFrame
        // final float[] rgbValues = new float[3];
 
         //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
-        double maxTopRingDistCM = 6;
-        double maxBotRingDistCM = 6;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
+        double maxTopRingDistCM = 8;
+        double maxBotRingDistCM = 8;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
 
         double bottomRingValueCM;
         double topRingValueCM;
@@ -585,6 +589,8 @@ public class ProgrammingFrame
             gripperServo.setPosition(0);
         }
     }
+//***************************************************************************************************
+    //**************   GRIPPER FUNCTIONS  *************************************************************
 
     public void gripperClose() {
         gripperServo.setDirection(Servo.Direction.REVERSE);

@@ -177,7 +177,7 @@ public class WobbleControl extends OpMode
                 robot.lifting.setPower(Range.clip(liftingPower, -.5,0));
                 //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
             }
-            if (robot.highSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
+            if (robot.highSwitch1.isPressed() || robot.highSwitch2.isPressed()) {
                 robot.lifting.setPower(Range.clip(liftingPower,0, 0.3));
             }
         } else {
@@ -353,10 +353,10 @@ public class WobbleControl extends OpMode
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
-        telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
-        telemetry.addData("Switch 1 Status", robot.lowSwitch1.isPressed());
-        telemetry.addData("Switch 2 Status", robot.lowSwitch2.isPressed());
+       // telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
+        telemetry.addData("Lifting Motor ", "(%.2f)",liftingPower);
+        telemetry.addData("Low Switch 1 Status", robot.lowSwitch1.isPressed());
+        telemetry.addData("Hi Switch 1 Status", robot.highSwitch1.isPressed());
     }
 
     public void stop() {

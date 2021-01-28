@@ -23,6 +23,7 @@ public class TestBlueAutoFirstTourney extends LinearOpMode {
         // Driving to the starter stack
 
         robot.gripperOpen();
+        robot.gripperOpen();
         robot.wait(1000L,this);
         robot.raiseGripper(800);
 
@@ -31,7 +32,7 @@ public class TestBlueAutoFirstTourney extends LinearOpMode {
         robot.raiseGripper(300);
 
         robot.GoDistanceCM2(70, .5, false,this);
-
+        robot.wait(500L,this);
             // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinderDistance(this);
         if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
