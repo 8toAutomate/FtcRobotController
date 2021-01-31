@@ -23,6 +23,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         // Driving to the starter stack
 
         robot.gripperOpen();
+        robot.gripperOpen();
         robot.wait(1000L,this);
         robot.raiseGripper(800);
 
