@@ -168,10 +168,10 @@ public class WobbleControl extends OpMode
 
 
         if (autoLifterState == States.Off) { // don't do manual movements if moving automatically
-            robot.lifting.setPower(liftingPower);
 
-            if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
-                robot.lifting.setPower(y2/2);
+
+            if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed()) {
+                liftingPower = y2/2;
             }
             if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
                 robot.lifting.setPower(Range.clip(liftingPower, -.5,0));
@@ -180,6 +180,7 @@ public class WobbleControl extends OpMode
             if (robot.highSwitch1.isPressed() || robot.highSwitch2.isPressed()) {
                 robot.lifting.setPower(Range.clip(liftingPower,0, 0.3));
             }
+            else {robot.lifting.setPower(liftingPower/2);}
         } else {
             if (autoLifterState == States.Forwards) {
                 // Don't break the robot check
