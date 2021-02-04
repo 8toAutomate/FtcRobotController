@@ -1186,6 +1186,140 @@ public class ProgrammingFrame
 
     }
 
+    public void goDistanceAcceleration(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode) {
+        // holds the conversion factor for TICKS to centimeters
+        final double conversion_factor = 27.55;
+        double setPower = 0.0;
+        double percent;
+        double percent2;
+
+
+        // sets the power negative if the distance is negative
+        if (centimeters < 0 && power > 0) {
+            power = power * -1;
+        }
+
+        // calculates the target amount of motor TICKS
+        int TICKS = (int) Math.round(centimeters * conversion_factor);
+
+
+
+        // Debug: Send telemetry message with calculated TICKS;
+        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+        //   systemTools.telemetry.update();
+
+
+        // Send telemetry message to signify robot waiting;
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        //   systemTools.telemetry.update();
+
+        resetDriveEncoders();
+
+//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        //  systemTools.telemetry.update();
+
+
+        // sets the target position for each of the motor encoders
+        int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
+        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // this is where the acceleration/deceleration happens
+        // currently only based on the front left motor but could be implemented on all of them
+
+        // get the percentage of the path traveled
+        double fLpercent = frontLeftMotor.getCurrentPosition()/frontLeftMotor.getTargetPosition() * 100;
+
+
+        if (fLpercent <= 30.0) {
+            percent = fLpercent/30.0;
+            setPower = percent * power; // accelerates from 0-max power
+        }
+        if (fLpercent > 30.0 && fLpercent < 70.0) {
+            setPower = power; // power stays at max in the middle of the course
+        }
+        if (fLpercent >= 70.0) {
+            percent2 = fLpercent-70.0;
+            percent = percent2/30.0;
+            setPower = 1-percent * power; // power decreases to zero at the end
+        }
+
+
+
+        // reset the timeout time and start motion.
+        frontLeftMotor.setPower(setPower);
+        frontRightMotor.setPower(setPower);
+        backRightMotor.setPower(setPower);
+        backLeftMotor.setPower(setPower);
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
+        /*while (linearOpMode.opModeIsActive() &&
+                (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
+        }
+        */
+
+        while (linearOpMode.opModeIsActive() &&
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
+        }
+
+        if (!handoff) stopDriveMotors();
+
+//        frontLeftMotor.setPower(0);
+//        frontRightMotor.setPower(0);
+//        backRightMotor.setPower(0);
+//        backLeftMotor.setPower(0);
+
+        // fem 12-24  debug       startDriveEncoders();
+//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        systemTools.telemetry.update();
+
+        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+
+        /*
+        systemTools.telemetry.addData("Path", "Complete");
+        systemTools.telemetry.addData("counts", TICKS);
+        systemTools.telemetry.update();
+
+         */
+    }
+
 
     public void wait(long timeout, LinearOpMode linearOpMode) {
         linearOpMode.sleep(timeout);
