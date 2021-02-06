@@ -1192,12 +1192,20 @@ public class ProgrammingFrame
         double setPower = 0.0;
         double percent;
         double percent2;
+        boolean backwards;
 
 
         // sets the power negative if the distance is negative
         if (centimeters < 0 && power > 0) {
             power = power * -1;
         }
+        if (power < 0) {
+            backwards = true;
+        }
+        else {
+            backwards = false;
+        }
+        power = Math.abs(power);
 
         // calculates the target amount of motor TICKS
         int TICKS = (int) Math.round(centimeters * conversion_factor);
@@ -1269,10 +1277,18 @@ public class ProgrammingFrame
 
 
         // reset the timeout time and start motion.
-        frontLeftMotor.setPower(setPower);
-        frontRightMotor.setPower(setPower);
-        backRightMotor.setPower(setPower);
-        backLeftMotor.setPower(setPower);
+        if (!backwards) {
+            frontLeftMotor.setPower(setPower);
+            frontRightMotor.setPower(setPower);
+            backRightMotor.setPower(setPower);
+            backLeftMotor.setPower(setPower);
+        } else {
+            frontLeftMotor.setPower(-setPower);
+            frontRightMotor.setPower(-setPower);
+            backRightMotor.setPower(-setPower);
+            backLeftMotor.setPower(-setPower);
+        }
+
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
