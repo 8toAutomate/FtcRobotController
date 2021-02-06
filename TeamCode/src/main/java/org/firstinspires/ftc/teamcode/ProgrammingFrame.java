@@ -1186,7 +1186,10 @@ public class ProgrammingFrame
 
     }
 
-    public void goDistanceAcceleration(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode) {
+    public void goDistanceAcceleration(int centimeters, double power, boolean handoff, double frontRamp, double backramp, LinearOpMode linearOpMode) {
+
+        // IMPORTANT: for backramp, subtract the percent from 100. For example, if you want the robot to ramp down for the last 30.0 percent, set it to 70.0
+
         // holds the conversion factor for TICKS to centimeters
         final double conversion_factor = 27.55;
         double setPower = 0.0;
@@ -1254,41 +1257,6 @@ public class ProgrammingFrame
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // this is where the acceleration/deceleration happens
-        // currently only based on the front left motor but could be implemented on all of them
-
-        // get the percentage of the path traveled
-        double fLpercent = frontLeftMotor.getCurrentPosition()/frontLeftMotor.getTargetPosition() * 100;
-
-
-        if (fLpercent <= 30.0) {
-            percent = fLpercent/30.0;
-            setPower = percent * power; // accelerates from 0-max power
-        }
-        if (fLpercent > 30.0 && fLpercent < 70.0) {
-            setPower = power; // power stays at max in the middle of the course
-        }
-        if (fLpercent >= 70.0) {
-            percent2 = fLpercent-70.0;
-            percent = percent2/30.0;
-            setPower = 1-percent * power; // power decreases to zero at the end
-        }
-
-
-
-        // reset the timeout time and start motion.
-        if (!backwards) {
-            frontLeftMotor.setPower(setPower);
-            frontRightMotor.setPower(setPower);
-            backRightMotor.setPower(setPower);
-            backLeftMotor.setPower(setPower);
-        } else {
-            frontLeftMotor.setPower(-setPower);
-            frontRightMotor.setPower(-setPower);
-            backRightMotor.setPower(-setPower);
-            backLeftMotor.setPower(-setPower);
-        }
-
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -1304,6 +1272,37 @@ public class ProgrammingFrame
 
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
+
+            double fLpercent = frontLeftMotor.getCurrentPosition()/frontLeftMotor.getTargetPosition() * 100;
+
+
+            if (fLpercent <= frontRamp) { // front ramp was 30.0
+                percent = fLpercent/30.0;
+                setPower = percent * power; // accelerates from 0-max power
+            }
+            if (fLpercent > 30.0 && fLpercent < 70.0) {
+                setPower = power; // power stays at max in the middle of the course
+            }
+            if (fLpercent >= backramp) { // back ramp was 70.0
+                percent2 = fLpercent-backramp;
+                percent = percent2/30.0;
+                setPower = 1-percent * power; // power decreases to zero at the end
+            }
+
+
+
+            // reset the timeout time and start motion.
+            if (!backwards) {
+                frontLeftMotor.setPower(setPower);
+                frontRightMotor.setPower(setPower);
+                backRightMotor.setPower(setPower);
+                backLeftMotor.setPower(setPower);
+            } else {
+                frontLeftMotor.setPower(-setPower);
+                frontRightMotor.setPower(-setPower);
+                backRightMotor.setPower(-setPower);
+                backLeftMotor.setPower(-setPower);
+            }
         }
 
         if (!handoff) stopDriveMotors();
