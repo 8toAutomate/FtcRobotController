@@ -1278,15 +1278,15 @@ public class ProgrammingFrame
 
             if (fLpercent <= frontRamp) { // front ramp was 30.0
                 percent = fLpercent/30.0;
-                setPower = percent * power; // accelerates from 0-max power
+                setPower = percent * power + 0.2; // accelerates from 0-max power
             }
             if (fLpercent > 30.0 && fLpercent < 70.0) {
-                setPower = power; // power stays at max in the middle of the course
+                setPower = power + 0.2; // power stays at max in the middle of the course
             }
             if (fLpercent >= backramp) { // back ramp was 70.0
                 percent2 = fLpercent-backramp;
                 percent = percent2/30.0;
-                setPower = 1-percent * power; // power decreases to zero at the end
+                setPower = 1-percent * power + 0.2; // power decreases to zero at the end
             }
 
 
