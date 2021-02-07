@@ -39,9 +39,9 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
-@TeleOp(name="MecanumDrive", group="Sensor")
+@TeleOp(name="MecanumDrivetest", group="Sensor")
 //@Disabled
-public class MecanumDrive extends OpMode
+public class MecanumDrivetest extends OpMode
 {
 
     ProgrammingFrame robot   = new ProgrammingFrame();

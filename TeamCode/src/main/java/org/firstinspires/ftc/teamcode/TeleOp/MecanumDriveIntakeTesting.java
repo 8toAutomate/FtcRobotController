@@ -60,7 +60,7 @@ public class MecanumDriveIntakeTesting extends OpMode
     double backRightPower;
     // Setup a variable for strafing constant
     double strafingConstant = 1.5;
-    // Setup boolean variables
+    // Setup boolean variables and states
     boolean isIntakeOn = false;
     boolean isAPressed = false;
     enum States {
