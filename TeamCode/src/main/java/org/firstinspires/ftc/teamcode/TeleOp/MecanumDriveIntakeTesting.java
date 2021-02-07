@@ -415,7 +415,7 @@ public class MecanumDriveIntakeTesting extends OpMode
 
         if (shootButton){                              // check button status flag. If true
             if (shooting) {                             //  then check if shooting process is in progress
-                robot.ringPusher.setPosition(1);        // run shooting servo to max position.
+                robot.ringPusher.setPosition(0.8);        // run shooting servo to max position.
                     if (getRuntime() - initialSH > .5) {  // check if enough time has passed.
                         robot.ringPusher.setPosition(0); // return servo to starting position.
                         shooting = false;               //  Shooting is done.
