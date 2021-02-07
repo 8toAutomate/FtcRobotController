@@ -1202,12 +1202,7 @@ public class ProgrammingFrame
         if (centimeters < 0 && power > 0) {
             power = power * -1;
         }
-        if (power < 0) {
-            backwards = true;
-        }
-        else {
-            backwards = false;
-        }
+        backwards = power < 0;
         power = Math.abs(power);
 
         // calculates the target amount of motor TICKS
