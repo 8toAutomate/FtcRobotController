@@ -1284,8 +1284,8 @@ public class ProgrammingFrame
                 setPower = (1-percent) * power; // power decreases to zero at the end
             }
 
-            if (setPower < 0.2) {
-                setPower = 0.2;
+            if (setPower < 0.1) {
+                setPower = 0.1;
             }
 
             // reset the timeout time and start motion.
