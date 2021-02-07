@@ -1186,7 +1186,7 @@ public class ProgrammingFrame
 
     }
 
-    public void goDistanceAcceleration(int centimeters, double power, boolean handoff, double frontRamp, double backramp, LinearOpMode linearOpMode) {
+    public void goDistanceAcceleration(int centimeters, double power, boolean handoff, double frontRamp, double backRamp, LinearOpMode linearOpMode) {
 
         // IMPORTANT: for backramp, subtract the percent from 100. For example, if you want the robot to ramp down for the last 30.0 percent, set it to 70.0
 
@@ -1275,12 +1275,12 @@ public class ProgrammingFrame
                 percent = fLpercent/frontRamp;
                 setPower = percent * power; // accelerates from 0-max power
             }
-            if (fLpercent > 30.0 && fLpercent < 70.0) {
+            if (fLpercent > frontRamp && fLpercent < backRamp) {
                 setPower = power; // power stays at max in the middle of the course
             }
-            if (fLpercent >= backramp) { // back ramp was 70.0
-                percent2 = fLpercent-backramp;
-                percent = percent2/(100.0-backramp);
+            if (fLpercent >= backRamp) { // back ramp was 70.0
+                percent2 = fLpercent-backRamp;
+                percent = percent2/(100.0-backRamp);
                 setPower = 1-percent * power; // power decreases to zero at the end
             }
 
