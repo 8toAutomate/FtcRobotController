@@ -1268,7 +1268,7 @@ public class ProgrammingFrame
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
 
-            double fLpercent = frontLeftMotor.getCurrentPosition()/frontLeftMotor.getTargetPosition() * 100;
+            double fLpercent = (double) (frontLeftMotor.getCurrentPosition())/ frontLeftMotor.getTargetPosition() * 100;
 
 
             if (fLpercent <= frontRamp) { // front ramp was 30.0
