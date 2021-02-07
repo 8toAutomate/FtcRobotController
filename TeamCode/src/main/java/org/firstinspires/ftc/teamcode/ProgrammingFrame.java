@@ -279,7 +279,7 @@ public class ProgrammingFrame
             power = power * -1;
         }
 
-        int TICKS = (int) Math.abs(Math.round(degrees * conversion_factor));
+        int TICKS = (int) Math.round(degrees * conversion_factor);
         /*
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
