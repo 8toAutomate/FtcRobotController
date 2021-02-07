@@ -1274,6 +1274,10 @@ public class ProgrammingFrame
             if (fLpercent <= frontRamp) { // front ramp was 30.0
                 percent = fLpercent/frontRamp;
                 setPower = percent * power; // accelerates from 0-max power
+
+                if (setPower < 0.1) {
+                    setPower = 0.1;
+                }
             }
             if (fLpercent > frontRamp && fLpercent < backRamp) {
                 setPower = power; // power stays at max in the middle of the course
@@ -1284,9 +1288,7 @@ public class ProgrammingFrame
                 setPower = (1-percent) * power; // power decreases to zero at the end
             }
 
-            if (setPower < 0.1) {
-                setPower = 0.1;
-            }
+
 
             // reset the timeout time and start motion.
             if (!backwards) {
