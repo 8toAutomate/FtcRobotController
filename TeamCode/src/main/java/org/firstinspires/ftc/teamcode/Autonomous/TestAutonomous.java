@@ -22,7 +22,7 @@ public class TestAutonomous extends LinearOpMode {
         // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
 
-        robot.goDistanceAcceleration(100,0.8,false, 10.0, 90.0, this);
+        robot.goDistanceAcceleration(100,0.8,false, 40.0, 60.0, this);
 
         telemetry.addData("Target zone", ringAt);
         telemetry.update();

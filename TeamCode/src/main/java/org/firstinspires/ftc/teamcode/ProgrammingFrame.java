@@ -1281,7 +1281,7 @@ public class ProgrammingFrame
             if (fLpercent >= backRamp) { // back ramp was 70.0
                 percent2 = fLpercent-backRamp;
                 percent = percent2/(100.0-backRamp);
-                setPower = 1-percent * power; // power decreases to zero at the end
+                setPower = (1-percent) * power; // power decreases to zero at the end
             }
 
             if (setPower < 0.2) {
