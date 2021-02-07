@@ -17,8 +17,8 @@ public class RotateTest extends LinearOpMode{
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        robot.RotateDEG(180, .8, this);
-        robot.wait(300, this);
-        robot.RotateDEG(-180, .8, this);
+        robot.RotateDEG(360, .5, this);
+        //robot.wait(300, this);
+        //robot.RotateDEG(-360, .8, this);
     }
 }
