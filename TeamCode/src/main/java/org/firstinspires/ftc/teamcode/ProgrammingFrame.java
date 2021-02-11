@@ -556,7 +556,7 @@ public class ProgrammingFrame
         return path;
     }
       //*******************************************************************************************************************************************************
-
+//************************************************** motor functions *********************************************************************************
         public void stopDriveMotors() {
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
@@ -626,6 +626,8 @@ public class ProgrammingFrame
         while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {}
         lifting.setPower(0);
     }
+//*****************************************************************************************************
+//*****************************************************************************************************
 
     public void GoDistanceTICKS2(int ticks, double power, LinearOpMode linearOpMode) {
 
@@ -719,9 +721,17 @@ public class ProgrammingFrame
 
     //*********************************************************************************************
     // go distance function
+
+    //*************************************************************************************************
+    //************************* Driving & Strafing funtions ******************************************************
+    //******************** go distance function  *************************************************
+    //  This the latest used in autonomous along with GoDistance Acceleration
+
     public void GoDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode){
+
         // holds the conversion factor for TICKS to centimeters
-        final double conversion_factor = 27.55;
+        //final double conversion_factor = 27.55; // old conversion factor using 3x3x3 cartridges on the drive motor
+        final double conversion_factor = 21.55;  // new conversion factor using 4x5 gear cartridges
 
         // sets the power negative if the distance is negative
         if (centimeters < 0 && power > 0) {
@@ -1039,8 +1049,10 @@ public class ProgrammingFrame
 
 //*********************************************************************************************************************************
     public void strafeDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode){
-
-        double conversion_factor = 31.3;
+        //   this method is used for strafing a controlled distance in autonomous
+        //
+        //double conversion_factor = 31.3;  old conversion factor using 3x3x3 cartridges on the drive motor
+        double conversion_factor = 24.48;  // new conversion factor using 4x5 gear cartridges
 
         boolean left = centimeters < 0;
         int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
@@ -1120,8 +1132,11 @@ public class ProgrammingFrame
     }
 
     public void strafeDistanceCM3(int centimeters, double power, boolean handoff){
-
-        double conversion_factor = 31.3;
+        //****************************************************************************
+        //   This method is used for strafing a controlled distance in Teleop mode
+        //
+        //double conversion_factor = 31.3;  old conversion factor using 3x3x3 cartridges on the drive motor
+        double conversion_factor = 24.48;  // new conversion factor using 4x5 gear cartridges
 
         boolean left = centimeters < 0;
         int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
@@ -1185,13 +1200,16 @@ public class ProgrammingFrame
         startDriveEncoders();
 
     }
-
+    //************************************************************************************************
+    //************************************************************************************************
     public void goDistanceAcceleration(int centimeters, double power, boolean handoff, double frontRamp, double backRamp, LinearOpMode linearOpMode) {
 
         // IMPORTANT: for backramp, subtract the percent from 100. For example, if you want the robot to ramp down for the last 30.0 percent, set it to 70.0
 
         // holds the conversion factor for TICKS to centimeters
-        final double conversion_factor = 27.55;
+        // holds the conversion factor for TICKS to centimeters
+        //final double conversion_factor = 27.55; // old conversion factor using 3x3x3 cartridges on the drive motor
+        final double conversion_factor = 21.55;  // new conversion factor using 4x5 gear cartridges
         double setPower = 0.0;
         double percent;
         double percent2;

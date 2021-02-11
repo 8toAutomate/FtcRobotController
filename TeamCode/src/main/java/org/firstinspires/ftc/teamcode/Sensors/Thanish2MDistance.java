@@ -59,8 +59,8 @@ public class Thanish2MDistance extends LinearOpMode {
     @Override
     public void runOpMode() {
         // you can use this as a regular DistanceSensor.
-        sensorRange = hardwareMap.get(DistanceSensor.class, "sensor_range");
-
+        sensorRange = hardwareMap.get(DistanceSensor.class, "wobbleSensor");
+        double minDistance = 100;
         // you can also cast this to a Rev2mDistanceSensor if you want to use added
         // methods associated with the Rev2mDistanceSensor class.
         Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
@@ -68,15 +68,22 @@ public class Thanish2MDistance extends LinearOpMode {
         telemetry.addData(">>", "Press start to continue");
         telemetry.update();
 
+
         waitForStart();
         while(opModeIsActive()) {
             // generic DistanceSensor methods.
+
+            double wobbleDistance = sensorRange.getDistance(DistanceUnit.CM);
+            if (wobbleDistance < minDistance) {
+                minDistance = wobbleDistance;
+            }
+
             telemetry.addData("deviceName",sensorRange.getDeviceName() );
             telemetry.addData("range", String.format("%.01f mm", sensorRange.getDistance(DistanceUnit.MM)));
             telemetry.addData("range", String.format("%.01f cm", sensorRange.getDistance(DistanceUnit.CM)));
             telemetry.addData("range", String.format("%.01f m", sensorRange.getDistance(DistanceUnit.METER)));
             telemetry.addData("range", String.format("%.01f in", sensorRange.getDistance(DistanceUnit.INCH)));
-
+            telemetry.addData("min distance", String.format("%.01f cm", minDistance));
             // Rev2mDistanceSensor specific methods.
             telemetry.addData("ID", String.format("%x", sensorTimeOfFlight.getModelID()));
             telemetry.addData("did time out", Boolean.toString(sensorTimeOfFlight.didTimeoutOccur()));
