@@ -118,11 +118,11 @@ public class WobbleFinderDistance extends LinearOpMode {
             while (linearOpMode.opModeIsActive() &&
                     (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())) {
 
-                double distance = robot.wobbleFinder.getDistance(DistanceUnit.CM);
+                double distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
                 double initial = linearOpMode.getRuntime();
 
                 if (linearOpMode.getRuntime() - initial < 0.2) {
-                    distance2 = robot.wobbleFinder.getDistance(DistanceUnit.CM);
+                    distance2 = robot.wobbleSensor.getDistance(DistanceUnit.CM);
                 }
                 // reset the timeout time and start motion.
                 robot.frontLeftMotor.setPower(power);
@@ -161,7 +161,7 @@ public class WobbleFinderDistance extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
 
-        Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)robot.wobbleFinder;
+        Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)robot.wobbleSensor;
 
         telemetry.update();
 
