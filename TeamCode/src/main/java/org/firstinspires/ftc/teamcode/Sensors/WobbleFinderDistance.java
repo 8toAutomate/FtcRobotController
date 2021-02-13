@@ -67,8 +67,8 @@ public class WobbleFinderDistance extends LinearOpMode {
          */
 
         // Send telemetry message to signify robot waiting;
-        robot.systemTools.telemetry.addData("Status", "Resetting Encoders");
-        robot.systemTools.telemetry.update();
+       //robot.systemTools.telemetry.addData("Status", "Resetting Encoders");
+       //robot.systemTools.telemetry.update();
 
         robot.resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -78,10 +78,10 @@ public class WobbleFinderDistance extends LinearOpMode {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        robot.systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                robot.frontLeftMotor.getCurrentPosition(),
-                robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
-        robot.systemTools.telemetry.update();
+       //robot.systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+       //        robot.frontLeftMotor.getCurrentPosition(),
+       //        robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
+       //robot.systemTools.telemetry.update();
 
         // set target position for all the motor encoders
         int FLcurrent = robot.frontLeftMotor.getCurrentPosition();
@@ -152,9 +152,9 @@ public class WobbleFinderDistance extends LinearOpMode {
 //        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.systemTools.telemetry.addData("Path", "Complete");
-        robot.systemTools.telemetry.addData("counts", TICKS);
-        robot.systemTools.telemetry.update();
+        //robot.systemTools.telemetry.addData("Path", "Complete");
+        //robot.systemTools.telemetry.addData("counts", TICKS);
+        //robot.systemTools.telemetry.update();
     }
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -171,9 +171,9 @@ public class WobbleFinderDistance extends LinearOpMode {
 
             findWobble(-50, 0.3, 55, 3, this);
 
-            telemetry.addData("range", String.format("%.01f cm", robot.wobbleFinder.getDistance(DistanceUnit.CM)));
-
-            telemetry.update();
+            //telemetry.addData("range", String.format("%.01f cm", robot.wobbleFinder.getDistance(DistanceUnit.CM)));
+//
+            //telemetry.update();
         }
     }
 
