@@ -160,6 +160,7 @@ public class WobbleFinderDistance extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        robot.init(hardwareMap, this);
 
         Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)robot.wobbleFinder;
 
