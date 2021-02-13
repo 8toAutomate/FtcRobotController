@@ -1357,12 +1357,7 @@ public class ProgrammingFrame
         int BLtarget = 0;
         int BRtarget = 0;
         boolean left = centimeters < 0;
-
-
-        // sets the power negative if the distance is negative
-        if (centimeters < 0 && power > 0) {
-            power = power * -1;
-        }
+        
         power = Math.abs(power);
 
         // calculates the target amount of motor TICKS
