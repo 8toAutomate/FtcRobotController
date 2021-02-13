@@ -135,9 +135,8 @@ public class WobbleFinderDistance extends LinearOpMode {
                 }
             }
 
-        robot.GoDistanceCM2(35, 0.8, false, this);
+        robot.GoDistanceCM2(5, 0.2, false, this);
 
-        robot.RotateDEG(20,0.7,this);
 
         }
         robot.stopDriveMotors();
@@ -169,7 +168,7 @@ public class WobbleFinderDistance extends LinearOpMode {
         while(opModeIsActive()) {
 
 
-            findWobble(-50, 0.3, 55, 3, this);
+            findWobble(-50, 0.2, 55, 1, this);
 
             //telemetry.addData("range", String.format("%.01f cm", robot.wobbleFinder.getDistance(DistanceUnit.CM)));
 //
