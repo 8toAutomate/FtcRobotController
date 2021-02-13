@@ -1247,6 +1247,7 @@ public class ProgrammingFrame
         backLeftMotor.setTargetPosition(BLtarget);
         backRightMotor.setTargetPosition(BRtarget);
 
+        // Sets the motors to start running to the position they have been given
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -1268,13 +1269,15 @@ public class ProgrammingFrame
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
 
+            // Finds out how far into the motion we are (0-100)
             double fLpercent = (double) (frontLeftMotor.getCurrentPosition())/ frontLeftMotor.getTargetPosition() * 100;
 
 
             if (fLpercent <= frontRamp) { // front ramp was 30.0
-                percent = fLpercent/frontRamp;
+                percent = fLpercent/frontRamp; // Finds out how far into the front ramp (0-1)
                 setPower = percent * power; // accelerates from 0-max power
 
+                // Set minimum power to .1 to get the robot started moving
                 if (setPower < 0.1) {
                     setPower = 0.1;
                 }
@@ -1283,14 +1286,16 @@ public class ProgrammingFrame
                 setPower = power; // power stays at max in the middle of the course
             }
             if (fLpercent >= backRamp) { // back ramp was 70.0
+                // Finds out how far into the back ramp(0-backRamp)
                 percent2 = fLpercent-backRamp;
+                // converts that to a percent on the backramp left (0-1)
                 percent = percent2/(100.0-backRamp);
                 setPower = (1-percent) * power; // power decreases to zero at the end
             }
 
 
 
-            // reset the timeout time and start motion.
+            // set the power the motors need to be going at
             if (!backwards) {
                 frontLeftMotor.setPower(setPower);
                 frontRightMotor.setPower(setPower);
@@ -1300,6 +1305,169 @@ public class ProgrammingFrame
                 frontLeftMotor.setPower(-setPower);
                 frontRightMotor.setPower(-setPower);
                 backRightMotor.setPower(-setPower);
+                backLeftMotor.setPower(-setPower);
+            }
+        }
+
+        if (!handoff) stopDriveMotors();
+
+//        frontLeftMotor.setPower(0);
+//        frontRightMotor.setPower(0);
+//        backRightMotor.setPower(0);
+//        backLeftMotor.setPower(0);
+
+        // fem 12-24  debug       startDriveEncoders();
+//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        systemTools.telemetry.update();
+
+        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+
+        /*
+        systemTools.telemetry.addData("Path", "Complete");
+        systemTools.telemetry.addData("counts", TICKS);
+        systemTools.telemetry.update();
+
+         */
+    }
+
+
+    public void strafeAcceleration(int centimeters, double power, boolean handoff, double frontRamp, double backRamp, LinearOpMode linearOpMode) {
+
+        // IMPORTANT: for backramp, subtract the percent from 100. For example, if you want the robot to ramp down for the last 30.0 percent, set it to 70.0
+
+        // holds the conversion factor for TICKS to centimeters
+        final double conversion_factor = 27.55;
+        double setPower = 0.0;
+        double percent;
+        double percent2;
+        int FLtarget = 0;
+        int FRtarget = 0;
+        int BLtarget = 0;
+        int BRtarget = 0;
+        boolean left = centimeters < 0;
+
+
+        // sets the power negative if the distance is negative
+        if (centimeters < 0 && power > 0) {
+            power = power * -1;
+        }
+        power = Math.abs(power);
+
+        // calculates the target amount of motor TICKS
+        int TICKS = (int) Math.round(centimeters * conversion_factor);
+
+
+
+        // Debug: Send telemetry message with calculated TICKS;
+        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+        //   systemTools.telemetry.update();
+
+
+        // Send telemetry message to signify robot waiting;
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        //   systemTools.telemetry.update();
+
+        resetDriveEncoders();
+
+//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addLine();
+        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        //  systemTools.telemetry.update();
+
+
+        // sets the target position for each of the motor encoders
+        if (left) {
+            FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
+            FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
+            BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+            BRtarget = backRightMotor.getCurrentPosition() - TICKS;
+        } else {
+            FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+            FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
+            BLtarget = backLeftMotor.getCurrentPosition() - TICKS;
+            BRtarget = backRightMotor.getCurrentPosition() + TICKS;
+        }
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
+
+        // Sets the motors to start running to the position they have been given
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
+        /*while (linearOpMode.opModeIsActive() &&
+                (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
+        }
+        */
+
+        while (linearOpMode.opModeIsActive() &&
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
+
+            // Finds out how far into the motion we are (0-100)
+            double fLpercent = (double) (frontLeftMotor.getCurrentPosition())/ frontLeftMotor.getTargetPosition() * 100;
+
+
+            if (fLpercent <= frontRamp) { // front ramp was 30.0
+                percent = fLpercent/frontRamp; // Finds out how far into the front ramp (0-1)
+                setPower = percent * power; // accelerates from 0-max power
+
+                // Set minimum power to .1 to get the robot started moving
+                if (setPower < 0.1) {
+                    setPower = 0.1;
+                }
+            }
+            if (fLpercent > frontRamp && fLpercent < backRamp) {
+                setPower = power; // power stays at max in the middle of the course
+            }
+            if (fLpercent >= backRamp) { // back ramp was 70.0
+                // Finds out how far into the back ramp(0-backRamp)
+                percent2 = fLpercent-backRamp;
+                // converts that to a percent on the backramp left (0-1)
+                percent = percent2/(100.0-backRamp);
+                setPower = (1-percent) * power; // power decreases to zero at the end
+            }
+
+
+
+            // set the power the motors need to be going at
+            if (left) {
+                frontLeftMotor.setPower(-setPower);
+                frontRightMotor.setPower(setPower);
+                backRightMotor.setPower(-setPower);
+                backLeftMotor.setPower(setPower);
+            } else {
+                frontLeftMotor.setPower(setPower);
+                frontRightMotor.setPower(-setPower);
+                backRightMotor.setPower(setPower);
                 backLeftMotor.setPower(-setPower);
             }
         }
