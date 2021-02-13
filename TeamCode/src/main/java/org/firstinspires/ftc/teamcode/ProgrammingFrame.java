@@ -1357,7 +1357,8 @@ public class ProgrammingFrame
         int BLtarget = 0;
         int BRtarget = 0;
         boolean left = centimeters < 0;
-        
+
+        centimeters = Math.abs(centimeters);
         power = Math.abs(power);
 
         // calculates the target amount of motor TICKS
