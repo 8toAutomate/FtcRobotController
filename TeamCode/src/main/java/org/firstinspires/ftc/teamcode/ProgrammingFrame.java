@@ -81,7 +81,7 @@ public class ProgrammingFrame
 
     public DistanceSensor bottomRing;
     public DistanceSensor topRing;
-    public DistanceSensor wobbleFinder;
+    public DistanceSensor wobbleSensor;
 
     enum States {
         On, Off, Backwards, Forwards
@@ -157,7 +157,7 @@ public class ProgrammingFrame
        //topRing = hwMap.get(RevColorSensorV3.class, "topRing");
         bottomRing = hwMap.get(DistanceSensor.class, "bottomRing");
         topRing = hwMap.get(DistanceSensor.class, "topRing");
-        wobbleFinder = hwMap.get(DistanceSensor.class,"wobbleSensor");
+        wobbleSensor = hwMap.get(DistanceSensor.class,"wobbleSensor");
 
         lowSwitch1 = hwMap.get(TouchSensor.class, "limit_low1");
         highSwitch1 = hwMap.get(TouchSensor.class, "limit_hi1");

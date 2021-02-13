@@ -107,7 +107,7 @@ public class Wobble2 extends LinearOpMode {
         while (linearOpMode.opModeIsActive() &&
                 (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())) {
 
-            double distance = robot.wobbleFinder.getDistance(DistanceUnit.CM);
+            double distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
 
             // reset the timeout time and start motion.
             robot.frontLeftMotor.setPower(power);
