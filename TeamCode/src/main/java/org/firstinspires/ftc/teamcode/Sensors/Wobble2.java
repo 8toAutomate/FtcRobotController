@@ -152,7 +152,7 @@ public class Wobble2 extends LinearOpMode {
         while(opModeIsActive()) {
 
 
-            wobbleFind(30,0.2,55,this);
+            wobbleFind(30,0.2,40,this);
 
             //telemetry.addData("range", String.format("%.01f cm", robot.wobbleFinder.getDistance(DistanceUnit.CM)));
 //
