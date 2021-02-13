@@ -144,7 +144,7 @@ public class Wobble2 extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
 
-        Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)robot.wobbleFinder;
+        Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)robot.wobbleSensor;
 
         telemetry.update();
 

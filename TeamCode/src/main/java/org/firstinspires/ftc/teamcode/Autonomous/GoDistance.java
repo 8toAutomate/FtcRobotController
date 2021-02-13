@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 public class GoDistance extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
-    static final double conversion_factor = 27.82;
+    static final double conversion_factor = 21.1;
     private ElapsedTime runtime = new ElapsedTime();
 
     public void GoDistanceCM(int centimeters, double power){
@@ -78,7 +78,7 @@ public class GoDistance extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        GoDistanceCM(20, 0.5);
-
+        //robot.GoDistanceCM2(100, 0.4, false, this);
+        robot.strafeAcceleration(100, .5, false, .2, .7, this );
     }
 }
