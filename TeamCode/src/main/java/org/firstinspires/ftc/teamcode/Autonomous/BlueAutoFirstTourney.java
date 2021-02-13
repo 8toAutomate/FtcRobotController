@@ -32,6 +32,7 @@ public class BlueAutoFirstTourney extends LinearOpMode {
         robot.raiseGripper(300);
 
         robot.GoDistanceCM2(70, .5, false,this);
+        robot.wait(500,this);  // Wait for robot to stop before reading rings
 
             // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinderDistance(this);

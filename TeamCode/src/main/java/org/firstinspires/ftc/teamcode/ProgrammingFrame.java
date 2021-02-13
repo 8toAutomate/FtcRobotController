@@ -1141,7 +1141,6 @@ public class ProgrammingFrame
         double conversion_factor = 24.48;  // new conversion factor using 4x5 gear cartridges
         //This method is used for TeleOp
         //was 31.3 for 3 3:1 cartridges
-        double conversion_factor = 31.3;
 
         boolean left = centimeters < 0;
         int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));

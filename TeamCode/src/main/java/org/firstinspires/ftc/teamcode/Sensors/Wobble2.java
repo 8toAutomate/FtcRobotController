@@ -48,8 +48,8 @@ public class Wobble2 extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
 
-    public void wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
-
+    public double wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
+        double distance = 100;
         // conversion for degrees to ticks
         final double conversion_factor = 12.73;
 
@@ -107,8 +107,9 @@ public class Wobble2 extends LinearOpMode {
         while (linearOpMode.opModeIsActive() &&
                 (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())) {
 
-            double distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
-
+            distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
+            robot.systemTools.telemetry.addData("Distance= ", "%.3f%n", distance);
+            telemetry.update();
             // reset the timeout time and start motion.
             robot.frontLeftMotor.setPower(power);
             robot.frontRightMotor.setPower(-power);
@@ -136,6 +137,7 @@ public class Wobble2 extends LinearOpMode {
         robot.systemTools.telemetry.addData("Path", "Complete");
         robot.systemTools.telemetry.addData("counts", TICKS);
         robot.systemTools.telemetry.update();
+        return distance;
     }
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -152,12 +154,16 @@ public class Wobble2 extends LinearOpMode {
         while(opModeIsActive()) {
 
 
-            wobbleFind(30,0.2,40,this);
-
-            //telemetry.addData("range", String.format("%.01f cm", robot.wobbleFinder.getDistance(DistanceUnit.CM)));
-//
-            //telemetry.update();
+            double wobbleDist =  wobbleFind(30,0.2,40,this);
+                 if (wobbleDist < 40) {
+                    telemetry.addData("Stopped at detect distance ", String.format("%.01f cm", wobbleDist));
+                    robot.wait(500,this);
+                     telemetry.addData("Current wobble distance ", String.format("%.01f cm", robot.wobbleSensor.getDistance(DistanceUnit.CM)));
+                    telemetry.update();
+                    break;
+                 }
         }
+        while(opModeIsActive()) {}
     }
 
 }
