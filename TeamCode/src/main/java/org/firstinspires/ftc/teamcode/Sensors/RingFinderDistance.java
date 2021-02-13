@@ -40,13 +40,12 @@ public class RingFinderDistance extends LinearOpMode {
 
        //     robot.bottomRing.setGain(gain);
       //      robot.topRing.setGain(gain);
-            //bottomRingValueCM = robot.bottomRing.getDistance(DistanceUnit.CM);
-            bottomRingValueCM = ((DistanceSensor) robot.bottomRing).getDistance(DistanceUnit.CM);
+            bottomRingValueCM = robot.bottomRing.getDistance(DistanceUnit.CM);
             botRingName = robot.bottomRing.getDeviceName();
             botRingConnect =  robot.bottomRing.getConnectionInfo();
 
-            // topRingValueCM = robot.topRing.getDistance(DistanceUnit.CM);
-            topRingValueCM = ((DistanceSensor) robot.topRing).getDistance(DistanceUnit.CM);
+            //sensor1ValueCM = ((DistanceSensor) robot.bottomRing).getDistance(DistanceUnit.CM);
+            topRingValueCM = robot.topRing.getDistance(DistanceUnit.CM);
             topRingName = robot.topRing.getDeviceName();
             topRingConnect = robot.topRing.getConnectionInfo();
 
