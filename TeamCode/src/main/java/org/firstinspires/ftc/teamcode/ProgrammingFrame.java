@@ -46,10 +46,12 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 import com.vuforia.ar.pl.SystemTools;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.TeleOp.WobbleControl;
 
 import static com.qualcomm.robotcore.hardware.configuration.ConfigurationType.DeviceFlavor.I2C;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
@@ -88,6 +90,8 @@ public class ProgrammingFrame {
     enum States {
         On, Off, Backwards, Forwards
     }
+
+    States armState = States.Off;
 
     enum LightsStates {
         Off, SixtySecs, FiftySecs, FourtySecs, FlashFreeze, LowBattery, GrabberLimit, Normal, Custom
@@ -1703,6 +1707,46 @@ public class ProgrammingFrame {
             return rotateBackDeg;
         }
 
+
+        public void wobble(double liftingPower) {
+            if (armState == States.Off) { // don't do manual movements if moving automatically
+
+
+//           if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed()) {
+//               liftingPower = y2/2;
+//           }
+                if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+                    lifting.setPower(Range.clip(liftingPower, -.5,0));
+                    //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
+                }
+                else if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
+                    lifting.setPower(Range.clip(liftingPower,0, 0.3));
+                }
+                else {lifting.setPower(liftingPower);}
+
+            } else {
+                if (armState == States.Forwards) {
+                    // Don't break the robot check
+                    if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
+                        lifting.setPower(0);
+                        lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        armState = States.Off;
+                    }
+                } else { // lifter is going backwards, aka down
+                    // Don't break the robot check
+                    if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+                        lifting.setPower(0);
+                        lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        armState = States.Off;
+                    }
+                }
+                if (!lifting.isBusy()) {
+                    lifting.setPower(0);
+                    lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    armState = States.Off;
+                }
+            }
+        }
 
 
     }
