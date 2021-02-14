@@ -1538,7 +1538,7 @@ public class ProgrammingFrame {
         linearOpMode.sleep(timeout);
     }
 
-    public double wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
+    public int wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
         double distance = 100;
         // conversion for degrees to ticks
         final double conversion_factor = 12.73;
@@ -1570,6 +1570,8 @@ public class ProgrammingFrame {
                 frontLeftMotor.getCurrentPosition(),
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         systemTools.telemetry.update();
+
+        int FLstart  =frontLeftMotor.getCurrentPosition();
 
         // set target position for all the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
@@ -1611,6 +1613,10 @@ public class ProgrammingFrame {
             }
         }
             stopDriveMotors();
+
+        int FLdelta = frontLeftMotor.getCurrentPosition() - FLstart;
+        int rotateBackDeg = (int) (205 - (FLdelta / conversion_factor));
+
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
 //        backRightMotor.setPower(0);
@@ -1625,7 +1631,7 @@ public class ProgrammingFrame {
             systemTools.telemetry.addData("Path", "Complete");
             systemTools.telemetry.addData("counts", TICKS);
             systemTools.telemetry.update();
-            return distance;
+            return rotateBackDeg;
         }
 
 
