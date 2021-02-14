@@ -1745,6 +1745,7 @@ public class ProgrammingFrame {
         }
         stopDriveMotors();
 
+        // calculate change after entire drive
         int FLdelta2 = frontLeftMotor.getCurrentPosition() - FLstart;
         int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor);
 
