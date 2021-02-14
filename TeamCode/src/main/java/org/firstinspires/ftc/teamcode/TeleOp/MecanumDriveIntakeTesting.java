@@ -179,23 +179,24 @@ public class MecanumDriveIntakeTesting extends OpMode
 
         double y2 = gamepad2.right_stick_y;
 
-        //if (Math.abs(x) <= .15) x = 0;
+        liftingPower = y2/2;
 
-        robot.updateLightsState(lowSpeedActivated, this);
 
         if (autoLifterState == States.Off) { // don't do manual movements if moving automatically
-            robot.lifting.setPower(liftingPower);
 
-            if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
-                robot.lifting.setPower(y2/2);
-            }
+
+//           if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed()) {
+//               liftingPower = y2/2;
+//           }
             if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
                 robot.lifting.setPower(Range.clip(liftingPower, -.5,0));
                 //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
             }
-            if (robot.highSwitch1.isPressed() || robot.highSwitch2.isPressed()) {
+            else if (robot.highSwitch1.isPressed() || robot.highSwitch2.isPressed()) {
                 robot.lifting.setPower(Range.clip(liftingPower,0, 0.3));
             }
+            else {robot.lifting.setPower(liftingPower);}
+
         } else {
             if (autoLifterState == States.Forwards) {
                 // Don't break the robot check
@@ -218,6 +219,7 @@ public class MecanumDriveIntakeTesting extends OpMode
                 autoLifterState = States.Off;
             }
         }
+
         if (gamepad2.dpad_up && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed() && autoLifterState == States.Off) {
             raiseGripper();
         }
