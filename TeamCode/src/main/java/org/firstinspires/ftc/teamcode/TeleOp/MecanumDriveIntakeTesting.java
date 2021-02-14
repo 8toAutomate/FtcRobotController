@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -178,6 +180,8 @@ public class MecanumDriveIntakeTesting extends OpMode
         double y2 = gamepad2.right_stick_y;
 
         //if (Math.abs(x) <= .15) x = 0;
+
+        robot.updateLightsState(lowSpeedActivated, this);
 
         if (autoLifterState == States.Off) { // don't do manual movements if moving automatically
             robot.lifting.setPower(liftingPower);

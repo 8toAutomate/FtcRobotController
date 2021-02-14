@@ -22,7 +22,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
         // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
 
-        robot.gripperOpen();
+     /*   robot.gripperOpen();
         robot.gripperOpen();
         robot.wait(1000L,this);
         robot.raiseGripper(800);
@@ -112,7 +112,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.GoDistanceCM2(-86, .7, this);
             robot.StrafeCM2(-59, .7, this);
         }
-       */
+
 
         // Comment out the below if we don't have time!!!
         // Use our sensor to make sure we are on the line
@@ -123,7 +123,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
         // Go forward a tiny bit that way we are more centered on the line
         //robot.GoDistanceCM(5, .8, this);
         //end of Debug: comment out rest of method  FEM 12-24-2020
-        //*/
+
        // telemetry.addLine();
         //telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
         //        robot.frontLeftMotor.getCurrentPosition(),
@@ -133,6 +133,22 @@ public class BlueAutoSecondTourney extends LinearOpMode {
         telemetry.addData("Target zone", ringAt);
         telemetry.update();
        // while (opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+*/
+      robot.RotateDEG(147, 0.5, this);
+      robot.goDistanceAcceleration(105, 0.7, false, 20, 70, this);
+      robot.wobbleFind(30, 0.2, 40, this);
+        robot.gripperOpen();
+      robot.RotateDEG(8, .2, this);
+      // robot.wait(1000L,this);
+      robot.raiseGripper(750);
+      robot.GoDistanceCM2(5, .2, false, this);
+      robot.gripperClose();
+      robot.wait(1000, this);
+      robot.gripperOpen();
+      robot.wait(1000, this);
+      robot.GoDistanceCM2(-20, 30, false, this);
+      robot.gripperClose();
+      robot.lowerGripper(800);
 
     }
 

@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 import android.telephony.mbms.MbmsErrors;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
@@ -45,18 +46,15 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 import com.vuforia.ar.pl.SystemTools;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.TeleOp.WobbleControl;
 
 import static com.qualcomm.robotcore.hardware.configuration.ConfigurationType.DeviceFlavor.I2C;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 
-public class ProgrammingFrame
-{
+public class ProgrammingFrame {
 
     // define motors
     public DcMotor frontLeftMotor = null;
@@ -72,8 +70,8 @@ public class ProgrammingFrame
 
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
-   public NormalizedColorSensor bottomRingColor;
-   public NormalizedColorSensor topRingColor;
+    public NormalizedColorSensor bottomRingColor;
+    public NormalizedColorSensor topRingColor;
 
     public TouchSensor lowSwitch1;
     public TouchSensor highSwitch1;
@@ -85,15 +83,21 @@ public class ProgrammingFrame
     public DistanceSensor topRing;
     public DistanceSensor wobbleSensor;
 
+    public RevBlinkinLedDriver lights;
+
     enum States {
-        On, Off, Backwards, Forwards, Up, Down, Moving,
+        On, Off, Backwards, Forwards
     }
 
-    States arm = States.Down;
+    enum LightsStates {
+        Off, SixtySecs, FiftySecs, FourtySecs, FlashFreeze, LowBattery, GrabberLimit, Normal, Custom
+    }
+
+    public LightsStates lightsState = LightsStates.Off;
 
     /* local OpMode members. */
-    HardwareMap hwMap           =  null;
-    private ElapsedTime period  = new ElapsedTime();
+    HardwareMap hwMap = null;
+    private ElapsedTime period = new ElapsedTime();
 
     /* Constructor */
 //*************************************************************************************************
@@ -107,14 +111,13 @@ public class ProgrammingFrame
 
 
         // Define and Initialize Motors
-        frontLeftMotor  = hwMap.get(DcMotor.class, "front_left_drive");
+        frontLeftMotor = hwMap.get(DcMotor.class, "front_left_drive");
         frontRightMotor = hwMap.get(DcMotor.class, "front_right_drive");
         backLeftMotor = hwMap.get(DcMotor.class, "back_left_drive");
         backRightMotor = hwMap.get(DcMotor.class, "back_right_drive");
         intake = hwMap.get(DcMotor.class, "intake");
         shooting = hwMap.get(DcMotor.class, "shooting");
         lifting = hwMap.get(DcMotor.class, "lifting");
-
 
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -127,6 +130,7 @@ public class ProgrammingFrame
         gripperServo = hwMap.get(Servo.class, "gripper");
         ringPusher = hwMap.get(Servo.class, "push_arm");
         storageServo = hwMap.get(Servo.class, "storage_servo");
+        lights = hwMap.get(RevBlinkinLedDriver.class, "ledController");
         // set motor directions
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -158,10 +162,10 @@ public class ProgrammingFrame
         colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
         colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
         // bottomRing = hwMap.get(RevColorSensorV3.class, "bottomRing");
-       //topRing = hwMap.get(RevColorSensorV3.class, "topRing");
+        //topRing = hwMap.get(RevColorSensorV3.class, "topRing");
         bottomRing = hwMap.get(DistanceSensor.class, "bottomRing");
         topRing = hwMap.get(DistanceSensor.class, "topRing");
-        wobbleSensor = hwMap.get(DistanceSensor.class,"wobbleSensor");
+        wobbleSensor = hwMap.get(DistanceSensor.class, "wobbleSensor");
 
         lowSwitch1 = hwMap.get(TouchSensor.class, "limit_low1");
         highSwitch1 = hwMap.get(TouchSensor.class, "limit_hi1");
@@ -181,10 +185,11 @@ public class ProgrammingFrame
         */
 
     }
-//****************************************************************************************************
+
+    //****************************************************************************************************
 //****************************************************************************************************
     // go distance function - obsolete,use GoDistanceCM2 for normal driving or goDistanceacceleration for acceleration
-    public void GoDistanceCM(int centimeters, double power, LinearOpMode linearOpMode){
+    public void GoDistanceCM(int centimeters, double power, LinearOpMode linearOpMode) {
         // holds the conversion factor for ticks to centimeters
         // 27.55 for 3 3:1 Cartridges
         final double conversion_factor = 21.4;
@@ -199,14 +204,14 @@ public class ProgrammingFrame
 
         // Debug: Send telemetry message with calculated ticks;
         systemTools.telemetry.addData("Calculated Counts =", TICKS);
-     //   systemTools.telemetry.update();
+        //   systemTools.telemetry.update();
 
-       // Thread.sleep(2000); // debugging: allow time to view telemetry
+        // Thread.sleep(2000); // debugging: allow time to view telemetry
 
         // Send telemetry message to signify robot waiting;
         systemTools.telemetry.addLine();
         systemTools.telemetry.addData("Status", "Resetting Encoders");
-     //   systemTools.telemetry.update();
+        //   systemTools.telemetry.update();
 
         resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -220,8 +225,8 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
                 frontLeftMotor.getCurrentPosition(),
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-      //  systemTools.telemetry.update();
-      //  wait(2000); // debugging: allow time to view telemetry
+        //  systemTools.telemetry.update();
+        //  wait(2000); // debugging: allow time to view telemetry
         /*
         // sets the target position for each of the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
@@ -255,7 +260,7 @@ public class ProgrammingFrame
 //        backRightMotor.setPower(0);
 //        backLeftMotor.setPower(0);
 
- // fem 12-24  debug       startDriveEncoders();
+        // fem 12-24  debug       startDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -360,7 +365,7 @@ public class ProgrammingFrame
     }
 
     // robot strafing function
-    public void StrafeCM(int centimeters, double power, LinearOpMode linearOpMode){
+    public void StrafeCM(int centimeters, double power, LinearOpMode linearOpMode) {
 
         // conversion factor between ticks and centimeters
         final double conversion_factor = 27.55;  //Corrected from 27.82 to 27.55 12-26-20
@@ -432,8 +437,8 @@ public class ProgrammingFrame
     // find line function
     public void findLine(double power, LinearOpMode linearOpMode) {
         // Send telemetry message to signify robot waiting;
-       systemTools.telemetry.addData("Status", "Resetting Encoders");
-       systemTools.telemetry.update();
+        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        systemTools.telemetry.update();
 
         resetDriveEncoders();
 
@@ -473,55 +478,55 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-  /*  public char ringFinder() {
-        char path;
-        boolean sensor1Detected;
-        boolean sensor2Detected;
-        float gain = 2;
-        int hueTarget = 30;
-        final float[] hsvValues = new float[3];
-        final float[] hsvValues2 = new float[3];
+    /*  public char ringFinder() {
+          char path;
+          boolean sensor1Detected;
+          boolean sensor2Detected;
+          float gain = 2;
+          int hueTarget = 30;
+          final float[] hsvValues = new float[3];
+          final float[] hsvValues2 = new float[3];
 
-        systemTools.telemetry.addData("Gain", gain);
+          systemTools.telemetry.addData("Gain", gain);
 
-        // set gain on color sensors
-        topRingColor.setGain(gain);
-        bottomRingColor.setGain(gain);
+          // set gain on color sensors
+          topRingColor.setGain(gain);
+          bottomRingColor.setGain(gain);
 
-        // get color sensors
-        NormalizedRGBA colors2 = topRingColor.getNormalizedColors();
-        NormalizedRGBA colors1 = bottomRingColor.getNormalizedColors();
+          // get color sensors
+          NormalizedRGBA colors2 = topRingColor.getNormalizedColors();
+          NormalizedRGBA colors1 = bottomRingColor.getNormalizedColors();
 
-        Color.colorToHSV(colors1.toColor(), hsvValues);
-        Color.colorToHSV(colors2.toColor(), hsvValues2);
+          Color.colorToHSV(colors1.toColor(), hsvValues);
+          Color.colorToHSV(colors2.toColor(), hsvValues2);
 
-        // checks if values are within the bounds
-        sensor1Detected = hsvValues[0] > hueTarget;
-        sensor2Detected = hsvValues2[0] > hueTarget;
+          // checks if values are within the bounds
+          sensor1Detected = hsvValues[0] > hueTarget;
+          sensor2Detected = hsvValues2[0] > hueTarget;
 
-        // return a character determined by the color sensor output
-        if (sensor1Detected && sensor2Detected) {
-            path = 'C';
-        } else if (sensor1Detected && !sensor2Detected) {
-            path = 'B';
-        } else if (!sensor1Detected && !sensor2Detected) {
-            path = 'A';
-        } else { // Means there was an error
-            path = 'E';
-        }
+          // return a character determined by the color sensor output
+          if (sensor1Detected && sensor2Detected) {
+              path = 'C';
+          } else if (sensor1Detected && !sensor2Detected) {
+              path = 'B';
+          } else if (!sensor1Detected && !sensor2Detected) {
+              path = 'A';
+          } else { // Means there was an error
+              path = 'E';
+          }
 
-        systemTools.telemetry.addData("Path letter (E is Error): ", path);
-        systemTools.telemetry.update();
-        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
-        return path;
-    }
+          systemTools.telemetry.addData("Path letter (E is Error): ", path);
+          systemTools.telemetry.update();
+          //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
+          return path;
+      }
 
-   */
+     */
 //**********************************************************************************************************************
     public char ringFinderDistance(LinearOpMode linearOpMode) {
         char path;
 
-       // final float[] rgbValues = new float[3];
+        // final float[] rgbValues = new float[3];
 
         //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
         double maxTopRingDistCM = 8;
@@ -532,15 +537,15 @@ public class ProgrammingFrame
 
         boolean bottomRingDetected;
         boolean topRingDetected;
-       // float gain = 2;
+        // float gain = 2;
 
-      //  systemTools.telemetry.addData("Gain", gain);
+        //  systemTools.telemetry.addData("Gain", gain);
 
-       // bottomRing.setGain(gain);
-       // topRing.setGain(gain);
+        // bottomRing.setGain(gain);
+        // topRing.setGain(gain);
 
         bottomRingValueCM = bottomRing.getDistance(DistanceUnit.CM);
-        topRingValueCM =  topRing.getDistance(DistanceUnit.CM);
+        topRingValueCM = topRing.getDistance(DistanceUnit.CM);
 
         bottomRingDetected = bottomRingValueCM < maxBotRingDistCM;
         topRingDetected = topRingValueCM < maxTopRingDistCM;
@@ -560,12 +565,13 @@ public class ProgrammingFrame
         systemTools.telemetry.addData("Maximum Top Ring Distance (CM): ", maxTopRingDistCM + "Maximum Bottom Ring Distance (CM): ", maxBotRingDistCM);
         systemTools.telemetry.addData("Path: ", path);
         systemTools.telemetry.update();
-     //   while (linearOpMode.opModeIsActive()) { }
+        //   while (linearOpMode.opModeIsActive()) { }
         return path;
     }
-      //*******************************************************************************************************************************************************
+
+    //*******************************************************************************************************************************************************
 //************************************************** motor functions *********************************************************************************
-        public void stopDriveMotors() {
+    public void stopDriveMotors() {
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
         frontLeftMotor.setPower(0);
@@ -595,13 +601,71 @@ public class ProgrammingFrame
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    public LightsStates updateLightsState(boolean lowSpeedActivated, OpMode opMode) {
+        LightsStates prevLightsState = lightsState;
+        if (lowSpeedActivated) {
+            lightsState = LightsStates.FlashFreeze;
+        } else if (highSwitch1.isPressed() || highSwitch2.isPressed() || lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+            lightsState = LightsStates.GrabberLimit;
+        }
+        else if (opMode.getRuntime() >= 80) {
+            lightsState = LightsStates.FourtySecs;
+        } else if (opMode.getRuntime() >= 70) {
+            lightsState = LightsStates.FiftySecs;
+        } else if (opMode.getRuntime() >= 60) {
+            lightsState = LightsStates.SixtySecs;
+        } else {
+            lightsState = LightsStates.Normal;
+        }
+        if (lightsState != prevLightsState) {
+            updateLightsToState();
+        }
+        return lightsState;
+    }
+
+    public void updateLightsToState() {
+        switch (lightsState) {
+            case Off:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                break;
+            case FourtySecs:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+                break;
+            case FiftySecs:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                break;
+            case SixtySecs:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN);
+                break;
+            case LowBattery:
+                // Don't quite know how do this yet as it wasn't in last years code
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                break;
+            case FlashFreeze:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SKY_BLUE);
+                break;
+            case GrabberLimit:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                break;
+            case Normal:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+                break;
+            case Custom:
+                break;
+        }
+    }
+
+    public void setLightsPattern(RevBlinkinLedDriver.BlinkinPattern pattern) {
+        lights.setPattern(pattern);
+        lightsState = LightsStates.Custom;
+    }
+
     public void moveGripper(boolean close) {
         gripperServo.setDirection(Servo.Direction.REVERSE);
         gripperServo.scaleRange(0, 1.0);
         if (close) {
             gripperServo.setPosition(1);
-        }
-        else {
+        } else {
             gripperServo.setPosition(0);
         }
     }
@@ -619,11 +683,13 @@ public class ProgrammingFrame
         gripperServo.scaleRange(0, 1.0);
         gripperServo.setPosition(0);
     }
+
     public void raiseGripper(int maxTicks) {
         lifting.setTargetPosition(lifting.getCurrentPosition() - maxTicks); // maxTicks was 850
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lifting.setPower(-1);
-        while (lifting.isBusy() && highSwitch1.isPressed() == false && highSwitch2.isPressed() == false) {}
+        while (lifting.isBusy() && highSwitch1.isPressed() == false && highSwitch2.isPressed() == false) {
+        }
         lifting.setPower(0);
     }
 
@@ -631,25 +697,9 @@ public class ProgrammingFrame
         lifting.setTargetPosition(lifting.getCurrentPosition() + maxTicks); // maxTicks was 2000
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lifting.setPower(1);
-        while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {}
+        while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {
+        }
         lifting.setPower(0);
-    }
-
-    public void moveArm(States state) {
-         if (state == States.Up) {
-            if (lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {
-                lifting.setPower(1);
-                state = States.Down;
-            }
-        } else if (state == States.Down) {
-             if (highSwitch1.isPressed() == false && highSwitch2.isPressed() == false) {
-                 lifting.setPower(-1);
-                 state = States.Up;
-             }
-         } else if (highSwitch1.isPressed() == true || highSwitch2.isPressed() == true || lowSwitch1.isPressed() == true || lowSwitch2.isPressed() == true) {
-             lifting.setPower(0);
-             lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-         }
     }
 
     public void GoDistanceTICKS2(int ticks, double power, LinearOpMode linearOpMode) {
@@ -657,7 +707,7 @@ public class ProgrammingFrame
 
         // Send telemetry message to signify robot waiting;
         systemTools.telemetry.addData("Status", "Resetting Encoders");
-       // systemTools.telemetry.update();
+        // systemTools.telemetry.update();
 
         resetDriveEncoders();
 
@@ -668,7 +718,7 @@ public class ProgrammingFrame
                 frontLeftMotor.getCurrentPosition(),
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
 
-               // Wait for the game to start (driver presses PLAY)
+        // Wait for the game to start (driver presses PLAY)
 
 
         // start motion.
@@ -750,7 +800,7 @@ public class ProgrammingFrame
     //******************** go distance function  *************************************************
     //  This the latest used in autonomous along with GoDistance Acceleration
 
-    public void GoDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode){
+    public void GoDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode) {
 
         // holds the conversion factor for TICKS to centimeters
         // 27.55 for 3 3:1 cartridges
@@ -827,7 +877,7 @@ public class ProgrammingFrame
         */
 
         while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
         }
 
         if (!handoff) stopDriveMotors();
@@ -860,7 +910,7 @@ public class ProgrammingFrame
          */
     }
 
-    public void StrafeCM2(int centimeters, double power, LinearOpMode linearOpMode){
+    public void StrafeCM2(int centimeters, double power, LinearOpMode linearOpMode) {
         // holds the conversion factor for TICKS to centimeters
         final double conversion_factor = 27.55;
 
@@ -961,7 +1011,7 @@ public class ProgrammingFrame
          */
     }
 
-    public void StrafeDistanceCM(int centimeters, double power, LinearOpMode linearOpMode){
+    public void StrafeDistanceCM(int centimeters, double power, LinearOpMode linearOpMode) {
 
         final double conversion_factor = 27.82;
         boolean left = centimeters > 0;
@@ -1041,19 +1091,29 @@ public class ProgrammingFrame
     }
 
     public void flywheel(boolean on, double onPower) {
-        if (on) { shooting.setPower(onPower); }
-        else { shooting.setPower(0); }
+        if (on) {
+            shooting.setPower(onPower);
+        } else {
+            shooting.setPower(0);
+        }
     }
 
     public void intake(States setting) {
-        if (setting == States.Off) { intake.setPower(0); }
-        else if (setting == States.Forwards) { intake.setPower(1); }
-        else if (setting == States.Backwards) { intake.setPower(-1); }
+        if (setting == States.Off) {
+            intake.setPower(0);
+        } else if (setting == States.Forwards) {
+            intake.setPower(1);
+        } else if (setting == States.Backwards) {
+            intake.setPower(-1);
+        }
     }
 
-    public  void storage(boolean up, LinearOpMode linearOpMode) {
-        if (up) { storageServo.setPosition(0); }
-        else { storageServo.setPosition(1); }
+    public void storage(boolean up, LinearOpMode linearOpMode) {
+        if (up) {
+            storageServo.setPosition(0);
+        } else {
+            storageServo.setPosition(1);
+        }
     }
 
     public void pushRing(double timeout, LinearOpMode linearOpMode) {
@@ -1066,12 +1126,13 @@ public class ProgrammingFrame
             ringPusher.setPosition(0);
          */
         double initial = linearOpMode.getRuntime();
-        while (linearOpMode.getRuntime() - initial < 0.5) {}
+        while (linearOpMode.getRuntime() - initial < 0.5) {
+        }
         ringPusher.setPosition(0);
     }
 
-//*********************************************************************************************************************************
-    public void strafeDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode){
+    //*********************************************************************************************************************************
+    public void strafeDistanceCM2(int centimeters, double power, boolean handoff, LinearOpMode linearOpMode) {
         //   this method is used for strafing a controlled distance in autonomous
         //
         //double conversion_factor = 31.3;  old conversion factor using 3x3x3 cartridges on the drive motor
@@ -1154,7 +1215,7 @@ public class ProgrammingFrame
         systemTools.telemetry.update();
     }
 
-    public void strafeDistanceCM3(int centimeters, double power, boolean handoff){
+    public void strafeDistanceCM3(int centimeters, double power, boolean handoff) {
         //****************************************************************************
         //   This method is used for strafing a controlled distance in Teleop mode
         //
@@ -1196,8 +1257,6 @@ public class ProgrammingFrame
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-
-
         // start motion
 
         if (left) {
@@ -1217,7 +1276,7 @@ public class ProgrammingFrame
         // always end the motion as soon as possible.
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while  (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()) {
+        while (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()) {
         }
 
         if (!handoff) stopDriveMotors();
@@ -1225,6 +1284,7 @@ public class ProgrammingFrame
         startDriveEncoders();
 
     }
+
     //************************************************************************************************
     //************************************************************************************************
     public void goDistanceAcceleration(int centimeters, double power, boolean handoff, double frontRamp, double backRamp, LinearOpMode linearOpMode) {
@@ -1251,7 +1311,6 @@ public class ProgrammingFrame
 
         // calculates the target amount of motor TICKS
         int TICKS = (int) Math.round(centimeters * conversion_factor);
-
 
 
         // Debug: Send telemetry message with calculated TICKS;
@@ -1311,14 +1370,14 @@ public class ProgrammingFrame
         */
 
         while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
 
             // Finds out how far into the motion we are (0-100)
-            double fLpercent = (double) (frontLeftMotor.getCurrentPosition())/ frontLeftMotor.getTargetPosition() * 100;
+            double fLpercent = (double) (frontLeftMotor.getCurrentPosition()) / frontLeftMotor.getTargetPosition() * 100;
 
 
             if (fLpercent <= frontRamp) { // front ramp was 30.0
-                percent = fLpercent/frontRamp; // Finds out how far into the front ramp (0-1)
+                percent = fLpercent / frontRamp; // Finds out how far into the front ramp (0-1)
                 setPower = percent * power; // accelerates from 0-max power
 
                 // Set minimum power to .1 to get the robot started moving
@@ -1331,13 +1390,11 @@ public class ProgrammingFrame
             }
             if (fLpercent >= backRamp) { // back ramp was 70.0
                 // Finds out how far into the back ramp(0-backRamp)
-                percent2 = fLpercent-backRamp;
+                percent2 = fLpercent - backRamp;
                 // converts that to a percent on the backramp left (0-1)
-                percent = percent2/(100.0-backRamp);
-                setPower = (1-percent) * power; // power decreases to zero at the end
-
+                percent = percent2 / (100.0 - backRamp);
+                setPower = (1 - percent) * power; // power decreases to zero at the end
             }
-
 
 
             // set the power the motors need to be going at
@@ -1407,7 +1464,6 @@ public class ProgrammingFrame
         int TICKS = (int) Math.round(centimeters * conversion_factor);
 
 
-
         // Debug: Send telemetry message with calculated TICKS;
         systemTools.telemetry.addData("Calculated Counts =", TICKS);
         //   systemTools.telemetry.update();
@@ -1471,14 +1527,14 @@ public class ProgrammingFrame
         */
 
         while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())){
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
 
             // Finds out how far into the motion we are (0-100)
-            double fLpercent = (double) (frontLeftMotor.getCurrentPosition())/ frontLeftMotor.getTargetPosition() * 100;
+            double fLpercent = (double) (frontLeftMotor.getCurrentPosition()) / frontLeftMotor.getTargetPosition() * 100;
 
 
             if (fLpercent <= frontRamp) { // front ramp was 30.0
-                percent = fLpercent/frontRamp; // Finds out how far into the front ramp (0-1)
+                percent = fLpercent / frontRamp; // Finds out how far into the front ramp (0-1)
                 setPower = percent * power; // accelerates from 0-max power
 
                 // Set minimum power to .1 to get the robot started moving
@@ -1491,12 +1547,15 @@ public class ProgrammingFrame
             }
             if (fLpercent >= backRamp) { // back ramp was 70.0
                 // Finds out how far into the back ramp(0-backRamp)
-                percent2 = fLpercent-backRamp;
+                percent2 = fLpercent - backRamp;
                 // converts that to a percent on the backramp left (0-1)
-                percent = percent2/(100.0-backRamp);
-                setPower = (1-percent) * power; // power decreases to zero at the end
+                percent = percent2 / (100.0 - backRamp);
+                setPower = (1 - percent) * power; // power decreases to zero at the end
+                //set minimum power to 0.05 to allow the robot to actually hit the target
+                if (setPower < 0.05) {
+                    setPower = 0.05;
+                }
             }
-
 
 
             // set the power the motors need to be going at
@@ -1548,43 +1607,104 @@ public class ProgrammingFrame
         linearOpMode.sleep(timeout);
     }
 
-    public void wobble(double liftingPower) {
-        if (arm == States.Off) { // don't do manual movements if moving automatically
+    public int wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
+        double distance = 100;
+        // conversion for degrees to ticks
+        final double conversion_factor = 12.73;
+
+        // if degrees are negative, set the power negative
+        if (degrees < 0 && power > 0) {
+            power = power * -1;
+        }
+
+        int TICKS = (int) Math.round(degrees * conversion_factor);
+        /*
+         * Initialize the drive system variables.
+         * The init() method of the hardware class does all the work here
+         */
+
+        // Send telemetry message to signify robot waiting;
+        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        systemTools.telemetry.update();
+
+        resetDriveEncoders();
+//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-//           if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed()) {
-//               liftingPower = y2/2;
-//           }
-            if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
-                lifting.setPower(Range.clip(liftingPower, -.5,0));
-                //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
-            }
-            else if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
-                lifting.setPower(Range.clip(liftingPower,0, 0.3));
-            }
-            else {lifting.setPower(liftingPower);}
+        // Send telemetry message to indicate successful Encoder reset
+        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+                frontLeftMotor.getCurrentPosition(),
+                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        systemTools.telemetry.update();
 
-        } else {
-            if (arm == States.Forwards) {
-                // Don't break the robot check
-                if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
-                    lifting.setPower(0);
-                    lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    arm = States.Off;
-                }
-            } else { // lifter is going backwards, aka down
-                // Don't break the robot check
-                if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
-                    lifting.setPower(0);
-                    lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    arm = States.Off;
-                }
-            }
-            if (!lifting.isBusy()) {
-                lifting.setPower(0);
-                lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                arm = States.Off;
+        int FLstart  =frontLeftMotor.getCurrentPosition();
+
+        // set target position for all the motor encoders
+        int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
+        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = backRightMotor.getCurrentPosition() - TICKS;
+
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while (linearOpMode.opModeIsActive() &&
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+
+            distance = wobbleSensor.getDistance(DistanceUnit.CM);
+            systemTools.telemetry.addData("Distance= ", "%.3f%n", distance);
+            systemTools.telemetry.update();
+            // reset the timeout time and start motion.
+            frontLeftMotor.setPower(power);
+            frontRightMotor.setPower(-power);
+            backRightMotor.setPower(-power);
+            backLeftMotor.setPower(power);
+
+            if (distance < difference) {
+                break;
             }
         }
+            stopDriveMotors();
+
+        int FLdelta = frontLeftMotor.getCurrentPosition() - FLstart;
+        int rotateBackDeg = (int) (205 - (FLdelta / conversion_factor));
+
+//        frontLeftMotor.setPower(0);
+//        frontRightMotor.setPower(0);
+//        backRightMotor.setPower(0);
+//        backLeftMotor.setPower(0);
+
+            startDriveEncoders();
+//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            systemTools.telemetry.addData("Path", "Complete");
+            systemTools.telemetry.addData("counts", TICKS);
+            systemTools.telemetry.update();
+            return rotateBackDeg;
+        }
+
+
+
     }
-}
+
+
