@@ -1688,7 +1688,7 @@ public class ProgrammingFrame {
             stopDriveMotors();
 
         int FLdelta = frontLeftMotor.getCurrentPosition() - FLstart;
-        int rotateBackDeg = (int) (205 - (FLdelta / conversion_factor));
+        int rotateBackDeg = (int) (FLdelta / conversion_factor);
 
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);

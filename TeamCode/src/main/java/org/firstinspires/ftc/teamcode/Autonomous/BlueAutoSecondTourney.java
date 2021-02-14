@@ -136,7 +136,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
 */
       robot.RotateDEG(147, 0.5, this);
       robot.goDistanceAcceleration(105, 0.7, false, 20, 70, this);
-      robot.wobbleFind(30, 0.2, 40, this);
+      int returnDegrees = robot.wobbleFind(30, 0.2, 40, this);
         robot.gripperOpen();
       robot.RotateDEG(8, .2, this);
       // robot.wait(1000L,this);
@@ -144,11 +144,17 @@ public class BlueAutoSecondTourney extends LinearOpMode {
       robot.GoDistanceCM2(5, .2, false, this);
       robot.gripperClose();
       robot.wait(1000, this);
+      //robot.gripperOpen();
+      //robot.wait(1000, this);
+      //robot.GoDistanceCM2(-20, 30, false, this);
+      //robot.gripperClose();
+      //robot.lowerGripper(800);
+      robot.raiseGripper(400);
+      robot.RotateDEG((172 - returnDegrees) + 12, .5, this);
+      robot.goDistanceAcceleration(85, .7, false, 20, 70, this);
+      robot.lowerGripper(100);
       robot.gripperOpen();
       robot.wait(1000, this);
-      robot.GoDistanceCM2(-20, 30, false, this);
-      robot.gripperClose();
-      robot.lowerGripper(800);
 
     }
 
