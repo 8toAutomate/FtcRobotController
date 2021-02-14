@@ -148,6 +148,15 @@ public class BlueAutoSecondTourney extends LinearOpMode {
       robot.GoDistanceCM2(5, .2, false, this);
       robot.gripperClose();
       robot.wait(1000, this);
+      //robot.gripperOpen();
+      //robot.wait(1000, this);
+      //robot.GoDistanceCM2(-20, 30, false, this);
+      //robot.gripperClose();
+      //robot.lowerGripper(800);
+      robot.raiseGripper(400);
+      robot.RotateDEG((172 - degrees) + 12, .5, this);
+      robot.goDistanceAcceleration(85, .7, false, 20, 70, this);
+      robot.lowerGripper(100);
       robot.gripperOpen();
       robot.wait(1000, this);
       robot.GoDistanceCM2(-20, 30, false, this);
