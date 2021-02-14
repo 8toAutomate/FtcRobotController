@@ -51,6 +51,7 @@ import com.vuforia.ar.pl.SystemTools;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Autonomous.BlueAutoSecondTourney;
 import org.firstinspires.ftc.teamcode.TeleOp.WobbleControl;
 
 import static com.qualcomm.robotcore.hardware.configuration.ConfigurationType.DeviceFlavor.I2C;
@@ -708,6 +709,21 @@ public class ProgrammingFrame {
         while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {
         }
         lifting.setPower(0);
+    }
+
+    public void moveArm(States autoLifterState) {
+        if (!lowSwitch1.isPressed() && !lowSwitch2.isPressed() && !highSwitch1.isPressed() && !highSwitch2.isPressed()) {
+            if (autoLifterState == States.Backwards) {
+                lifting.setTargetPosition(lifting.getCurrentPosition() - 850);
+                lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lifting.setPower(-0.8);
+            } else if (autoLifterState == States.Forwards) {
+                lifting.setTargetPosition(lifting.getCurrentPosition() + 850);
+                lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lifting.setPower(.5);
+            }
+
+        }
     }
 
     public void GoDistanceTICKS2(int ticks, double power, LinearOpMode linearOpMode) {
@@ -1734,11 +1750,7 @@ public class ProgrammingFrame {
 
             if (distance < difference) {
                 wobble.success = true;
-                frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + 38);
-                frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() - 38);
-                backLeftMotor.setTargetPosition(backLeftMotor.getCurrentPosition() + 38);
-                backRightMotor.setTargetPosition(backRightMotor.getCurrentPosition() - 38);
-                //break;
+                break;
             }
         }
         stopDriveMotors();
