@@ -1731,15 +1731,13 @@ public class ProgrammingFrame {
             backRightMotor.setPower(-power);
             backLeftMotor.setPower(power);
 
-            int FLdelta = frontLeftMotor.getCurrentPosition() - FLstart;
-            int rotateBackDeg = (int) (FLdelta / conversion_factor);
 
             if (distance < difference) {
                 wobble.success = true;
-                frontLeftMotor.setTargetPosition(FLtarget - TICKS + rotateBackDeg + 3);
-                frontRightMotor.setTargetPosition(FRtarget + TICKS - rotateBackDeg - 3);
-                backLeftMotor.setTargetPosition(BLtarget - TICKS + rotateBackDeg + 3);
-                backRightMotor.setTargetPosition(BRtarget + TICKS - rotateBackDeg - 3);
+                frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + 38);
+                frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() - 38);
+                backLeftMotor.setTargetPosition(backLeftMotor.getCurrentPosition() + 38);
+                backRightMotor.setTargetPosition(backRightMotor.getCurrentPosition() - 38);
                 //break;
             }
         }
