@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 import android.telephony.mbms.MbmsErrors;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
@@ -82,9 +83,17 @@ public class ProgrammingFrame {
     public DistanceSensor topRing;
     public DistanceSensor wobbleSensor;
 
+    public RevBlinkinLedDriver lights;
+
     enum States {
         On, Off, Backwards, Forwards
     }
+
+    enum LightsStates {
+        Off, SixtySecs, FiftySecs, FourtySecs, FlashFreeze, LowBattery, GrabberLimit, Normal, Custom
+    }
+
+    public LightsStates lightsState = LightsStates.Off;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -121,6 +130,7 @@ public class ProgrammingFrame {
         gripperServo = hwMap.get(Servo.class, "gripper");
         ringPusher = hwMap.get(Servo.class, "push_arm");
         storageServo = hwMap.get(Servo.class, "storage_servo");
+        lights = hwMap.get(RevBlinkinLedDriver.class, "ledController");
         // set motor directions
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -589,6 +599,65 @@ public class ProgrammingFrame {
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public LightsStates updateLightsState(boolean lowSpeedActivated, OpMode opMode) {
+        LightsStates prevLightsState = lightsState;
+        if (lowSpeedActivated) {
+            lightsState = LightsStates.FlashFreeze;
+        } else if (highSwitch1.isPressed() || highSwitch2.isPressed() || lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+            lightsState = LightsStates.GrabberLimit;
+        }
+        else if (opMode.getRuntime() >= 80) {
+            lightsState = LightsStates.FourtySecs;
+        } else if (opMode.getRuntime() >= 70) {
+            lightsState = LightsStates.FiftySecs;
+        } else if (opMode.getRuntime() >= 60) {
+            lightsState = LightsStates.SixtySecs;
+        } else {
+            lightsState = LightsStates.Normal;
+        }
+        if (lightsState != prevLightsState) {
+            updateLightsToState();
+        }
+        return lightsState;
+    }
+
+    public void updateLightsToState() {
+        switch (lightsState) {
+            case Off:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                break;
+            case FourtySecs:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+                break;
+            case FiftySecs:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                break;
+            case SixtySecs:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN);
+                break;
+            case LowBattery:
+                // Don't quite know how do this yet as it wasn't in last years code
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                break;
+            case FlashFreeze:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.SKY_BLUE);
+                break;
+            case GrabberLimit:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                break;
+            case Normal:
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+                break;
+            case Custom:
+                break;
+        }
+    }
+
+    public void setLightsPattern(RevBlinkinLedDriver.BlinkinPattern pattern) {
+        lights.setPattern(pattern);
+        lightsState = LightsStates.Custom;
     }
 
     public void moveGripper(boolean close) {
