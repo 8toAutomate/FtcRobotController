@@ -45,10 +45,12 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 import com.vuforia.ar.pl.SystemTools;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.TeleOp.WobbleControl;
 
 import static com.qualcomm.robotcore.hardware.configuration.ConfigurationType.DeviceFlavor.I2C;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
@@ -84,8 +86,10 @@ public class ProgrammingFrame
     public DistanceSensor wobbleSensor;
 
     enum States {
-        On, Off, Backwards, Forwards
+        On, Off, Backwards, Forwards, Up, Down, Moving,
     }
+
+    States arm = States.Down;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -629,6 +633,23 @@ public class ProgrammingFrame
         lifting.setPower(1);
         while (lifting.isBusy() && lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {}
         lifting.setPower(0);
+    }
+
+    public void moveArm(States state) {
+         if (state == States.Up) {
+            if (lowSwitch1.isPressed() == false && lowSwitch2.isPressed() == false) {
+                lifting.setPower(1);
+                state = States.Down;
+            }
+        } else if (state == States.Down) {
+             if (highSwitch1.isPressed() == false && highSwitch2.isPressed() == false) {
+                 lifting.setPower(-1);
+                 state = States.Up;
+             }
+         } else if (highSwitch1.isPressed() == true || highSwitch2.isPressed() == true || lowSwitch1.isPressed() == true || lowSwitch2.isPressed() == true) {
+             lifting.setPower(0);
+             lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+         }
     }
 
     public void GoDistanceTICKS2(int ticks, double power, LinearOpMode linearOpMode) {
@@ -1314,6 +1335,7 @@ public class ProgrammingFrame
                 // converts that to a percent on the backramp left (0-1)
                 percent = percent2/(100.0-backRamp);
                 setPower = (1-percent) * power; // power decreases to zero at the end
+
             }
 
 
@@ -1524,5 +1546,45 @@ public class ProgrammingFrame
 
     public void wait(long timeout, LinearOpMode linearOpMode) {
         linearOpMode.sleep(timeout);
+    }
+
+    public void wobble(double liftingPower) {
+        if (arm == States.Off) { // don't do manual movements if moving automatically
+
+
+//           if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed()) {
+//               liftingPower = y2/2;
+//           }
+            if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+                lifting.setPower(Range.clip(liftingPower, -.5,0));
+                //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
+            }
+            else if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
+                lifting.setPower(Range.clip(liftingPower,0, 0.3));
+            }
+            else {lifting.setPower(liftingPower);}
+
+        } else {
+            if (arm == States.Forwards) {
+                // Don't break the robot check
+                if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
+                    lifting.setPower(0);
+                    lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    arm = States.Off;
+                }
+            } else { // lifter is going backwards, aka down
+                // Don't break the robot check
+                if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+                    lifting.setPower(0);
+                    lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    arm = States.Off;
+                }
+            }
+            if (!lifting.isBusy()) {
+                lifting.setPower(0);
+                lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                arm = States.Off;
+            }
+        }
     }
 }
