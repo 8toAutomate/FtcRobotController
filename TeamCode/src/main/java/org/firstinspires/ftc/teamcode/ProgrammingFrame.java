@@ -1473,6 +1473,10 @@ public class ProgrammingFrame
                 // converts that to a percent on the backramp left (0-1)
                 percent = percent2/(100.0-backRamp);
                 setPower = (1-percent) * power; // power decreases to zero at the end
+                //set minimum power to 0.05 to allow the robot to actually hit the target
+                if (setPower < 0.05) {
+                    setPower = 0.05;
+                }
             }
 
 
