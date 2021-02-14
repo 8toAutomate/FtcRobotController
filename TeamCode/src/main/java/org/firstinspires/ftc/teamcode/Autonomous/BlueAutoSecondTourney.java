@@ -14,6 +14,8 @@ public class BlueAutoSecondTourney extends LinearOpMode {
     char ringAt;
     ProgrammingFrame robot   = new ProgrammingFrame();
     private ElapsedTime runtime = new ElapsedTime();
+    ProgrammingFrame.wobble wobble = new ProgrammingFrame.wobble();
+
 
     @Override
     public void runOpMode() {
@@ -137,6 +139,8 @@ public class BlueAutoSecondTourney extends LinearOpMode {
       robot.RotateDEG(147, 0.5, this);
       robot.goDistanceAcceleration(105, 0.7, false, 20, 70, this);
       robot.wobbleFind(30, 0.2, 40, this);
+      boolean success = ProgrammingFrame.wobble.success;
+      int degrees = ProgrammingFrame.wobble.rotateBack;
         robot.gripperOpen();
       robot.RotateDEG(8, .2, this);
       // robot.wait(1000L,this);

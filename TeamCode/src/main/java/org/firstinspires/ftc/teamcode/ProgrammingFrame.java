@@ -99,6 +99,10 @@ public class ProgrammingFrame {
 
     public LightsStates lightsState = LightsStates.Off;
 
+    public boolean wobbleSuccess;
+
+    public int degreesRotated;
+
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
@@ -1611,7 +1615,53 @@ public class ProgrammingFrame {
         linearOpMode.sleep(timeout);
     }
 
-    public int wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
+
+        public void wobble(double liftingPower) {
+            if (armState == States.Off) { // don't do manual movements if moving automatically
+
+
+//           if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed()) {
+//               liftingPower = y2/2;
+//           }
+                if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+                    lifting.setPower(Range.clip(liftingPower, -.5, 0));
+                    //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
+                } else if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
+                    lifting.setPower(Range.clip(liftingPower, 0, 0.3));
+                } else {
+                    lifting.setPower(liftingPower);
+                }
+
+            } else {
+                if (armState == States.Forwards) {
+                    // Don't break the robot check
+                    if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
+                        lifting.setPower(0);
+                        lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        armState = States.Off;
+                    }
+                } else { // lifter is going backwards, aka down
+                    // Don't break the robot check
+                    if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+                        lifting.setPower(0);
+                        lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        armState = States.Off;
+                    }
+                }
+                if (!lifting.isBusy()) {
+                    lifting.setPower(0);
+                    lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    armState = States.Off;
+                }
+            }
+        }
+    public static class wobble extends ProgrammingFrame {
+
+        public static boolean success = false;
+        public static int rotateBack;
+    }
+
+    public void wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
         double distance = 100;
         // conversion for degrees to ticks
         final double conversion_factor = 12.73;
@@ -1644,7 +1694,7 @@ public class ProgrammingFrame {
                 frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         systemTools.telemetry.update();
 
-        int FLstart  =frontLeftMotor.getCurrentPosition();
+        int FLstart = frontLeftMotor.getCurrentPosition();
 
         // set target position for all the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
@@ -1682,10 +1732,11 @@ public class ProgrammingFrame {
             backLeftMotor.setPower(power);
 
             if (distance < difference) {
+                wobble.success = true;
                 break;
             }
         }
-            stopDriveMotors();
+        stopDriveMotors();
 
         int FLdelta = frontLeftMotor.getCurrentPosition() - FLstart;
         int rotateBackDeg = (int) (205 - (FLdelta / conversion_factor));
@@ -1695,60 +1746,23 @@ public class ProgrammingFrame {
 //        backRightMotor.setPower(0);
 //        backLeftMotor.setPower(0);
 
-            startDriveEncoders();
+        startDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            systemTools.telemetry.addData("Path", "Complete");
-            systemTools.telemetry.addData("counts", TICKS);
-            systemTools.telemetry.update();
-            return rotateBackDeg;
-        }
+        systemTools.telemetry.addData("Path", "Complete");
+        systemTools.telemetry.addData("counts", TICKS);
+        systemTools.telemetry.update();
 
 
-        public void wobble(double liftingPower) {
-            if (armState == States.Off) { // don't do manual movements if moving automatically
-
-
-//           if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed()) {
-//               liftingPower = y2/2;
-//           }
-                if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
-                    lifting.setPower(Range.clip(liftingPower, -.5,0));
-                    //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
-                }
-                else if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
-                    lifting.setPower(Range.clip(liftingPower,0, 0.3));
-                }
-                else {lifting.setPower(liftingPower);}
-
-            } else {
-                if (armState == States.Forwards) {
-                    // Don't break the robot check
-                    if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
-                        lifting.setPower(0);
-                        lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        armState = States.Off;
-                    }
-                } else { // lifter is going backwards, aka down
-                    // Don't break the robot check
-                    if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
-                        lifting.setPower(0);
-                        lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        armState = States.Off;
-                    }
-                }
-                if (!lifting.isBusy()) {
-                    lifting.setPower(0);
-                    lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    armState = States.Off;
-                }
-            }
-        }
-
+        wobble.rotateBack = rotateBackDeg;
 
     }
+}
+
+
+
 
 
