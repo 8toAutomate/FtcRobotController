@@ -141,7 +141,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
       robot.wobbleFind(30, 0.2, 40, this);
       boolean success = ProgrammingFrame.wobble.success;
       int degrees = ProgrammingFrame.wobble.rotateBack;
-        robot.gripperOpen();
+      robot.gripperOpen();
       robot.RotateDEG(8, .2, this);
       // robot.wait(1000L,this);
       robot.raiseGripper(750);

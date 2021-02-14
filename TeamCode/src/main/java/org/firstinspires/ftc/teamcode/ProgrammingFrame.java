@@ -1731,15 +1731,23 @@ public class ProgrammingFrame {
             backRightMotor.setPower(-power);
             backLeftMotor.setPower(power);
 
+            int FLdelta = frontLeftMotor.getCurrentPosition() - FLstart;
+            int rotateBackDeg = (int) (FLdelta / conversion_factor);
+
             if (distance < difference) {
                 wobble.success = true;
-                break;
+                frontLeftMotor.setTargetPosition(FLtarget - TICKS + rotateBackDeg + 3);
+                frontRightMotor.setTargetPosition(FRtarget + TICKS - rotateBackDeg - 3);
+                backLeftMotor.setTargetPosition(BLtarget - TICKS + rotateBackDeg + 3);
+                backRightMotor.setTargetPosition(BRtarget + TICKS - rotateBackDeg - 3);
+                //break;
             }
         }
         stopDriveMotors();
 
-        int FLdelta = frontLeftMotor.getCurrentPosition() - FLstart;
-        int rotateBackDeg = (int) (FLdelta / conversion_factor);
+        int FLdelta2 = frontLeftMotor.getCurrentPosition() - FLstart;
+        int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor);
+
 
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
@@ -1757,7 +1765,7 @@ public class ProgrammingFrame {
         systemTools.telemetry.update();
 
 
-        wobble.rotateBack = rotateBackDeg;
+        wobble.rotateBack = rotateBackDeg2;
 
     }
 }
