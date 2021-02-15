@@ -65,8 +65,8 @@ public class Wobble2 extends LinearOpMode {
          */
 
         // Send telemetry message to signify robot waiting;
-        robot.systemTools.telemetry.addData("Status", "Resetting Encoders");
-        robot.systemTools.telemetry.update();
+     //   robot.systemTools.telemetry.addData("Status", "Resetting Encoders");
+     //   robot.systemTools.telemetry.update();
 
         robot.resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -76,10 +76,10 @@ public class Wobble2 extends LinearOpMode {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        robot.systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                robot.frontLeftMotor.getCurrentPosition(),
-                robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
-        robot.systemTools.telemetry.update();
+     //   robot.systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+      //          robot.frontLeftMotor.getCurrentPosition(),
+     //           robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
+     //   robot.systemTools.telemetry.update();
 
         // set target position for all the motor encoders
         int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
@@ -116,7 +116,9 @@ public class Wobble2 extends LinearOpMode {
             robot.backRightMotor.setPower(-power);
             robot.backLeftMotor.setPower(power);
 
-            if (distance < difference) {
+            if (distance < difference) {//  wobble found
+             for (int i = 1; i <= 10000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
+                                                        // this saves over 0.5 seconds over adding another 3 degree turn
                 break;
             }
 
@@ -148,18 +150,18 @@ public class Wobble2 extends LinearOpMode {
 
         Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)robot.wobbleSensor;
 
-        telemetry.update();
-
         waitForStart();
         while(opModeIsActive()) {
-
+            double startTime = getRuntime();
 
             double wobbleDist =  wobbleFind(30,0.2,40,this);
                  if (wobbleDist < 40) {
+                  //   robot.RotateDEG(3, .2, this);
                     telemetry.addData("Stopped at detect distance ", String.format("%.01f cm", wobbleDist));
                     robot.wait(500,this);
                      telemetry.addData("Current wobble distance ", String.format("%.01f cm", robot.wobbleSensor.getDistance(DistanceUnit.CM)));
-                    telemetry.update();
+                     telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
+                     telemetry.update();
                     break;
                  }
         }

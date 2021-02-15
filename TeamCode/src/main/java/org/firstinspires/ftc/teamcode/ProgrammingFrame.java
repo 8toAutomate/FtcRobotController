@@ -1150,7 +1150,7 @@ public class ProgrammingFrame {
             ringPusher.setPosition(0);
          */
         double initial = linearOpMode.getRuntime();
-        while (linearOpMode.getRuntime() - initial < 0.5) {
+        while (linearOpMode.getRuntime() - initial < 0.4) {
         }
         ringPusher.setPosition(0);
     }
@@ -1676,6 +1676,7 @@ public class ProgrammingFrame {
         public static boolean success = false;
         public static int rotateBack;
     }
+//***************************************************************************************************
 
     public void wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
         double distance = 100;
@@ -1750,6 +1751,9 @@ public class ProgrammingFrame {
 
             if (distance < difference) {
                 wobble.success = true;
+                for (int i = 1; i <= 15000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
+                                                            // this saves over 0.5 seconds over adding another 3 degree turn
+
                // frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + 12);
                // frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() - 12);
                // backLeftMotor.setTargetPosition(backLeftMotor.getCurrentPosition() + 12);
@@ -1779,11 +1783,10 @@ public class ProgrammingFrame {
         systemTools.telemetry.addData("counts", TICKS);
         systemTools.telemetry.update();
 
-
         wobble.rotateBack = rotateBackDeg2;
 
-    }
-}
+    }  // end wobble find
+}   //end programming frame
 
 
 

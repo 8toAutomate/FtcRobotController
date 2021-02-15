@@ -20,22 +20,22 @@ public class BlueAutoSecondTourney extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, this);
+        robot.gripperOpen();
+        robot.gripperOpen();
         waitForStart();
         // Have method(s) that shoot 3 rings here, likely in the high goal
         // Driving to the starter stack
 
-       robot.gripperOpen();
-        robot.gripperOpen();
-        robot.wait(500L,this);
-        robot.raiseGripper(800);
+    //    robot.wait(500L,this);
+        robot.raiseGripper(750);
 
         robot.gripperClose();
-        robot.wait(1000L,this);
-        robot.raiseGripper(300);
+        robot.wait(500L,this);
+        robot.raiseGripper(350);
 
        // robot.GoDistanceCM2(70, .5, false,this);
-        robot.goDistanceAcceleration(68,0.8,false,10,25,this);
-        robot.wait(500,this);  // Wait for robot to stop before reading rings
+        robot.goDistanceAcceleration(65,0.9,false,5,20,this);
+        robot.wait(300,this);  // Wait for robot to stop before reading rings
 
             // Detect the rings here and return A, B, C, or E for Error
         ringAt = robot.ringFinderDistance(this);
@@ -54,45 +54,46 @@ public class BlueAutoSecondTourney extends LinearOpMode {
 
         // Gets us to the target zone
         //robot.GoDistanceCM2(60, .5, false, this);
-        robot.goDistanceAcceleration(62,0.7,false,10,25,this);
+        robot.flywheel(true, 0.85);
+        robot.goDistanceAcceleration(62,0.8,false,5,25,this);
         robot.storage(true, this);
-        robot.flywheel(true, 0.8);
-        robot.wait(2500,this);
+       // robot.flywheel(true, 0.8);
+      //  robot.wait(2500,this);
 
         for (int i = 0; i<4; i++) {                             // added extra shot in case last ring is stuck.
-            robot.pushRing(0.5, this);
-            robot.wait(900, this); // timeout was 1200 fir first tourney
+            robot.pushRing(0.4, this);
+            robot.wait(400, this); // timeout was 1200 fir first tourney
         }
         robot.flywheel(false, 0.0);
 
         if (ringAt == 'A') {
-            robot.GoDistanceCM2(26, .7, false, this);
-            robot.strafeDistanceCM2(-37, .7,false, this);
+            robot.GoDistanceCM2(29, .7, false, this);
+            robot.strafeDistanceCM2(-32, .7,false, this);
             // drop wobble stick here
             robot.lowerGripper(250);
             robot.gripperOpen();
-            robot.wait(500L,this);
+            robot.wait(300L,this);
             robot.lowerGripper(900);
-            robot.RotateDEG(147, 0.5, this);
-            robot.goDistanceAcceleration(105, 0.7, false, 20, 70, this);
-            robot.wobbleFind(30, 0.2, 40, this);
+            robot.RotateDEG(146, 0.7, this);        // raotion was 147 at 0.5 power
+            robot.goDistanceAcceleration(103, 0.9, false, 5, 70, this);
+            robot.wobbleFind(35, 0.2, 40, this);
             boolean success = ProgrammingFrame.wobble.success;
             int wobbleDegrees = ProgrammingFrame.wobble.rotateBack;
             robot.gripperOpen();
-            robot.RotateDEG(3, .2, this);
+           // robot.RotateDEG(3, .2, this);
             // robot.wait(1000L,this);
             robot.raiseGripper(750);
-            robot.GoDistanceCM2(5, .2, false, this);
+            robot.GoDistanceCM2(8, .2, false, this);
             robot.gripperClose();
-            robot.wait(1000, this);
+            robot.wait(700, this);
             //robot.gripperOpen();
             //robot.wait(1000, this);
             //robot.GoDistanceCM2(-20, 30, false, this);
             //robot.gripperClose();
             //robot.lowerGripper(800);
             robot.raiseGripper(400);
-            robot.RotateDEG((180 - wobbleDegrees) + 12, .5, this);
-            robot.goDistanceAcceleration(90, .9, false, 10, 75, this);
+            robot.RotateDEG((180 - wobbleDegrees) + 12, .7, this);
+            robot.goDistanceAcceleration(90, .9, false, 5, 75, this);
             robot.lowerGripper(100);
             robot.gripperOpen();
           //  robot.GoDistanceCM2(-20, -.7,false, this);
@@ -120,12 +121,15 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.lowerGripper(950);
             robot.GoDistanceCM2(-80, -.7, false,this);
         }
-     //   robot.wait(1000, this);
+        robot.wait(300, this);
         //robot.GoDistanceCM2(-20, 30, false, this);
         robot.lowerGripper(900);
       //  robot.gripperClose();
+        robot.RotateDEG(45,0.7,this);
+        robot.GoDistanceCM2(15, .8,false, this);  // navigate to white line
         robot.gripperClose();
-        robot.storage(false, this);
+        robot.storage(false,this);
+
         robot.wait(1500L,this);  //allow time for servo to finish closing grip before terminating
         // /*  Debug: comment out rest of method  MAx M. 12-24-2020
         // Add function that drops a wobble goal
