@@ -228,7 +228,7 @@ public class MecanumDriveIntakeTesting extends OpMode
             lowerGripper();
         }
 
-        if (gamepad1.a) {
+        if (gamepad1.right_bumper) {
             if (!driverAButtonDown) {
                 driverAButtonDown = true;
                 lowSpeedActivated = !lowSpeedActivated;

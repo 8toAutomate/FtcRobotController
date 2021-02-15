@@ -1750,6 +1750,11 @@ public class ProgrammingFrame {
 
             if (distance < difference) {
                 wobble.success = true;
+               // frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + 12);
+               // frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() - 12);
+               // backLeftMotor.setTargetPosition(backLeftMotor.getCurrentPosition() + 12);
+               // backRightMotor.setTargetPosition(backRightMotor.getCurrentPosition() - 12);
+
                 break;
             }
         }
@@ -1758,7 +1763,6 @@ public class ProgrammingFrame {
         // calculate change after entire drive
         int FLdelta2 = frontLeftMotor.getCurrentPosition() - FLstart;
         int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor);
-
 
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
