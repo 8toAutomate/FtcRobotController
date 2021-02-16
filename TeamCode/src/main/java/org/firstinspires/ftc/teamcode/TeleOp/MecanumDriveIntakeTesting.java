@@ -269,6 +269,8 @@ public class MecanumDriveIntakeTesting extends OpMode
         robot.backLeftMotor.setPower(backLeftPower);
         robot.backRightMotor.setPower(backRightPower);
 
+        robot.updateLightsState(lowSpeedActivated, this);
+
     /*    robot.lifting.setPower(liftingPower);
 
         if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed()) {
