@@ -54,14 +54,16 @@ public class BlueAutoSecondTourney extends LinearOpMode {
 
         // Gets us to the target zone
         //robot.GoDistanceCM2(60, .5, false, this);
-        robot.flywheel(true, 0.85);
-        robot.goDistanceAcceleration(62,0.8,false,5,25,this);
+        robot.flywheel(true, 0.75);
         robot.storage(true, this);
+        robot.goDistanceAcceleration(62,0.8,false,5,25,this);
+
        // robot.flywheel(true, 0.8);
       //  robot.wait(2500,this);
 
-        for (int i = 0; i<4; i++) {                             // added extra shot in case last ring is stuck.
+        for (int i = 0; i<3; i++) {                             // added extra shot in case last ring is stuck.
             robot.pushRing(0.4, this);
+            robot.flywheel(true, 0.85); // increase power for second and third shot
             robot.wait(400, this); // timeout was 1200 fir first tourney
         }
         robot.flywheel(false, 0.0);

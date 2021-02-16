@@ -115,10 +115,10 @@ public class Wobble2 extends LinearOpMode {
             robot.frontRightMotor.setPower(-power);
             robot.backRightMotor.setPower(-power);
             robot.backLeftMotor.setPower(power);
-
+            int sum=0;
             if (distance < difference) {//  wobble found
-             for (int i = 1; i <= 10000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
-                                                        // this saves over 0.5 seconds over adding another 3 degree turn
+                for ( int i = 1; i < 1200000; ++i) {sum += i;}   // sum = sum + i.  waste some time to allow robot to turn more and align gripper with wobble.
+                                                     // this saves over 0.5 seconds over adding another 3 degree turn
                 break;
             }
 
@@ -153,14 +153,27 @@ public class Wobble2 extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()) {
             double startTime = getRuntime();
-
-            double wobbleDist =  wobbleFind(30,0.2,40,this);
+            robot.RotateDEG(146, 0.7, this);        // raotion was 147 at 0.5 power
+            robot.goDistanceAcceleration(103, 0.9, false, 5, 70, this);
+            double wobbleDist =  wobbleFind(35,0.2,40,this);
                  if (wobbleDist < 40) {
                   //   robot.RotateDEG(3, .2, this);
-                    telemetry.addData("Stopped at detect distance ", String.format("%.01f cm", wobbleDist));
-                    robot.wait(500,this);
-                     telemetry.addData("Current wobble distance ", String.format("%.01f cm", robot.wobbleSensor.getDistance(DistanceUnit.CM)));
+                     robot.wait(500,this);
+                     double startWobbleDist=robot.wobbleSensor.getDistance(DistanceUnit.CM);
+                     int travelDist=8;
+                    // if (startWobbleDist > 22.5){
+                    //     travelDist = (int)(8 + (startWobbleDist-22.5));
+                    // }
+                     robot.gripperOpen();
+                     robot.raiseGripper(750);
+                     robot.GoDistanceCM2(travelDist, .2, false, this);
+                     robot.wait(3000,this);
+                     robot.lowerGripper(900);
+                     robot.gripperClose();
+                     telemetry.addData("Stopped at detect distance ", String.format("%.01f cm", wobbleDist));
+                     telemetry.addData("start wobble distance ", String.format("%.01f cm", startWobbleDist));
                      telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
+                     telemetry.addData("new wobble distance ", String.format("%.01f cm", robot.wobbleSensor.getDistance(DistanceUnit.CM)));
                      telemetry.update();
                     break;
                  }

@@ -1150,7 +1150,7 @@ public class ProgrammingFrame {
             ringPusher.setPosition(0);
          */
         double initial = linearOpMode.getRuntime();
-        while (linearOpMode.getRuntime() - initial < 0.4) {
+        while (linearOpMode.getRuntime() - initial < 0.35) {
         }
         ringPusher.setPosition(0);
     }
@@ -1751,7 +1751,7 @@ public class ProgrammingFrame {
 
             if (distance < difference) {
                 wobble.success = true;
-                for (int i = 1; i <= 15000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
+                for (int i = 1; i <= 20000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
                                                             // this saves over 0.5 seconds over adding another 3 degree turn
 
                // frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + 12);

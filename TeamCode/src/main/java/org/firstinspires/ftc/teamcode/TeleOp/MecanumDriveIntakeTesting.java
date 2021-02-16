@@ -189,11 +189,11 @@ public class MecanumDriveIntakeTesting extends OpMode
 //               liftingPower = y2/2;
 //           }
             if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
-                robot.lifting.setPower(Range.clip(liftingPower, -.5,0));
+                robot.lifting.setPower(Range.clip(liftingPower, -.8,0));
                 //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
             }
             else if (robot.highSwitch1.isPressed() || robot.highSwitch2.isPressed()) {
-                robot.lifting.setPower(Range.clip(liftingPower,0, 0.3));
+                robot.lifting.setPower(Range.clip(liftingPower,0, 0.8));
             }
             else {robot.lifting.setPower(liftingPower);}
 
@@ -380,7 +380,6 @@ public class MecanumDriveIntakeTesting extends OpMode
                 yClick = false; // Flywheel button is lowered
             }
         }
-
 
         //********************Shooting Servo************************************************************
   /*      if (!shooting) {
