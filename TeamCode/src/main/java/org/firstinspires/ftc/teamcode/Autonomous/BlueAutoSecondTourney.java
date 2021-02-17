@@ -54,7 +54,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
 
         // Gets us to the target zone
         //robot.GoDistanceCM2(60, .5, false, this);
-        robot.flywheel(true, 0.75);
+        robot.flywheel(true, 0.80);
         robot.storage(true, this);
         robot.goDistanceAcceleration(62,0.8,false,5,25,this);
 

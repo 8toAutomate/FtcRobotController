@@ -538,8 +538,8 @@ public class ProgrammingFrame {
         // final float[] rgbValues = new float[3];
 
         //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
-        double maxTopRingDistCM = 8;
-        double maxBotRingDistCM = 8;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
+        double maxTopRingDistCM = 11;
+        double maxBotRingDistCM = 11;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
 
         double bottomRingValueCM;
         double topRingValueCM;

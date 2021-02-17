@@ -157,28 +157,30 @@ public class Wobble2 extends LinearOpMode {
             robot.goDistanceAcceleration(103, 0.9, false, 5, 70, this);
             double wobbleDist =  wobbleFind(35,0.2,40,this);
                  if (wobbleDist < 40) {
-                  //   robot.RotateDEG(3, .2, this);
+                     robot.RotateDEG(3, .2, this);
                      robot.wait(500,this);
                      double startWobbleDist=robot.wobbleSensor.getDistance(DistanceUnit.CM);
                      int travelDist=8;
                     // if (startWobbleDist > 22.5){
                     //     travelDist = (int)(8 + (startWobbleDist-22.5));
                     // }
-                     robot.gripperOpen();
-                     robot.raiseGripper(750);
-                     robot.GoDistanceCM2(travelDist, .2, false, this);
-                     robot.wait(3000,this);
-                     robot.lowerGripper(900);
+                    robot.gripperOpen();
+                    robot.raiseGripper(750);
+                    robot.GoDistanceCM2(travelDist, .2, false, this);
+                    // robot.wait(3000,this);
                      robot.gripperClose();
+                     robot.wait(300,this);
+                        robot.raiseGripper(400);
+                  //   robot.gripperClose();
                      telemetry.addData("Stopped at detect distance ", String.format("%.01f cm", wobbleDist));
                      telemetry.addData("start wobble distance ", String.format("%.01f cm", startWobbleDist));
                      telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
                      telemetry.addData("new wobble distance ", String.format("%.01f cm", robot.wobbleSensor.getDistance(DistanceUnit.CM)));
                      telemetry.update();
-                    break;
-                 }
+                   break;
+                 }  // end if
         }
         while(opModeIsActive()) {}
     }
 
-}
+}// end Wobble 2
