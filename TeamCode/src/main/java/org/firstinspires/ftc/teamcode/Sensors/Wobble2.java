@@ -157,7 +157,7 @@ public class Wobble2 extends LinearOpMode {
             robot.goDistanceAcceleration(103, 0.9, false, 5, 70, this);
             double wobbleDist =  wobbleFind(35,0.2,40,this);
                  if (wobbleDist < 40) {
-                     robot.RotateDEG(3, .2, this);
+                  //   robot.RotateDEG(3, .2, this);
                      robot.wait(500,this);
                      double startWobbleDist=robot.wobbleSensor.getDistance(DistanceUnit.CM);
                      int travelDist=8;
