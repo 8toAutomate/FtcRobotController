@@ -151,6 +151,7 @@ public class Wobble2 extends LinearOpMode {
         Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)robot.wobbleSensor;
 
         waitForStart();
+
         while(opModeIsActive()) {
             double startTime = getRuntime();
             robot.RotateDEG(146, 0.7, this);        // raotion was 147 at 0.5 power
