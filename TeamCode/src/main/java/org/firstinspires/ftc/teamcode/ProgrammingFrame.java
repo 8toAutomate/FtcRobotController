@@ -538,8 +538,8 @@ public class ProgrammingFrame {
         // final float[] rgbValues = new float[3];
 
         //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
-        double maxTopRingDistCM = 8;
-        double maxBotRingDistCM = 8;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
+        double maxTopRingDistCM = 11;
+        double maxBotRingDistCM = 11;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
 
         double bottomRingValueCM;
         double topRingValueCM;
@@ -1150,7 +1150,7 @@ public class ProgrammingFrame {
             ringPusher.setPosition(0);
          */
         double initial = linearOpMode.getRuntime();
-        while (linearOpMode.getRuntime() - initial < 0.5) {
+        while (linearOpMode.getRuntime() - initial < 0.35) {
         }
         ringPusher.setPosition(0);
     }
@@ -1676,6 +1676,7 @@ public class ProgrammingFrame {
         public static boolean success = false;
         public static int rotateBack;
     }
+//***************************************************************************************************
 
     public void wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
         double distance = 100;
@@ -1750,6 +1751,14 @@ public class ProgrammingFrame {
 
             if (distance < difference) {
                 wobble.success = true;
+                for (int i = 1; i <= 20000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
+                                                            // this saves over 0.5 seconds over adding another 3 degree turn
+
+               // frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + 12);
+               // frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() - 12);
+               // backLeftMotor.setTargetPosition(backLeftMotor.getCurrentPosition() + 12);
+               // backRightMotor.setTargetPosition(backRightMotor.getCurrentPosition() - 12);
+
                 break;
             }
         }
@@ -1778,8 +1787,8 @@ public class ProgrammingFrame {
 
         wobble.rotateBack = rotateBackDeg2;
 
-    }
-}
+    }  // end wobble find
+}   //end programming frame
 
 
 
