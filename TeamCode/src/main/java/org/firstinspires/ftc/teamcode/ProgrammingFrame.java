@@ -212,14 +212,14 @@ public class ProgrammingFrame {
         int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
 
         // Debug: Send telemetry message with calculated ticks;
-        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+        //systemTools.telemetry.addData("Calculated Counts =", TICKS);
         //   systemTools.telemetry.update();
 
         // Thread.sleep(2000); // debugging: allow time to view telemetry
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        //systemTools.telemetry.addLine();
+        //systemTools.telemetry.addData("Status", "Resetting Encoders");
         //   systemTools.telemetry.update();
 
         resetDriveEncoders();
@@ -230,10 +230,10 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         //  systemTools.telemetry.update();
         //  wait(2000); // debugging: allow time to view telemetry
         /*
@@ -276,11 +276,11 @@ public class ProgrammingFrame {
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         /*
         systemTools.telemetry.addData("Path", "Complete");
@@ -308,8 +308,8 @@ public class ProgrammingFrame {
          */
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.update();
 
         resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -319,10 +319,10 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         // set target position for all the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
@@ -368,9 +368,9 @@ public class ProgrammingFrame {
 //        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path", "Complete");
+        // systemTools.telemetry.addData("counts", TICKS);
+        // systemTools.telemetry.update();
     }
 
     // robot strafing function
@@ -387,8 +387,8 @@ public class ProgrammingFrame {
         int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.update();
 
         resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -397,10 +397,10 @@ public class ProgrammingFrame {
 //        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         // set target position for motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
@@ -438,25 +438,25 @@ public class ProgrammingFrame {
 //        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path", "Complete");
+        // systemTools.telemetry.addData("counts", TICKS);
+        // systemTools.telemetry.update();
     }
 
     // find line function
     public void findLine(double power, LinearOpMode linearOpMode) {
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.update();
 
         resetDriveEncoders();
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
         NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
@@ -483,8 +483,8 @@ public class ProgrammingFrame {
 
         startDriveEncoders();
 
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path", "Complete");
+        // systemTools.telemetry.update();
     }
 
     /*  public char ringFinder() {
@@ -569,11 +569,11 @@ public class ProgrammingFrame {
             path = 'E';
         }
 
-        systemTools.telemetry.addData("Sensor 1 Distance (CM): ", bottomRingValueCM);
-        systemTools.telemetry.addData("Sensor 2 Distance (CM): ", topRingValueCM);
-        systemTools.telemetry.addData("Maximum Top Ring Distance (CM): ", maxTopRingDistCM + "Maximum Bottom Ring Distance (CM): ", maxBotRingDistCM);
-        systemTools.telemetry.addData("Path: ", path);
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Sensor 1 Distance (CM): ", bottomRingValueCM);
+        // systemTools.telemetry.addData("Sensor 2 Distance (CM): ", topRingValueCM);
+        // systemTools.telemetry.addData("Maximum Top Ring Distance (CM): ", maxTopRingDistCM + "Maximum Bottom Ring Distance (CM): ", maxBotRingDistCM);
+        // systemTools.telemetry.addData("Path: ", path);
+        // systemTools.telemetry.update();
         //   while (linearOpMode.opModeIsActive()) { }
         return path;
     }
@@ -730,17 +730,17 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
         // systemTools.telemetry.update();
 
         resetDriveEncoders();
 
         startDriveEncoders();
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
 
         // Wait for the game to start (driver presses PLAY)
 
@@ -764,13 +764,13 @@ public class ProgrammingFrame {
         stopDriveMotors();
 
         startDriveEncoders();
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Final pos.", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Final pos.", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
 
-        systemTools.telemetry.addLine().addData("Path", "Complete");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addLine().addData("Path", "Complete");
+        // systemTools.telemetry.update();
     }
 
 
@@ -778,16 +778,16 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.update();
 
         resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
 
@@ -812,8 +812,8 @@ public class ProgrammingFrame {
 
         startDriveEncoders();
 
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.update();
+        //systemTools.telemetry.addData("Path", "Complete");
+        //systemTools.telemetry.update();
     }
 
     //*********************************************************************************************
@@ -839,13 +839,13 @@ public class ProgrammingFrame {
         int TICKS = (int) Math.round(centimeters * conversion_factor);
 
         // Debug: Send telemetry message with calculated TICKS;
-        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+        // systemTools.telemetry.addData("Calculated Counts =", TICKS);
         //   systemTools.telemetry.update();
 
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
         //   systemTools.telemetry.update();
 
         resetDriveEncoders();
@@ -857,10 +857,10 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         //  systemTools.telemetry.update();
 
 
@@ -918,11 +918,11 @@ public class ProgrammingFrame {
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
@@ -947,13 +947,13 @@ public class ProgrammingFrame {
         int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
 
         // Debug: Send telemetry message with calculated TICKS;
-        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+        // systemTools.telemetry.addData("Calculated Counts =", TICKS);
         //   systemTools.telemetry.update();
 
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
         //   systemTools.telemetry.update();
 
         resetDriveEncoders();
@@ -965,10 +965,10 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         //  systemTools.telemetry.update();
 
 
@@ -1019,11 +1019,11 @@ public class ProgrammingFrame {
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
@@ -1049,16 +1049,16 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.update();
 
         resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+       // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+       //         frontLeftMotor.getCurrentPosition(),
+       //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+       // systemTools.telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
 
@@ -1109,9 +1109,9 @@ public class ProgrammingFrame {
 
         startDriveEncoders();
 
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path", "Complete");
+        // systemTools.telemetry.addData("counts", TICKS);
+        // systemTools.telemetry.update();
     }
 
     public void flywheel(boolean on, double onPower) {
@@ -1173,16 +1173,16 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.update();
 
         resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
 
@@ -1234,9 +1234,9 @@ public class ProgrammingFrame {
 
         startDriveEncoders();
 
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path", "Complete");
+        // systemTools.telemetry.addData("counts", TICKS);
+        // systemTools.telemetry.update();
     }
 
     public void strafeDistanceCM3(int centimeters, double power, boolean handoff) {
@@ -1338,13 +1338,13 @@ public class ProgrammingFrame {
 
 
         // Debug: Send telemetry message with calculated TICKS;
-        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+        // systemTools.telemetry.addData("Calculated Counts =", TICKS);
         //   systemTools.telemetry.update();
 
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
         //   systemTools.telemetry.update();
 
         resetDriveEncoders();
@@ -1356,10 +1356,10 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         //  systemTools.telemetry.update();
 
 
@@ -1449,11 +1449,11 @@ public class ProgrammingFrame {
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
@@ -1489,13 +1489,13 @@ public class ProgrammingFrame {
 
 
         // Debug: Send telemetry message with calculated TICKS;
-        systemTools.telemetry.addData("Calculated Counts =", TICKS);
+        // systemTools.telemetry.addData("Calculated Counts =", TICKS);
         //   systemTools.telemetry.update();
 
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
         //   systemTools.telemetry.update();
 
         resetDriveEncoders();
@@ -1507,10 +1507,10 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         //  systemTools.telemetry.update();
 
 
@@ -1610,11 +1610,11 @@ public class ProgrammingFrame {
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addLine();
-        systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addLine();
+        // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
 
@@ -1694,8 +1694,8 @@ public class ProgrammingFrame {
          */
 
         // Send telemetry message to signify robot waiting;
-        systemTools.telemetry.addData("Status", "Resetting Encoders");
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.update();
 
         resetDriveEncoders();
 //        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -1705,10 +1705,10 @@ public class ProgrammingFrame {
 
 
         // Send telemetry message to indicate successful Encoder reset
-        systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-                frontLeftMotor.getCurrentPosition(),
-                frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        systemTools.telemetry.update();
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
 
         int FLstart = frontLeftMotor.getCurrentPosition();
 
@@ -1739,8 +1739,8 @@ public class ProgrammingFrame {
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
 
             distance = wobbleSensor.getDistance(DistanceUnit.CM);
-            systemTools.telemetry.addData("Distance= ", "%.3f%n", distance);
-            systemTools.telemetry.update();
+            // systemTools.telemetry.addData("Distance= ", "%.3f%n", distance);
+            // systemTools.telemetry.update();
             // reset the timeout time and start motion.
             frontLeftMotor.setPower(power);
             frontRightMotor.setPower(-power);
@@ -1771,10 +1771,10 @@ public class ProgrammingFrame {
 //        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
-
+        // systemTools.telemetry.addData("Path", "Complete");
+        // systemTools.telemetry.addData("counts", TICKS);
+        // systemTools.telemetry.update();
+//
 
         wobble.rotateBack = rotateBackDeg2;
 
