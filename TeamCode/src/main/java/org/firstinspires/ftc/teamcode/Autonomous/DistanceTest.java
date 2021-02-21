@@ -14,7 +14,8 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
          */
         /* Declare OpMode members. */
         ProgrammingFrame robot   = new ProgrammingFrame();   // Use a Pushbot's hardware
-        private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime runtime = new ElapsedTime();
+    ProgrammingFrame.wobble wobble = new ProgrammingFrame.wobble();
 
         //static final int        TICKS                   = 1000;
         static final double     DRIVE_SPEED             = 0.5;
@@ -24,15 +25,15 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
         public void GoDistanceTICKS(int ticks, double power) {
 
             // Send telemetry message to signify robot waiting;
-            telemetry.addData("Status", "Resetting Encoders");
+          //  telemetry.addData("Status", "Resetting Encoders");
             //telemetry.update();
 
             robot.resetDriveEncoders();
 
             // Send telemetry message to indicate successful Encoder reset
-            telemetry.addLine().addData("Path0", "Starting at %7d :%7d :%7d :%7d",
-                    robot.frontLeftMotor.getCurrentPosition(),
-                    robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
+        //    telemetry.addLine().addData("Path0", "Starting at %7d :%7d :%7d :%7d",
+         //           robot.frontLeftMotor.getCurrentPosition(),
+         //           robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
             //telemetry.update();
 
             // Wait for the game to start (driver presses PLAY)

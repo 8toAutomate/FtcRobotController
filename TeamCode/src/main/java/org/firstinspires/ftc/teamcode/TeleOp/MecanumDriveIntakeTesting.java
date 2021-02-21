@@ -423,7 +423,7 @@ public class MecanumDriveIntakeTesting extends OpMode
         if (shootButton){                              // check button status flag. If true
             if (shooting) {                             //  then check if shooting process is in progress
                 robot.ringPusher.setPosition(0.7);        // run shooting servo to max position.
-                    if (getRuntime() - initialSH > .5) {  // check if enough time has passed.
+                    if (getRuntime() - initialSH > .3) {  // check if enough time has passed.
                         robot.ringPusher.setPosition(0); // return servo to starting position.
                         shooting = false;               //  Shooting is done.
                         shootingReset = false;         //  servo reset is not complete yet so set status flag false.
@@ -433,7 +433,7 @@ public class MecanumDriveIntakeTesting extends OpMode
         }
 
         if(!shootingReset) {                   // check if shooting reset has completed.  If not
-            if (getRuntime() - initialSH > .5) { // see if enough time has passed.  If true
+            if (getRuntime() - initialSH > .25) { // see if enough time has passed.  If true
                 shootingReset = true;          // shooting reset process is complete
                 shootButton = false;           // reset shoot button flag so it can be read on the next cycle
             }

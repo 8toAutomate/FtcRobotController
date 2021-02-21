@@ -20,17 +20,17 @@ public class GoDistance extends LinearOpMode {
         int TICKS = (int) Math.round(centimeters * conversion_factor);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Resetting Encoders");
-        telemetry.update();
+   //     telemetry.addData("Status", "Resetting Encoders");
+   //     telemetry.update();
 
         robot.resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0", "Starting at %7d :%7d",
+      /*  telemetry.addData("Path0", "Starting at %7d :%7d",
                 robot.frontLeftMotor.getCurrentPosition(),
                 robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
         telemetry.update();
-
+       */
         // Wait for the game to start (driver presses PLAY)
 
         int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
@@ -70,15 +70,21 @@ public class GoDistance extends LinearOpMode {
 
         robot.startDriveEncoders();
 
-        telemetry.addData("Path", "Complete");
-        telemetry.addData("counts", TICKS);
-        telemetry.update();
+    //    telemetry.addData("Path", "Complete");
+    //    telemetry.addData("counts", TICKS);
+    //    telemetry.update();
     }
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
         //robot.GoDistanceCM2(100, 0.4, false, this);
-        robot.strafeAcceleration(100, .5, false, .2, .7, this );
+        Double startTime = getRuntime();
+        robot.goDistanceAcceleration(65, .9, false, 5, 50, this );
+        robot.wait(1000,this);
+        robot.goDistanceAcceleration(62, .8, false, 8, 50, this );
+        telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
+        telemetry.update();
+        while(opModeIsActive()) {}
     }
 }

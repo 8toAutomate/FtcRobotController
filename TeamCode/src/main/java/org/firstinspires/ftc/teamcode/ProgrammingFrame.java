@@ -553,8 +553,8 @@ public class ProgrammingFrame {
         // bottomRing.setGain(gain);
         // topRing.setGain(gain);
 
-        bottomRingValueCM = bottomRing.getDistance(DistanceUnit.CM);
         topRingValueCM = topRing.getDistance(DistanceUnit.CM);
+        bottomRingValueCM = bottomRing.getDistance(DistanceUnit.CM);
 
         bottomRingDetected = bottomRingValueCM < maxBotRingDistCM;
         topRingDetected = topRingValueCM < maxTopRingDistCM;
@@ -1417,7 +1417,8 @@ public class ProgrammingFrame {
                 percent2 = fLpercent - backRamp;
                 // converts that to a percent on the backramp left (0-1)
                 percent = percent2 / (100.0 - backRamp);
-                setPower = (1 - percent) * power; // power decreases to zero at the end
+                setPower =0.05 + (1 - percent) * power; // power decreases to zero at the end
+
             }
 
 
