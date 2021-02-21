@@ -901,7 +901,7 @@ public class ProgrammingFrame {
         */
 
         while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+                (frontLeftMotor.isBusy() || frontRightMotor.isBusy() || backLeftMotor.isBusy() || backRightMotor.isBusy())) {
         }
 
         if (!handoff) stopDriveMotors();
@@ -1003,9 +1003,10 @@ public class ProgrammingFrame {
         // always end the motion as soon as possible.
         // However, if you require that BOTH motors have finished their moves before the robot continues
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
-        }
+       }
 
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
@@ -1394,7 +1395,8 @@ public class ProgrammingFrame {
         */
 
         while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+             //   (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+            (frontLeftMotor.isBusy() || frontRightMotor.isBusy() || backLeftMotor.isBusy() || backRightMotor.isBusy())) {
 
             // Finds out how far into the motion we are (0-100)
             double fLpercent = (double) (frontLeftMotor.getCurrentPosition()) / frontLeftMotor.getTargetPosition() * 100;
