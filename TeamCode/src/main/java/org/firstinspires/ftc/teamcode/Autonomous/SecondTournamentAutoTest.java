@@ -38,7 +38,40 @@ public class SecondTournamentAutoTest extends LinearOpMode {
         // robot.GoDistanceCM2(70, .5, false,this);
         robot.goDistanceAcceleration(65,0.9,false,5,50,this);
         robot.wait(300,this);  // Wait for robot to stop before reading rings
-        robot.goDistanceAcceleration(62,0.8,false,8,50,this);
+
+        ringAt = robot.ringFinderDistance(this);
+        if (ringAt == 'E') {  // Top saw a ring but bottom didn't somehow, try one more time
+            char tryAgain = robot.ringFinderDistance(this);  // If this fails it will take C path
+            if (tryAgain == 'E') {
+                ringAt = 'C';
+            }
+            else {
+                ringAt = tryAgain;
+            }
+        }
+        // ringAt = robot.ringFinderDistance();
+     //   telemetry.addData("Target zone", ringAt);
+      //  telemetry.update();
+
+        // Gets us to the target zone
+        //robot.GoDistanceCM2(60, .5, false, this);
+        robot.flywheel(true, 0.80);
+        robot.storage(true, this);
+        robot.goDistanceAcceleration(62,0.8,false,5,40,this);
+
+        // robot.flywheel(true, 0.8);
+        //  robot.wait(2500,this);
+
+        for (int i = 0; i<3; i++) {                             // added extra shot in case last ring is stuck.
+            robot.pushRing(0.4, this);
+            robot.flywheel(true, 0.85); // increase power for second and third shot
+            robot.wait(400, this); // timeout was 1200 fir first tourney
+        }
+        robot.flywheel(false, 0.0);
+
+
+
+     //   robot.goDistanceAcceleration(62,0.8,false,8,50,this);
         // robot.GoDistanceCM2(70, .5, false,this);
        // robot.GoDistanceCM2(65,0.6,false,this);
        // robot.wait(300,this);  // Wait for robot to stop before reading rings

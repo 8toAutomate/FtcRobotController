@@ -80,11 +80,11 @@ public class GoDistance extends LinearOpMode {
         waitForStart();
         //robot.GoDistanceCM2(100, 0.4, false, this);
         Double startTime = getRuntime();
-    //    robot.goDistanceAcceleration(65, .9, false, 5, 50, this );
+       robot.goDistanceAcceleration(65, .9, false, 5, 50, this );
     //    robot.wait(1000,this);
     //    robot.goDistanceAcceleration(62, .8, false, 8, 50, this );
         //robot.goDistanceAcceleration(-28, -0.4, false,15,70, this);
-        robot.GoDistanceCM2(-28,.4,false,this);
+      //  robot.GoDistanceCM2(28,.5,false,this);
         telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
         telemetry.update();
         while(opModeIsActive()) {}
