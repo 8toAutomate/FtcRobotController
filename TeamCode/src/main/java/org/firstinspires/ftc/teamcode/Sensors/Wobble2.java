@@ -48,10 +48,12 @@ public class Wobble2 extends LinearOpMode {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
 
-    public double wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
+    public boolean wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
         double distance = 100;
         // conversion for degrees to ticks
         final double conversion_factor = 12.73;
+
+        int wStart=0, wEnd=0;
 
         // if degrees are negative, set the power negative
         if (degrees < 0 && power > 0) {
@@ -81,6 +83,8 @@ public class Wobble2 extends LinearOpMode {
      //           robot.frontRightMotor.getCurrentPosition(), robot.backLeftMotor.getCurrentPosition(), robot.backRightMotor.getCurrentPosition());
      //   robot.systemTools.telemetry.update();
 
+        int FLstart = robot.frontLeftMotor.getCurrentPosition();
+
         // set target position for all the motor encoders
         int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
         int FRtarget = robot.frontRightMotor.getCurrentPosition() - TICKS;
@@ -97,6 +101,10 @@ public class Wobble2 extends LinearOpMode {
         robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        robot.frontLeftMotor.setPower(power);
+        robot.frontRightMotor.setPower(-power);
+        robot.backRightMotor.setPower(-power);
+        robot.backLeftMotor.setPower(power);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -106,40 +114,52 @@ public class Wobble2 extends LinearOpMode {
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while (linearOpMode.opModeIsActive() &&
                 (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())) {
-
+            boolean frontEdgeFound = false;
             distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
-            robot.systemTools.telemetry.addData("Distance= ", "%.3f%n", distance);
-            telemetry.update();
+       //     robot.systemTools.telemetry.addData("Distance= ", "%.3f%n", distance);
+       //     telemetry.update();
             // reset the timeout time and start motion.
-            robot.frontLeftMotor.setPower(power);
+           /* robot.frontLeftMotor.setPower(power);
             robot.frontRightMotor.setPower(-power);
             robot.backRightMotor.setPower(-power);
             robot.backLeftMotor.setPower(power);
-            int sum=0;
-            if (distance < difference) {//  wobble found
-                for ( int i = 1; i < 1200000; ++i) {sum += i;}   // sum = sum + i.  waste some time to allow robot to turn more and align gripper with wobble.
-                                                     // this saves over 0.5 seconds over adding another 3 degree turn
-                break;
-            }
+          */
+            //int sum=0;
+                if (distance < difference) {//  wobble found
 
+                    wStart = robot.frontLeftMotor.getCurrentPosition() ;
+                    frontEdgeFound = true;
+                    // for ( int i = 1; i < 10000; ++i) {sum += i;}   // sum = sum + i.  waste some time to allow robot to turn more and align gripper with wobble.
+                    //this saves over 0.5 seconds over adding another 3 degree turn
+                }
+
+            if (frontEdgeFound && distance > difference) {
+                robot.stopDriveMotors();               //   break;
+            }
         }
 
-        robot.stopDriveMotors();
 //        frontLeftMotor.setPower(0);
 //        frontRightMotor.setPower(0);
 //        backRightMotor.setPower(0);
 //        backLeftMotor.setPower(0);
 
-        robot.startDriveEncoders();
+     //   robot.startDriveEncoders();
+        wEnd = robot.frontLeftMotor.getCurrentPosition();
 //        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.systemTools.telemetry.addData("Path", "Complete");
-        robot.systemTools.telemetry.addData("counts", TICKS);
-        robot.systemTools.telemetry.update();
-        return distance;
+   //     robot.systemTools.telemetry.addData("Path", "Complete");
+   //     robot.systemTools.telemetry.addData("counts", TICKS);
+    //    robot.systemTools.telemetry.update();
+        int FLdelta2 = Math.abs(wEnd - wStart);
+        telemetry.addData("wStart: ", wStart + "  wEnd: "+ wEnd + "  FLdelta2: " + FLdelta2);
+        int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor)+8;
+        telemetry.addData("rotateBackDeg2: ", rotateBackDeg2);
+        robot.RotateDEG(-rotateBackDeg2,0.5,this);
+        distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
+        return true;
     }
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -154,33 +174,39 @@ public class Wobble2 extends LinearOpMode {
 
         while(opModeIsActive()) {
             double startTime = getRuntime();
-            robot.RotateDEG(146, 0.7, this);        // raotion was 147 at 0.5 power
-            robot.goDistanceAcceleration(103, 0.9, false, 5, 70, this);
-            double wobbleDist =  wobbleFind(35,0.2,40,this);
-                 if (wobbleDist < 40) {
+        //    robot.RotateDEG(146, 0.7, this);        //this is video demo from target zone A
+        //    robot.goDistanceAcceleration(103, 0.9, false, 5, 70, this);  //this is video demo from target zone A
+            boolean wobbleStat =  wobbleFind(45,0.2,35,this);
+                 if (wobbleStat) {
                   //   robot.RotateDEG(3, .2, this);
-                     robot.wait(500,this);
+                     //robot.wait(500,this);
                      double startWobbleDist=robot.wobbleSensor.getDistance(DistanceUnit.CM);
                      int travelDist=8;
-                    // if (startWobbleDist > 22.5){
-                    //     travelDist = (int)(8 + (startWobbleDist-22.5));
-                    // }
+                    if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
+                             travelDist = (int)(8 + (startWobbleDist-22.5));
+                    //else{
+                    //        if (startWobbleDist < 20.5) {
+                     //           travelDist = (int) (startWobbleDist > 22.58 + (startWobbleDist - 22.5));
+                     //       }
+                        }
                     robot.gripperOpen();
-                    robot.raiseGripper(750);
-                    robot.GoDistanceCM2(travelDist, .2, false, this);
-                    // robot.wait(3000,this);
-                     robot.gripperClose();
-                     robot.wait(300,this);
-                        robot.raiseGripper(400);
+                  robot.raiseGripper(750);
+                   robot.GoDistanceCM2(travelDist, .2, false, this);
+                    robot.wait(2000,this);
+                    robot.lowerGripper(900);
+                    robot.gripperClose();
+                    //robot.wait(300,this);
+                   //     robot.raiseGripper(400);
                   //   robot.gripperClose();
-                     telemetry.addData("Stopped at detect distance ", String.format("%.01f cm", wobbleDist));
-                     telemetry.addData("start wobble distance ", String.format("%.01f cm", startWobbleDist));
+                     telemetry.addData("start wobble distance ", startWobbleDist);
                      telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
-                     telemetry.addData("new wobble distance ", String.format("%.01f cm", robot.wobbleSensor.getDistance(DistanceUnit.CM)));
+                     telemetry.addData("travel distance ", travelDist);
                      telemetry.update();
                    break;
                  }  // end if
-        }
+        } // end of While Opmodeisactive
+        // telemetry.addData("Stopped at detect distance ", String.format("%.01f cm", wobbleDist));
+
         while(opModeIsActive()) {}
     }
 
