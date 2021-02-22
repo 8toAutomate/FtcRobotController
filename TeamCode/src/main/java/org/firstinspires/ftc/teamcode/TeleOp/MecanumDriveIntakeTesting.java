@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
@@ -130,6 +131,116 @@ public class MecanumDriveIntakeTesting extends OpMode
         // robot.lifting.setPower(0);
         // robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    public void wobbleFind(int degrees, double power, double difference) {
+        double distance = 100;
+        // conversion for degrees to ticks
+        final double conversion_factor = 12.73;
+
+        // if degrees are negative, set the power negative
+        if (degrees < 0 && power > 0) {
+            power = power * -1;
+        }
+
+        int TICKS = (int) Math.round(degrees * conversion_factor);
+        /*
+         * Initialize the drive system variables.
+         * The init() method of the hardware class does all the work here
+         */
+
+        // Send telemetry message to signify robot waiting;
+        // systemTools.telemetry.addData("Status", "Resetting Encoders");
+        // systemTools.telemetry.update();
+
+        robot.resetDriveEncoders();
+//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        // Send telemetry message to indicate successful Encoder reset
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
+
+        int FLstart = robot.frontLeftMotor.getCurrentPosition();
+
+        // set target position for all the motor encoders
+        int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = robot.frontRightMotor.getCurrentPosition() - TICKS;
+        int BLtarget = robot.backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = robot.backRightMotor.getCurrentPosition() - TICKS;
+
+        robot.frontLeftMotor.setTargetPosition(FLtarget);
+        robot.frontRightMotor.setTargetPosition(FRtarget);
+        robot.backLeftMotor.setTargetPosition(BLtarget);
+        robot.backRightMotor.setTargetPosition(BRtarget);
+
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while ((robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())) {
+
+            distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
+            // systemTools.telemetry.addData("Distance= ", "%.3f%n", distance);
+            // systemTools.telemetry.update();
+            // reset the timeout time and start motion.
+            robot.frontLeftMotor.setPower(power);
+            robot.frontRightMotor.setPower(-power);
+            robot.backRightMotor.setPower(-power);
+            robot.backLeftMotor.setPower(power);
+
+
+            if (distance < difference) {
+                ProgrammingFrame.wobble.success = true;
+                for (int i = 1; i <= 20000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
+                // this saves over 0.5 seconds over adding another 3 degree turn
+
+                // frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + 12);
+                // frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() - 12);
+                // backLeftMotor.setTargetPosition(backLeftMotor.getCurrentPosition() + 12);
+                // backRightMotor.setTargetPosition(backRightMotor.getCurrentPosition() - 12);
+
+                break;
+            }
+        }
+        robot.stopDriveMotors();
+
+        // calculate change after entire drive
+        int FLdelta2 = robot.frontLeftMotor.getCurrentPosition() - FLstart;
+        int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor);
+
+
+//        frontLeftMotor.setPower(0);
+//        frontRightMotor.setPower(0);
+//        backRightMotor.setPower(0);
+//        backLeftMotor.setPower(0);
+
+        robot.startDriveEncoders();
+//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // systemTools.telemetry.addData("Path", "Complete");
+        // systemTools.telemetry.addData("counts", TICKS);
+        // systemTools.telemetry.update();
+//
+
+        ProgrammingFrame.wobble.rotateBack = rotateBackDeg2;
+
+    }  // end wobble find
 
     @Override
     public void init() {
@@ -606,6 +717,10 @@ public class MecanumDriveIntakeTesting extends OpMode
         }
 
         //************************************************************************************************************
+
+        if (gamepad1.b) {
+            wobbleFind(35, 0.2, 40);
+        }
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
