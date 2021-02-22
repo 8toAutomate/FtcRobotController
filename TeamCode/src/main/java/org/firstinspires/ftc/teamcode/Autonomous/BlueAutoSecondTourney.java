@@ -49,14 +49,14 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             }
         }
        // ringAt = robot.ringFinderDistance();
-        telemetry.addData("Target zone", ringAt);
-        telemetry.update();
+   //     telemetry.addData("Target zone", ringAt);
+     //   telemetry.update();
 
         // Gets us to the target zone
         //robot.GoDistanceCM2(60, .5, false, this);
         robot.flywheel(true, 0.80);
         robot.storage(true, this);
-        robot.goDistanceAcceleration(62,0.8,false,5,25,this);
+        robot.goDistanceAcceleration(62,0.8,false,5,40,this); // back ramp was 25 2-20-21
 
        // robot.flywheel(true, 0.8);
       //  robot.wait(2500,this);
@@ -98,21 +98,54 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.goDistanceAcceleration(90, .9, false, 5, 75, this);
             robot.lowerGripper(100);
             robot.gripperOpen();
-          //  robot.GoDistanceCM2(-20, -.7,false, this);
-         //   robot.strafeDistanceCM2(55, .7,false, this);  // go sidways and forward  to launch line without
-         //   robot.GoDistanceCM2(35, .7, false, this);   // disturbing wobble (strafe needed for Target zone A only)
+            robot.wait(300, this);
+            //robot.GoDistanceCM2(-20, 30, false, this);
+            robot.lowerGripper(1000);
+            //  robot.gripperClose();
+            robot.RotateDEG(47,0.7,this);
+            robot.GoDistanceCM2(20, .8,false, this);  // navigate to white line
+
         }
         else if (ringAt == 'B') {
-            robot.GoDistanceCM2(95, .7, false,this);   // added extra 20 cm to get ring out of the way.  Wobble was landing on top of ring 1-27-2021
-            robot.strafeDistanceCM2(35, .7,false, this);
-            robot.GoDistanceCM2(-20, -.7, false,this);  //  back up and drop wobble away from ring
+            robot.goDistanceAcceleration(125, 0.8, false,8, 75, this);   // added extra 20 cm to get ring out of the way.  Wobble was landing on top of ring 1-27-2021
+            robot.GoDistanceCM2(-28, -0.4, false, this);  //  back up and drop wobble away from ring
+            robot.strafeDistanceCM2(27, 0.7,false, this);
+
+
             // drop wobble goal here
             robot.lowerGripper(250);
             robot.gripperOpen();
-            robot.wait(1000L,this);
+            robot.wait(500L,this);
             robot.lowerGripper(900);
-            robot.GoDistanceCM2(-30, -.7, false,this);
-        }
+            robot.GoDistanceCM2(-10, .3, false, this);
+            robot.RotateDEG(172, 0.6, this); // was 171
+            robot.goDistanceAcceleration(135, 0.9, false, 5, 75, this);
+            robot.wobbleFind(35, 0.2, 40, this);
+            boolean success = ProgrammingFrame.wobble.success;
+            int wobbleDegrees = ProgrammingFrame.wobble.rotateBack;
+            robot.gripperOpen();
+            // robot.RotateDEG(3, .2, this);
+            // robot.wait(1000L,this);
+            robot.raiseGripper(750);
+            robot.GoDistanceCM2(9, .2, false, this);
+            robot.gripperClose();
+            robot.wait(500, this);
+            //robot.gripperOpen();
+            //robot.wait(1000, this);
+            //robot.GoDistanceCM2(-20, 30, false, this);
+            //robot.gripperClose();
+            //robot.lowerGripper(800);
+            robot.raiseGripper(400);
+            //robot.GoDistanceCM2(-30, -.7, false,this);
+            robot.RotateDEG((180 - wobbleDegrees) + 3 , 0.6, this);  // degrees was -5
+            robot.goDistanceAcceleration(130, .9, false, 5, 75, this);
+
+            // */
+            robot.lowerGripper(100);
+            robot.gripperOpen();
+            robot.wait(300,this);
+            robot.lowerGripper(1000);
+                   }
         else {   // ring at C
             robot.GoDistanceCM2(147, .7, false,this);
             robot.strafeDistanceCM2(-30, .7,false, this);
@@ -123,12 +156,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.lowerGripper(950);
             robot.GoDistanceCM2(-80, -.7, false,this);
         }
-        robot.wait(300, this);
-        //robot.GoDistanceCM2(-20, 30, false, this);
-        robot.lowerGripper(900);
-      //  robot.gripperClose();
-        robot.RotateDEG(45,0.7,this);
-        robot.GoDistanceCM2(15, .8,false, this);  // navigate to white line
+
         robot.gripperClose();
         robot.storage(false,this);
 
