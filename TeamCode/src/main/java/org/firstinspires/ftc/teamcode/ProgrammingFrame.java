@@ -1873,7 +1873,7 @@ public class ProgrammingFrame {
         //RotateDEG(-alignWobbleDeg,0.5);  // rotate robot to align gripper with wobble
         //************************************************
         //rotate robot back
-        power = 0.5;
+        power = 0.4;
         if (alignWobbleDeg< 0 && power > 0) {
             power = power * -1;
             }// end if
@@ -1881,6 +1881,7 @@ public class ProgrammingFrame {
         //TICKS = (int) Math.round(alignWobbleDeg * conversion_factor);
         TICKS = alignWobbleDeg;
          // resetDriveEncoders();
+
 
         // set target position for all the motor encoders
         FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
@@ -1933,7 +1934,7 @@ public class ProgrammingFrame {
         if (wobble.travelDist >25) {
             systemTools.telemetry.addData("Error, travel distance exceeded. Travel distance:   ", wobble.travelDist);
             systemTools.telemetry.update();
-            wobble.success = false;;
+            wobble.success = false;
         }
         /*
         else {
