@@ -371,8 +371,10 @@ public class ProgrammingFrame {
         // systemTools.telemetry.addData("Path", "Complete");
         // systemTools.telemetry.addData("counts", TICKS);
         // systemTools.telemetry.update();
-    }
+    }   //end RotateDeg
+//***********************************************************************************************
 
+//**************************************************************************************************
     // robot strafing function
     public void StrafeCM(int centimeters, double power, LinearOpMode linearOpMode) {
 
@@ -1675,7 +1677,8 @@ public class ProgrammingFrame {
 
         public static boolean success = false;
         public static int rotateBack;
-    }
+        public static int travelDist;
+    }  // end static class wobble
 //***************************************************************************************************
 
     public void wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
@@ -1748,17 +1751,10 @@ public class ProgrammingFrame {
             backRightMotor.setPower(-power);
             backLeftMotor.setPower(power);
 
-
             if (distance < difference) {
                 wobble.success = true;
                 for (int i = 1; i <= 20000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
                                                             // this saves over 0.5 seconds over adding another 3 degree turn
-
-               // frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + 12);
-               // frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() - 12);
-               // backLeftMotor.setTargetPosition(backLeftMotor.getCurrentPosition() + 12);
-               // backRightMotor.setTargetPosition(backRightMotor.getCurrentPosition() - 12);
-
                 break;
             }
         }
@@ -1788,6 +1784,169 @@ public class ProgrammingFrame {
         wobble.rotateBack = rotateBackDeg2;
 
     }  // end wobble find
+
+    //**********************************************************************************************
+    //wobbleFind2 used enhanced search for wobble and adjusts travel distance to grip wobble
+    // best to place the wobble about 10-15 Cm in front of the robot about 1/3 of the way from the left.
+    // call with 40-45 deg and 0.2 power and distance of 40 or 35.
+    //use in Autonomous
+    //
+    public void wobbleFind2(int degrees, double power, double difference, LinearOpMode linearOpMode) {
+        double distance = 100;
+        // conversion for degrees to ticks
+        final double conversion_factor = 12.73;
+        boolean frontEdgeFound = false;  // lower flag for detecting  front edge.
+        // if degrees are negative, set the power negative
+        if (degrees < 0 && power > 0) {
+            power = power * -1;
+        }
+        int wStart=0, wEnd=0;
+        int TICKS = (int) Math.round(degrees * conversion_factor);
+        /*
+         * Initialize the drive system variables.
+         * The init() method of the hardware class does all the work here
+         */
+
+        resetDriveEncoders();
+
+        int FLstart = frontLeftMotor.getCurrentPosition();
+
+        // set target position for all the motor encoders
+        int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
+        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = backRightMotor.getCurrentPosition() - TICKS;
+
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // start motion.
+        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(-power);
+        backRightMotor.setPower(-power);
+        backLeftMotor.setPower(power);
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
+        while (linearOpMode.opModeIsActive() &&
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+            distance = wobbleSensor.getDistance(DistanceUnit.CM);
+            frontEdgeFound = false;
+            // reset the timeout time and start motion.
+
+                if (distance < difference) {//  wobble found
+                    wobble.success = true;
+                    wStart = frontLeftMotor.getCurrentPosition() ;
+                    frontEdgeFound = true;
+                    // for ( int i = 1; i < 10000; ++i) {sum += i;}   // sum = sum + i.  waste some time to allow robot to turn more and align gripper with wobble.
+                    //this saves over 0.5 seconds over adding another 3 degree turn
+                }  // end if
+
+                if (frontEdgeFound && distance > difference) {
+                    stopDriveMotors();
+                    //   break;
+                } // end if
+
+        } // end while
+
+        //stopDriveMotors();
+        wEnd = frontLeftMotor.getCurrentPosition();
+        int FLdelta = Math.abs(wEnd - wStart);
+        //telemetry.addData("wStart: ", wStart + "  wEnd: "+ wEnd + "  FLdelta2: " + FLdelta2);
+        //int alignWobbleDeg = (int)((-FLdelta / conversion_factor)-8);
+        int alignWobbleDeg = (int)(-FLdelta -7.5*conversion_factor);      // FLdelta is already in ticks so no need to change twice
+
+        // startDriveEncoders();
+        //telemetry.addData("rotateBackDeg2: ", rotateBackDeg2);
+        //RotateDEG(-alignWobbleDeg,0.5);  // rotate robot to align gripper with wobble
+        //************************************************
+        //rotate robot back
+        power = 0.5;
+        if (alignWobbleDeg< 0 && power > 0) {
+            power = power * -1;
+            }// end if
+
+        //TICKS = (int) Math.round(alignWobbleDeg * conversion_factor);
+        TICKS = alignWobbleDeg;
+         // resetDriveEncoders();
+
+        // set target position for all the motor encoders
+        FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+        FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
+        BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+        BRtarget = backRightMotor.getCurrentPosition() - TICKS;
+
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // start motion.
+        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(-power);
+        backRightMotor.setPower(-power);
+        backLeftMotor.setPower(power);
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
+        while (linearOpMode.opModeIsActive() &&
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {}
+        stopDriveMotors();
+
+        //************************************************
+        //distance = wobbleSensor.getDistance(DistanceUnit.CM);
+
+        // calculate change after entire drive
+       int FLdelta2 = frontLeftMotor.getCurrentPosition() - FLstart;
+        int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor);
+
+        wobble.rotateBack = rotateBackDeg2;
+
+       // startDriveEncoders();
+        double startWobbleDist=wobbleSensor.getDistance(DistanceUnit.CM);
+        wobble.travelDist=8;
+        if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
+            wobble.travelDist = (int)(9 + (startWobbleDist-22.5));
+        }
+        if (wobble.travelDist >25) {
+            systemTools.telemetry.addData("Error, travel distance exceeded. Travel distance:   ", wobble.travelDist);
+            systemTools.telemetry.update();
+            wobble.success = false;;
+        }
+        /*
+        else {
+            gripperOpen();
+            raiseGripper(750);
+            GoDistanceCM2(travelDist, .2, false, this);
+            //telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
+            gripperClose();
+            //wait(400,this);
+            //raiseGripper(400);
+            }  // end else
+*/
+    }  // end wobble find 2
 }   //end programming frame
 
 

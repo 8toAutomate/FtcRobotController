@@ -40,7 +40,7 @@ import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
 @TeleOp(name="MecanumDrive", group="Sensor")
-//@Disabled
+@Disabled
 public class MecanumDrive extends OpMode
 {
 

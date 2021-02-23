@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Sensors;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 @Autonomous(name="RingFinder", group="Motion")
+@Disabled
 public class RingFinder extends LinearOpMode {
 
     ProgrammingFrame robot = new ProgrammingFrame();

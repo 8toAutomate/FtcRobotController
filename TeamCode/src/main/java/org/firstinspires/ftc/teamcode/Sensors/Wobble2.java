@@ -138,21 +138,9 @@ public class Wobble2 extends LinearOpMode {
             }
         }
 
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
      //   robot.startDriveEncoders();
         wEnd = robot.frontLeftMotor.getCurrentPosition();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-   //     robot.systemTools.telemetry.addData("Path", "Complete");
-   //     robot.systemTools.telemetry.addData("counts", TICKS);
-    //    robot.systemTools.telemetry.update();
         int FLdelta2 = Math.abs(wEnd - wStart);
         telemetry.addData("wStart: ", wStart + "  wEnd: "+ wEnd + "  FLdelta2: " + FLdelta2);
         int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor)+8;
@@ -183,15 +171,18 @@ public class Wobble2 extends LinearOpMode {
                      double startWobbleDist=robot.wobbleSensor.getDistance(DistanceUnit.CM);
                      int travelDist=8;
                     if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
-                             travelDist = (int)(8 + (startWobbleDist-22.5));
-                    //else{
-                    //        if (startWobbleDist < 20.5) {
-                     //           travelDist = (int) (startWobbleDist > 22.58 + (startWobbleDist - 22.5));
-                     //       }
+                             travelDist = (int)(9 + (startWobbleDist-22.5));
                         }
+                    if (travelDist >25) {
+                        telemetry.addData("Error, travel distance exceeded. Travel distance:   ", travelDist);
+                        telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
+                        telemetry.update();
+                        break;
+                    }
                     robot.gripperOpen();
                   robot.raiseGripper(750);
                    robot.GoDistanceCM2(travelDist, .2, false, this);
+                   telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
                     robot.wait(2000,this);
                     robot.lowerGripper(900);
                     robot.gripperClose();
@@ -199,7 +190,7 @@ public class Wobble2 extends LinearOpMode {
                    //     robot.raiseGripper(400);
                   //   robot.gripperClose();
                      telemetry.addData("start wobble distance ", startWobbleDist);
-                     telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
+
                      telemetry.addData("travel distance ", travelDist);
                      telemetry.update();
                    break;

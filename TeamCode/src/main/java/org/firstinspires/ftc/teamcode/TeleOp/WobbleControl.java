@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 
-@TeleOp(name="WobbleControl", group="Iterative Opmode")
+@TeleOp(name="WobbleControl", group="Sensor")
 //@Disabled
 public class WobbleControl extends OpMode
 {

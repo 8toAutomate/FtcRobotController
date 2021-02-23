@@ -41,10 +41,9 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-
-@TeleOp(name="MecanumDriveIntakeTesting", group="Iterative Opmode")
+@TeleOp(name="MecanumDriveIntakeTourney2", group="Iterative Opmode")
 //@Disabled
-public class MecanumDriveIntakeTesting extends OpMode
+public class MecanumDriveIntaketourney2 extends OpMode
 {
 
     ProgrammingFrame robot   = new ProgrammingFrame();
@@ -316,7 +315,8 @@ public class MecanumDriveIntakeTesting extends OpMode
                     robot.lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     autoLifterState = States.Off;
                 }
-            } else { // lifter is going backwards, aka down
+            } else {
+                // lifter is going backwards, aka down
                 // Don't break the robot check
                 if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
                     robot.lifting.setPower(0);

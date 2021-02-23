@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 @Autonomous(name="AutonomousFirstTourney", group="Motion")
+@Disabled
 public class BlueAutoFirstTourney extends LinearOpMode {
     // This program starts on the left blue line, shoots at the high goal, drops off a wobble goal
     // in it's target, than drives to center shooting spot to park at the end.

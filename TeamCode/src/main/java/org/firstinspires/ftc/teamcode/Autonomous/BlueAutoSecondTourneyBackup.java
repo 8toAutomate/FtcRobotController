@@ -2,13 +2,17 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Autonomous(name="AutonomousSecondTourney", group="Motion")
-public class BlueAutoSecondTourney extends LinearOpMode {
+@Autonomous(name="AutonomousSecondTourneyBackup", group="Motion")
+@Disabled
+public class BlueAutoSecondTourneyBackup extends LinearOpMode {
+   // This is a backup of the second tourney program before changing target B and C to Wobblefinder2 2-22-21
+
     // This program starts on the left blue line, shoots at the high goal, drops off a wobble goal
     // in it's target, than drives to center shooting spot to park at the end.
     char ringAt;
@@ -19,7 +23,6 @@ public class BlueAutoSecondTourney extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, this);
-        robot.lowerGripper(100);
         robot.gripperOpen();
         robot.gripperOpen();
         waitForStart();
@@ -27,14 +30,14 @@ public class BlueAutoSecondTourney extends LinearOpMode {
         // Driving to the starter stack
 
     //    robot.wait(500L,this);
-        robot.raiseGripper(730);
+        robot.raiseGripper(750);
 
         robot.gripperClose();
-        robot.wait(400L,this);
+        robot.wait(500L,this);
         robot.raiseGripper(350);
 
        // robot.GoDistanceCM2(70, .5, false,this);
-        robot.goDistanceAcceleration(65,0.8,false,5,60,this);// 0.9 5 20
+        robot.goDistanceAcceleration(65,0.9,false,5,20,this);
         robot.wait(300,this);  // Wait for robot to stop before reading rings
 
             // Detect the rings here and return A, B, C, or E for Error
@@ -76,11 +79,11 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.gripperOpen();
             robot.wait(400L,this);
             robot.GoDistanceCM2(-7,0.3,false,this);
-            robot.lowerGripper(950);
+            robot.lowerGripper(900);
             robot.RotateDEG(148, 0.7, this);        // rotation was 146 at 0.7 power is 148  2/22/21
             robot.goDistanceAcceleration(97, 0.9, false, 5, 70, this);// distance was 103 is 101 2-22-21
            // robot.wobbleFind(35, 0.2, 40, this);
-            robot.wobbleFind2(45, 0.2, 40, this);
+            robot.wobbleFind2(40, 0.2, 40, this);
             boolean success = ProgrammingFrame.wobble.success;
             int wobbleDegrees = ProgrammingFrame.wobble.rotateBack;
             int travelDist = ProgrammingFrame.wobble.travelDist;
@@ -106,40 +109,38 @@ public class BlueAutoSecondTourney extends LinearOpMode {
         }   // end drop zone A
 
         else if (ringAt == 'B') {
-            robot.goDistanceAcceleration(127, 0.8, false,8, 75, this);   // added extra 20 cm to get ring out of the way.  Wobble was landing on top of ring 1-27-2021
-            robot.GoDistanceCM2(-29, -0.4, false, this);  //  back up and drop wobble away from ring
-            robot.strafeDistanceCM2(29, 0.5,false, this);
+            robot.goDistanceAcceleration(125, 0.8, false,8, 75, this);   // added extra 20 cm to get ring out of the way.  Wobble was landing on top of ring 1-27-2021
+            robot.GoDistanceCM2(-28, -0.4, false, this);  //  back up and drop wobble away from ring
+            robot.strafeDistanceCM2(27, 0.7,false, this);
             // drop wobble goal here
             robot.lowerGripper(250);
             robot.gripperOpen();
             robot.wait(500L,this);
-            robot.lowerGripper(950);
+            robot.lowerGripper(900);
             robot.GoDistanceCM2(-10, .3, false, this);
-            robot.RotateDEG(174, 0.6, this); // was 171
+            robot.RotateDEG(172, 0.6, this); // was 171
             robot.goDistanceAcceleration(133, 0.9, false, 5, 75, this);  //distance was 135 2-22-21
-            // robot.wobbleFind(35, 0.2, 40, this);
-            robot.wobbleFind2(45, 0.2, 40, this);
+            robot.wobbleFind(35, 0.2, 40, this);
             boolean success = ProgrammingFrame.wobble.success;
             int wobbleDegrees = ProgrammingFrame.wobble.rotateBack;
-            int travelDist = ProgrammingFrame.wobble.travelDist;
-            if (success) {
-                robot.gripperOpen();
-                robot.raiseGripper(750);
-                robot.GoDistanceCM2(travelDist, .2, false, this);
-                robot.gripperClose();
-                robot.wait(500, this);
-                robot.raiseGripper(400);
-            }
-           // robot.gripperOpen();
-           // robot.raiseGripper(750);
-            //robot.GoDistanceCM2(9, .2, false, this);
+            robot.gripperOpen();
+            // robot.RotateDEG(3, .2, this);
+            // robot.wait(1000L,this);
+            robot.raiseGripper(750);
+            robot.GoDistanceCM2(9, .2, false, this);
+            robot.gripperClose();
+            robot.wait(500, this);
+            //robot.gripperOpen();
+            //robot.wait(1000, this);
+            //robot.GoDistanceCM2(-20, 30, false, this);
             //robot.gripperClose();
-           // robot.wait(500, this);
-           // robot.raiseGripper(400);
+            //robot.lowerGripper(800);
+            robot.raiseGripper(400);
             //robot.GoDistanceCM2(-30, -.7, false,this);
-            robot.RotateDEG((180 - wobbleDegrees) + 5 , 0.6, this);  // degrees 4.5 would be best  2-22-21
+            robot.RotateDEG((180 - wobbleDegrees) + 3 , 0.6, this);  // degrees was -5
             robot.goDistanceAcceleration(130, .9, false, 5, 75, this);
 
+            // */
             robot.lowerGripper(100);
             robot.gripperOpen();    //drop wobble
             robot.wait(400,this);
@@ -155,45 +156,38 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.lowerGripper(250);
             robot.gripperOpen();
             robot.wait(300L,this);
-            robot.lowerGripper(950);
+            robot.lowerGripper(900);
             //robot.GoDistanceCM2(-10, .3, false, this);
             robot.RotateDEG(168, 0.6, this); // was 171
 
             robot.goDistanceAcceleration(203, 0.9, false, 5, 85, this);     //distance was 205 2-22-21
-            // robot.wobbleFind(35, 0.2, 40, this);
-            robot.wobbleFind2(45, 0.2, 40, this);
+            robot.wobbleFind(35, 0.2, 40, this);
             boolean success = ProgrammingFrame.wobble.success;
             int wobbleDegrees = ProgrammingFrame.wobble.rotateBack;
-            int travelDist = ProgrammingFrame.wobble.travelDist;
-            if (success) {
-                robot.gripperOpen();
-                robot.raiseGripper(750);
-                robot.GoDistanceCM2(travelDist, .2, false, this);
-                robot.gripperClose();
-                robot.wait(500, this);
-                robot.raiseGripper(400);
-            }
-            //robot.gripperOpen();
-           // robot.raiseGripper(750);
-           // robot.GoDistanceCM2(9, .2, false, this);
-            //robot.gripperClose();
-            //robot.wait(400, this);
-            //robot.raiseGripper(400);
+            robot.gripperOpen();
+            // robot.RotateDEG(3, .2, this);
+            // robot.wait(1000L,this);
+            robot.raiseGripper(750);
+            robot.GoDistanceCM2(9, .2, false, this);
+            robot.gripperClose();
+            robot.wait(400, this);
 
+            robot.raiseGripper(400);
+            //robot.GoDistanceCM2(-30, -.7, false,this);
             robot.RotateDEG((180 - wobbleDegrees)  , 0.6, this);  // degrees was -5
             robot.goDistanceAcceleration(207, .9, false, 5, 85, this);
 
             robot.lowerGripper(100);
             robot.gripperOpen();
-            robot.wait(300,this);
+            robot.wait(500,this);
             robot.goDistanceAcceleration(-60, 1, false, 5, 95, this);
 
         }// end drop zone c
-        robot.lowerGripper(300);
-         robot.storage(false,this);
 
         robot.gripperClose();
-        robot.wait(500L,this);  //allow time for servo to finish closing grip before terminating
+        robot.storage(false,this);
+        robot.lowerGripper(900);
+        robot.wait(600L,this);  //allow time for servo to finish closing grip before terminating
         // /*  Debug: comment out rest of method  MAx M. 2-15-2021
         // Add function hat navigates to launch line if second wobble misses
         // Move to the launch line
