@@ -1931,7 +1931,7 @@ public class ProgrammingFrame {
         if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
             wobble.travelDist = (int)(9 + (startWobbleDist-22.5));
         }
-        if (wobble.travelDist >25) {
+        if (wobble.travelDist >18) {
             systemTools.telemetry.addData("Error, travel distance exceeded. Travel distance:   ", wobble.travelDist);
             systemTools.telemetry.update();
             wobble.success = false;

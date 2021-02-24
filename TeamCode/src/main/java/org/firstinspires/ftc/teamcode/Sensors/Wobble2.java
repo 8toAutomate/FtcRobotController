@@ -164,7 +164,7 @@ public class Wobble2 extends LinearOpMode {
             double startTime = getRuntime();
         //    robot.RotateDEG(146, 0.7, this);        //this is video demo from target zone A
         //    robot.goDistanceAcceleration(103, 0.9, false, 5, 70, this);  //this is video demo from target zone A
-            boolean wobbleStat =  wobbleFind(45,0.2,35,this);
+            boolean wobbleStat =  wobbleFind(45,0.2,40,this);
                  if (wobbleStat) {
                   //   robot.RotateDEG(3, .2, this);
                      //robot.wait(500,this);
@@ -173,7 +173,7 @@ public class Wobble2 extends LinearOpMode {
                     if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
                              travelDist = (int)(9 + (startWobbleDist-22.5));
                         }
-                    if (travelDist >25) {
+                    if (travelDist >18) {
                         telemetry.addData("Error, travel distance exceeded. Travel distance:   ", travelDist);
                         telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
                         telemetry.update();

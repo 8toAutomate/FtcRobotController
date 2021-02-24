@@ -379,7 +379,8 @@ public class MecanumDriveIntaketourney2 extends OpMode
         if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
             travelDist = (int)(6.5 + (startWobbleDist-22.5));
         }
-        if (travelDist >25) {
+        if (travelDist >20d
+        ) {
             //telemetry.addData("Error, travel distance exceeded. Travel distance:   ", ProgrammingFrame.wobble.travelDist);
            // telemetry.update();
             travelDist=3;
@@ -515,11 +516,11 @@ public class MecanumDriveIntaketourney2 extends OpMode
 //               liftingPower = y2/2;
 //           }
             if (robot.lowSwitch1.isPressed() || robot.lowSwitch2.isPressed()) {
-                robot.lifting.setPower(Range.clip(liftingPower, -.8,0));
+                robot.lifting.setPower(Range.clip(liftingPower, -.7,0));
                 //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
             }
             else if (robot.highSwitch1.isPressed() || robot.highSwitch2.isPressed()) {
-                robot.lifting.setPower(Range.clip(liftingPower,0, 0.8));
+                robot.lifting.setPower(Range.clip(liftingPower,0, 1));
             }
             else {robot.lifting.setPower(liftingPower);}
 
@@ -585,10 +586,10 @@ public class MecanumDriveIntaketourney2 extends OpMode
         liftingPower = Range.clip(liftingPower, -1,1);
 
         if (lowSpeedActivated) {
-            frontLeftPower /= 2;
-            frontRightPower /= 2;
-            backLeftPower /= 2;
-            backRightPower /= 2;
+            frontLeftPower /= 3;
+            frontRightPower /= 3;
+            backLeftPower /= 3;
+            backRightPower /= 3;
         }
 
         robot.frontLeftMotor.setPower(frontLeftPower);
@@ -937,15 +938,24 @@ public class MecanumDriveIntaketourney2 extends OpMode
         if (gamepad1.y) {
             wobbleFindTele(40, 0.2, 40);
             wobbleFound = ProgrammingFrame.wobble.success;
-            wStartTime = getRuntime();
+            if (wobbleFound) {
+                wStartTime = getRuntime();
+                moveGripper(false);
+
+        }
+        //if (wobbleFound){
+
+        //    moveGripper(false);
+        //    gripperMoving=true;
         }
         if (wobbleFound) {
-            moveGripper(false);
-
+        //moveGripper(false);
             if (getRuntime() - wStartTime > 0.3) {
                raiseGripper();
                 GoDistanceCM(travelDist, .2);
                 wobbleFound=false;
+                gripperClosed = !gripperClosed; // updates state
+                //gripperMoving=false;
             }
         }
        // Show the elapsed game time and wheel power.
