@@ -60,6 +60,15 @@ public class RingFinderDistance extends LinearOpMode {
             botRingDetected = bottomRingValueCM < maxRingDistCM;
             topRingDetected = topRingValueCM < maxRingDistCM;
 
+            // Wait and check again to keep more consistent, if either check gave a true sensor value, then the value is true, otherwise false.
+            sleep(100);
+
+            topRingValueCM = robot.topRing.getDistance(DistanceUnit.CM);
+            bottomRingValueCM = robot.bottomRing.getDistance(DistanceUnit.CM);
+
+            botRingDetected = bottomRingValueCM < maxRingDistCM || botRingDetected;
+            topRingDetected = topRingValueCM < maxRingDistCM || topRingDetected;
+
             if (botRingDetected && topRingDetected) {
                 ringsFound = "4 - C Path";
             } else if (botRingDetected&& !topRingDetected) {
