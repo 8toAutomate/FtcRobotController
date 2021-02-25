@@ -22,7 +22,7 @@ public class RingFinderDistance extends LinearOpMode {
 
        // final float[] rgbValues = new float[3];
 
-        double maxRingDistCM = 8;
+        double maxRingDistCM = 20;
 
         double bottomRingValueCM;
         double topRingValueCM;
@@ -49,14 +49,14 @@ public class RingFinderDistance extends LinearOpMode {
             topRingValueCM = ((DistanceSensor) robot.topRing).getDistance(DistanceUnit.CM);
             topRingName = robot.topRing.getDeviceName();
             topRingConnect = robot.topRing.getConnectionInfo();
-
+/*
             leftLineValueCM = ((DistanceSensor)robot.colorSensor1).getDistance(DistanceUnit.CM);
             leftLineName = robot.colorSensor1.getDeviceName();
             leftLineConnect = robot.colorSensor1.getConnectionInfo();
             rightLineValueCM = ((DistanceSensor)robot.colorSensor2).getDistance(DistanceUnit.CM);
             rightLineName = robot.colorSensor2.getDeviceName();
             rightLineConnect = robot.colorSensor2.getConnectionInfo();
-
+*/
             botRingDetected = bottomRingValueCM < maxRingDistCM;
             topRingDetected = topRingValueCM < maxRingDistCM;
 
@@ -94,8 +94,8 @@ public class RingFinderDistance extends LinearOpMode {
 
             telemetry.addData("Bot. sensor config: ", botRingName + "  Conn.: " + botRingConnect + "  Distance (CM): " + "%.3f%n",bottomRingValueCM);
             telemetry.addData("Top sensor config: ", topRingName + "  Conn.: " + topRingConnect + "  Distance (CM): " + "%.3f%n", topRingValueCM );
-            telemetry.addData("Left sensor config: ", leftLineName + "  Conn.: " + leftLineConnect + "  Distance (CM): " + "%.3f%n",leftLineValueCM);
-            telemetry.addData("Right sensor config: ", rightLineName + "  Conn.: " + rightLineConnect + "  Distance (CM): " + "%.3f%n", rightLineValueCM );
+           // telemetry.addData("Left sensor config: ", leftLineName + "  Conn.: " + leftLineConnect + "  Distance (CM): " + "%.3f%n",leftLineValueCM);
+           // telemetry.addData("Right sensor config: ", rightLineName + "  Conn.: " + rightLineConnect + "  Distance (CM): " + "%.3f%n", rightLineValueCM );
             telemetry.addData("Maximum Ring Distance (CM): ", maxRingDistCM);
             telemetry.addData("Rings Found:", ringsFound);
             telemetry.update();

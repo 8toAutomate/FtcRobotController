@@ -168,8 +168,8 @@ public class ProgrammingFrame {
 //        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
-        colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
-        colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
+      //  colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
+       // colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
         // bottomRing = hwMap.get(RevColorSensorV3.class, "bottomRing");
         //topRing = hwMap.get(RevColorSensorV3.class, "topRing");
         bottomRing = hwMap.get(DistanceSensor.class, "bottomRing");
@@ -540,8 +540,8 @@ public class ProgrammingFrame {
         // final float[] rgbValues = new float[3];
 
         //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
-        double maxTopRingDistCM = 11;
-        double maxBotRingDistCM = 11;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
+        double maxTopRingDistCM = 20;
+        double maxBotRingDistCM = 20;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
 
         double bottomRingValueCM;
         double topRingValueCM;
@@ -671,27 +671,30 @@ public class ProgrammingFrame {
         lightsState = LightsStates.Custom;
     }
 
+    //***************************************************************************************************
+    //**************   GRIPPER FUNCTIONS  *************************************************************
+    //
+    // moveGripper is used in teleop
     public void moveGripper(boolean close) {
         gripperServo.setDirection(Servo.Direction.REVERSE);
-        gripperServo.scaleRange(0, 1.0);
+        gripperServo.scaleRange(0, .93);
         if (close) {
             gripperServo.setPosition(1);
         } else {
             gripperServo.setPosition(0);
         }
     }
-//***************************************************************************************************
-    //**************   GRIPPER FUNCTIONS  *************************************************************
 
+// gripperClose & gripperOpen are used in Autonomous is used in teleop
     public void gripperClose() {
         gripperServo.setDirection(Servo.Direction.REVERSE);
-        gripperServo.scaleRange(0, 1.0);
+        gripperServo.scaleRange(0, 0.93);
         gripperServo.setPosition(1);
     }
 
     public void gripperOpen() {
         gripperServo.setDirection(Servo.Direction.REVERSE);
-        gripperServo.scaleRange(0, 1.0);
+        gripperServo.scaleRange(0, 0.93);
         gripperServo.setPosition(0);
     }
 
@@ -1873,7 +1876,7 @@ public class ProgrammingFrame {
         //RotateDEG(-alignWobbleDeg,0.5);  // rotate robot to align gripper with wobble
         //************************************************
         //rotate robot back
-        power = 0.4;
+        power = 0.5;
         if (alignWobbleDeg< 0 && power > 0) {
             power = power * -1;
             }// end if
@@ -1929,9 +1932,10 @@ public class ProgrammingFrame {
         double startWobbleDist=wobbleSensor.getDistance(DistanceUnit.CM);
         wobble.travelDist=8;
         if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
-            wobble.travelDist = (int)(9 + (startWobbleDist-22.5));
+            wobble.travelDist = (int)(8 + (startWobbleDist-22.+
+                    5));
         }
-        if (wobble.travelDist >18) {
+        if (wobble.travelDist >25) {
             systemTools.telemetry.addData("Error, travel distance exceeded. Travel distance:   ", wobble.travelDist);
             systemTools.telemetry.update();
             wobble.success = false;
