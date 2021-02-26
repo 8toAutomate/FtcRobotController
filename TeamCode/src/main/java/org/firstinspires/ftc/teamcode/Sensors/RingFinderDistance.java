@@ -22,7 +22,7 @@ public class RingFinderDistance extends LinearOpMode {
 
        // final float[] rgbValues = new float[3];
 
-        double maxRingDistCM = 20;
+        double maxRingDistCM = 15;
 
         double bottomRingValueCM;
         double topRingValueCM;

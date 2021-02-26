@@ -540,7 +540,7 @@ public class ProgrammingFrame {
         // final float[] rgbValues = new float[3];
 
         //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
-        double maxTopRingDistCM = 20;
+        double maxTopRingDistCM = 16;
         double maxBotRingDistCM = 20;  // updated from 4 to 6 when changing to 2m Distance sensor 1-27-2021
 
         double bottomRingValueCM;
@@ -560,6 +560,15 @@ public class ProgrammingFrame {
 
         bottomRingDetected = bottomRingValueCM < maxBotRingDistCM;
         topRingDetected = topRingValueCM < maxTopRingDistCM;
+
+        //sleep(100);
+       // linearOpMode.sleep(100);
+
+       // topRingValueCM = topRing.getDistance(DistanceUnit.CM);
+       // bottomRingValueCM = bottomRing.getDistance(DistanceUnit.CM);
+
+        //bottomRingDetected = bottomRingValueCM < maxBotRingDistCM || bottomRingDetected;
+        //topRingDetected = topRingValueCM < maxTopRingDistCM || topRingDetected;
 
         if (bottomRingDetected && topRingDetected) {
             path = 'C';
@@ -587,7 +596,6 @@ public class ProgrammingFrame {
         backRightMotor.setPower(0);
         frontLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
-
 
     }
 
@@ -1876,7 +1884,7 @@ public class ProgrammingFrame {
         //RotateDEG(-alignWobbleDeg,0.5);  // rotate robot to align gripper with wobble
         //************************************************
         //rotate robot back
-        power = 0.5;
+        power = 0.4;
         if (alignWobbleDeg< 0 && power > 0) {
             power = power * -1;
             }// end if
@@ -1932,8 +1940,7 @@ public class ProgrammingFrame {
         double startWobbleDist=wobbleSensor.getDistance(DistanceUnit.CM);
         wobble.travelDist=8;
         if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
-            wobble.travelDist = (int)(8 + (startWobbleDist-22.+
-                    5));
+            wobble.travelDist = (int)(9 + (startWobbleDist-22.5));
         }
         if (wobble.travelDist >25) {
             systemTools.telemetry.addData("Error, travel distance exceeded. Travel distance:   ", wobble.travelDist);
