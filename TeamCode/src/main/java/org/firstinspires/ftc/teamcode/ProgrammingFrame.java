@@ -29,15 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-import android.telephony.mbms.MbmsErrors;
-
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -47,15 +43,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.vuforia.ar.pl.SystemTools;
 
-import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Autonomous.BlueAutoSecondTourney;
-import org.firstinspires.ftc.teamcode.TeleOp.WobbleControl;
-
-import static com.qualcomm.robotcore.hardware.configuration.ConfigurationType.DeviceFlavor.I2C;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 
 public class ProgrammingFrame {
 
@@ -135,7 +124,7 @@ public class ProgrammingFrame {
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lifting.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // define and initialize servo
+        // define and initialize servos and LED's
         gripperServo = hwMap.get(Servo.class, "gripper");
         ringPusher = hwMap.get(Servo.class, "push_arm");
         storageServo = hwMap.get(Servo.class, "storage_servo");
@@ -154,20 +143,11 @@ public class ProgrammingFrame {
 
         // Set all motors to zero power
         stopAllMotors();
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-//        backRightMotor.setPower(0);
 
-        // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
+        // Set drive motors to run using encoders.
         startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // Define and initialize ALL installed servos.
+        // Define and initialize ALL installed sensors.
         colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
         colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
         // bottomRing = hwMap.get(RevColorSensorV3.class, "bottomRing");
@@ -197,99 +177,6 @@ public class ProgrammingFrame {
 
     //****************************************************************************************************
 //****************************************************************************************************
-    // go distance function - obsolete,use GoDistanceCM2 for normal driving or goDistanceacceleration for acceleration
-    public void GoDistanceCM(int centimeters, double power, LinearOpMode linearOpMode) {
-        // holds the conversion factor for ticks to centimeters
-        // 27.55 for 3 3:1 Cartridges
-        final double conversion_factor = 21.4;
-
-        // sets the power negative if the distance is negative
-        if (centimeters < 0 && power > 0) {
-            power = power * -1;
-        }
-
-        // calculates the target amount of motor ticks
-        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
-
-        // Debug: Send telemetry message with calculated ticks;
-        //systemTools.telemetry.addData("Calculated Counts =", TICKS);
-        //   systemTools.telemetry.update();
-
-        // Thread.sleep(2000); // debugging: allow time to view telemetry
-
-        // Send telemetry message to signify robot waiting;
-        //systemTools.telemetry.addLine();
-        //systemTools.telemetry.addData("Status", "Resetting Encoders");
-        //   systemTools.telemetry.update();
-
-        resetDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        // Send telemetry message to indicate successful Encoder reset
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-        //         frontLeftMotor.getCurrentPosition(),
-        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        //  systemTools.telemetry.update();
-        //  wait(2000); // debugging: allow time to view telemetry
-        /*
-        // sets the target position for each of the motor encoders
-        int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
-        int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
-        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
-        int BRtarget = backRightMotor.getCurrentPosition() + TICKS;
-        M.M. 12/24- Redundant */
-
-        startDriveEncoders();
-
-        // reset the timeout time and start motion.
-        frontLeftMotor.setPower(power);
-        frontRightMotor.setPower(power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (linearOpMode.opModeIsActive() &&
-                (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
-        }
-
-        stopDriveMotors();
-
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
-        // fem 12-24  debug       startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Send telemetry message to indicate successful Encoder reset
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-        //         frontLeftMotor.getCurrentPosition(),
-        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        // systemTools.telemetry.update();
-
-        /*
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
-
-         */
-    }
-
     // function for rotating the robot
     public void RotateDEG(int degrees, double power, LinearOpMode linearOpMode) {
 
@@ -302,21 +189,8 @@ public class ProgrammingFrame {
         }
 
         int TICKS = (int) Math.round(degrees * conversion_factor);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        // systemTools.telemetry.update();
 
         resetDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -346,113 +220,22 @@ public class ProgrammingFrame {
         backRightMotor.setPower(-power);
         backLeftMotor.setPower(power);
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
         }
 
         stopDriveMotors();
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
         startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // systemTools.telemetry.addData("Path", "Complete");
-        // systemTools.telemetry.addData("counts", TICKS);
-        // systemTools.telemetry.update();
     }   //end RotateDeg
 //***********************************************************************************************
 
 //**************************************************************************************************
-    // robot strafing function
-    public void StrafeCM(int centimeters, double power, LinearOpMode linearOpMode) {
-
-        // conversion factor between ticks and centimeters
-        final double conversion_factor = 27.55;  //Corrected from 27.82 to 27.55 12-26-20
-
-        // if the distance is negative, set power negative
-        if (centimeters < 0 && power > 0) {
-            power = power * -1;
-        }
-
-        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        // systemTools.telemetry.update();
-
-        resetDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        // Send telemetry message to indicate successful Encoder reset
-        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-        //         frontLeftMotor.getCurrentPosition(),
-        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        // systemTools.telemetry.update();
-
-        // set target position for motor encoders
-        int FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
-        int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
-        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
-        int BRtarget = backRightMotor.getCurrentPosition() - TICKS;
-
-        startDriveEncoders();
-
-        // after resetting encoders, apply power to the motors
-        frontLeftMotor.setPower(-power);
-        frontRightMotor.setPower(power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(-power);
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (linearOpMode.opModeIsActive() &&
-                (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
-        }
-
-        stopDriveMotors();
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
-        startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // systemTools.telemetry.addData("Path", "Complete");
-        // systemTools.telemetry.addData("counts", TICKS);
-        // systemTools.telemetry.update();
-    }
-
     // find line function
     public void findLine(double power, LinearOpMode linearOpMode) {
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        // systemTools.telemetry.update();
-
+        // Make sure floor color sensors are added back in before trying to use!
         resetDriveEncoders();
-
 
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -469,13 +252,8 @@ public class ProgrammingFrame {
         backRightMotor.setPower(power);
         backLeftMotor.setPower(power);
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // When the color sensors detect the line, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
-                //        (runtime.seconds() < 30) &&
                 ((colors1.red != 0 && colors1.green != 0 && colors1.blue != 0) || (colors2.red != 0 && colors2.green != 0 && colors2.blue != 0))) {
             colors1 = colorSensor1.getNormalizedColors();
             colors2 = colorSensor2.getNormalizedColors();
@@ -484,12 +262,10 @@ public class ProgrammingFrame {
         stopDriveMotors();
 
         startDriveEncoders();
-
-        // systemTools.telemetry.addData("Path", "Complete");
-        // systemTools.telemetry.update();
     }
 
     /*  public char ringFinder() {
+       // Based on using the color for the color sensors
           char path;
           boolean sensor1Detected;
           boolean sensor2Detected;
@@ -530,14 +306,10 @@ public class ProgrammingFrame {
           systemTools.telemetry.update();
           //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
           return path;
-      }
-
-     */
+      } */
 //**********************************************************************************************************************
     public char ringFinderDistance(LinearOpMode linearOpMode) {
         char path;
-
-        // final float[] rgbValues = new float[3];
 
         //double maxTopRingDistCM = 2.9;// updated from 2.9 to 6 when changing to 2m Distance sensor 1-27-2021
         double maxTopRingDistCM = 11;
@@ -548,12 +320,6 @@ public class ProgrammingFrame {
 
         boolean bottomRingDetected;
         boolean topRingDetected;
-        // float gain = 2;
-
-        //  systemTools.telemetry.addData("Gain", gain);
-
-        // bottomRing.setGain(gain);
-        // topRing.setGain(gain);
 
         topRingValueCM = topRing.getDistance(DistanceUnit.CM);
         bottomRingValueCM = bottomRing.getDistance(DistanceUnit.CM);
@@ -576,7 +342,6 @@ public class ProgrammingFrame {
         // systemTools.telemetry.addData("Maximum Top Ring Distance (CM): ", maxTopRingDistCM + "Maximum Bottom Ring Distance (CM): ", maxBotRingDistCM);
         // systemTools.telemetry.addData("Path: ", path);
         // systemTools.telemetry.update();
-        //   while (linearOpMode.opModeIsActive()) { }
         return path;
     }
 
@@ -587,8 +352,6 @@ public class ProgrammingFrame {
         backRightMotor.setPower(0);
         frontLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
-
-
     }
 
     public void stopAllMotors() {
@@ -612,6 +375,14 @@ public class ProgrammingFrame {
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    public void startDriveEncodersTarget() {
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    // ********************************** Lights Functions ******************************************
     public LightsStates updateLightsState(boolean lowSpeedActivated, OpMode opMode) {
         LightsStates prevLightsState = lightsState;
         if (lowSpeedActivated) {
@@ -670,7 +441,8 @@ public class ProgrammingFrame {
         lights.setPattern(pattern);
         lightsState = LightsStates.Custom;
     }
-
+//***************************************************************************************************
+    //**************   GRIPPER FUNCTIONS  *************************************************************
     public void moveGripper(boolean close) {
         gripperServo.setDirection(Servo.Direction.REVERSE);
         gripperServo.scaleRange(0, 1.0);
@@ -680,8 +452,6 @@ public class ProgrammingFrame {
             gripperServo.setPosition(0);
         }
     }
-//***************************************************************************************************
-    //**************   GRIPPER FUNCTIONS  *************************************************************
 
     public void gripperClose() {
         gripperServo.setDirection(Servo.Direction.REVERSE);
@@ -699,7 +469,7 @@ public class ProgrammingFrame {
         lifting.setTargetPosition(lifting.getCurrentPosition() - maxTicks); // maxTicks was 850
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lifting.setPower(-1);
-        while (lifting.isBusy() && highSwitch1.isPressed() == false && highSwitch2.isPressed() == false) {
+        while (lifting.isBusy() && !highSwitch1.isPressed() && !highSwitch2.isPressed()) {
         }
         lifting.setPower(0);
     }
@@ -727,100 +497,6 @@ public class ProgrammingFrame {
 
         }
     }
-
-    public void GoDistanceTICKS2(int ticks, double power, LinearOpMode linearOpMode) {
-
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        // systemTools.telemetry.update();
-
-        resetDriveEncoders();
-
-        startDriveEncoders();
-        // Send telemetry message to indicate successful Encoder reset
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-        //         frontLeftMotor.getCurrentPosition(),
-        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-
-        // Wait for the game to start (driver presses PLAY)
-
-
-        // start motion.
-        frontLeftMotor.setPower(power);
-        frontRightMotor.setPower(power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (linearOpMode.opModeIsActive() &&
-                (Math.abs(frontLeftMotor.getCurrentPosition()) < ticks && Math.abs(frontRightMotor.getCurrentPosition()) < ticks && Math.abs(backLeftMotor.getCurrentPosition()) < ticks && Math.abs(backRightMotor.getCurrentPosition()) < ticks)) {
-        }
-
-        stopDriveMotors();
-
-        startDriveEncoders();
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Final pos.", "Starting at %7d :%7d :%7d :%7d",
-        //         frontLeftMotor.getCurrentPosition(),
-        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-
-        // systemTools.telemetry.addLine().addData("Path", "Complete");
-        // systemTools.telemetry.update();
-    }
-
-
-    public void GoDistanceTICKS(int ticks, double power, LinearOpMode linearOpMode) {
-
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        // systemTools.telemetry.update();
-
-        resetDriveEncoders();
-
-        // Send telemetry message to indicate successful Encoder reset
-        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-        //         frontLeftMotor.getCurrentPosition(),
-        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        // systemTools.telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
-
-
-        // reset the timeout time and start motion.
-        frontLeftMotor.setPower(power);
-        frontRightMotor.setPower(power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (linearOpMode.opModeIsActive() &&
-                (Math.abs(frontLeftMotor.getCurrentPosition()) < ticks && Math.abs(frontRightMotor.getCurrentPosition()) < ticks && Math.abs(backLeftMotor.getCurrentPosition()) < ticks && Math.abs(backRightMotor.getCurrentPosition()) < ticks)) {
-        }
-
-        stopDriveMotors();
-
-        startDriveEncoders();
-
-        //systemTools.telemetry.addData("Path", "Complete");
-        //systemTools.telemetry.update();
-    }
-
-    //*********************************************************************************************
-    // go distance function
-
     //*************************************************************************************************
     //************************* Driving & Strafing funtions ******************************************************
     //******************** go distance function  *************************************************
@@ -844,19 +520,7 @@ public class ProgrammingFrame {
         // systemTools.telemetry.addData("Calculated Counts =", TICKS);
         //   systemTools.telemetry.update();
 
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        //   systemTools.telemetry.update();
-
         resetDriveEncoders();
-
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addLine();
@@ -864,7 +528,6 @@ public class ProgrammingFrame {
         //         frontLeftMotor.getCurrentPosition(),
         //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         //  systemTools.telemetry.update();
-
 
         // sets the target position for each of the motor encoders
         int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
@@ -877,12 +540,12 @@ public class ProgrammingFrame {
         backLeftMotor.setTargetPosition(BLtarget);
         backRightMotor.setTargetPosition(BRtarget);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        //startDriveEncoders();  // disabled 12-26-20 - This is not needed when driving by RUN_TO_POSITION.  Enabling this causes measurement errors
+        // Testing this new function call instead of using RUN_TO_POSITION everywhere
+        startDriveEncodersTarget();
+//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
         frontLeftMotor.setPower(power);
@@ -890,18 +553,7 @@ public class ProgrammingFrame {
         backRightMotor.setPower(power);
         backLeftMotor.setPower(power);
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
-        /*while (linearOpMode.opModeIsActive() &&
-                (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
-        }
-        */
-
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
            //     (frontLeftMotor.isBusy() || frontRightMotor.isBusy() || backLeftMotor.isBusy() || backRightMotor.isBusy())) {
             (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
@@ -909,212 +561,13 @@ public class ProgrammingFrame {
 
         if (!handoff) stopDriveMotors();
 
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
         // fem 12-24  debug       startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addLine();
         // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
         //         frontLeftMotor.getCurrentPosition(),
         //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        // systemTools.telemetry.update();
-
-        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
-
-        /*
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
-
-         */
-    }
-
-    public void StrafeCM2(int centimeters, double power, LinearOpMode linearOpMode) {
-        // holds the conversion factor for TICKS to centimeters
-        final double conversion_factor = 27.55;
-
-        // sets the power negative if the distance is negative
-        if (centimeters < 0 && power > 0) {
-            power = power * -1;
-        }
-
-        // calculates the target amount of motor TICKS
-        int TICKS = (int) Math.abs(Math.round(centimeters * conversion_factor));
-
-        // Debug: Send telemetry message with calculated TICKS;
-        // systemTools.telemetry.addData("Calculated Counts =", TICKS);
-        //   systemTools.telemetry.update();
-
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        //   systemTools.telemetry.update();
-
-        resetDriveEncoders();
-
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        // Send telemetry message to indicate successful Encoder reset
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Initial pos.", "Starting at %7d :%7d :%7d :%7d",
-        //         frontLeftMotor.getCurrentPosition(),
-        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        //  systemTools.telemetry.update();
-
-
-        // sets the target position for each of the motor encoders
-        int FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;   // was positive.  Front Left and Back Right Need negative to strafe right 12-26-20
-        int FRtarget = frontRightMotor.getCurrentPosition() + TICKS;    // was negative.  Front right and Back left Need negative to strafe right 12-26-20
-        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
-        int BRtarget = backRightMotor.getCurrentPosition() - TICKS;
-
-        frontLeftMotor.setTargetPosition(FLtarget);
-        frontRightMotor.setTargetPosition(FRtarget);
-        backLeftMotor.setTargetPosition(BLtarget);
-        backRightMotor.setTargetPosition(BRtarget);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        //startDriveEncoders();  // disabled 12-26-20 - This is not needed when driving by RUN_TO_POSITION.  Enabling this causes measurement errors
-
-        // reset the timeout time and start motion.
-        // Should these be all positive with the targets? Or should they still be negative?
-        frontLeftMotor.setPower(power);     // was positive.  Front Left and Back Right Need negative to strafe right 12-26-20
-        frontRightMotor.setPower(-power); // was negative.  Front right and Back left Need negative to strafe right 12-26-20
-        backLeftMotor.setPower(-power);
-        backRightMotor.setPower(power);
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
-        while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
-       }
-
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
-        // fem 12-24  debug       startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Send telemetry message to indicate successful Encoder reset
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
-        //         frontLeftMotor.getCurrentPosition(),
-        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-        // systemTools.telemetry.update();
-
-        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
-
-        /*
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
-
-         */
-    }
-
-    public void StrafeDistanceCM(int centimeters, double power, LinearOpMode linearOpMode) {
-
-        final double conversion_factor = 27.82;
-        boolean left = centimeters > 0;
-        int TICKS = (int) Math.round(centimeters * conversion_factor);
-        int FLtarget = 0;
-        int FRtarget = 0;
-        int BLtarget = 0;
-        int BRtarget = 0;
-
-        power = Math.abs(power);
-
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        // systemTools.telemetry.update();
-
-        resetDriveEncoders();
-
-        // Send telemetry message to indicate successful Encoder reset
-       // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-       //         frontLeftMotor.getCurrentPosition(),
-       //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-       // systemTools.telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
-
-        if (left) {
-            FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
-            FRtarget = frontRightMotor.getCurrentPosition() + TICKS;
-            BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
-            BRtarget = backRightMotor.getCurrentPosition() - TICKS;
-        } else {
-            FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
-            FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
-            BLtarget = backLeftMotor.getCurrentPosition() - TICKS;
-            BRtarget = backRightMotor.getCurrentPosition() + TICKS;
-        }
-        frontLeftMotor.setTargetPosition(FLtarget);
-        frontRightMotor.setTargetPosition(FRtarget);
-        backLeftMotor.setTargetPosition(BLtarget);
-        backRightMotor.setTargetPosition(BRtarget);
-
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-        if (left) {
-            frontLeftMotor.setPower(-power);
-            frontRightMotor.setPower(power);
-            backRightMotor.setPower(-power);
-            backLeftMotor.setPower(power);
-        } else {
-            frontLeftMotor.setPower(power);
-            frontRightMotor.setPower(-power);
-            backRightMotor.setPower(power);
-            backLeftMotor.setPower(-power);
-        }
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
-        }
-
-        stopDriveMotors();
-
-        startDriveEncoders();
-
-        // systemTools.telemetry.addData("Path", "Complete");
-        // systemTools.telemetry.addData("counts", TICKS);
         // systemTools.telemetry.update();
     }
 
@@ -1175,11 +628,6 @@ public class ProgrammingFrame {
 
         power = Math.abs(power);
 
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        // systemTools.telemetry.update();
-
         resetDriveEncoders();
 
         // Send telemetry message to indicate successful Encoder reset
@@ -1187,8 +635,6 @@ public class ProgrammingFrame {
         //         frontLeftMotor.getCurrentPosition(),
         //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         // systemTools.telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
 
         if (left) {
             FLtarget = frontLeftMotor.getCurrentPosition() - TICKS;
@@ -1212,7 +658,6 @@ public class ProgrammingFrame {
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // start motion
-
         if (left) {
             frontLeftMotor.setPower(-power);
             frontRightMotor.setPower(power);
@@ -1224,12 +669,7 @@ public class ProgrammingFrame {
             backRightMotor.setPower(power);
             backLeftMotor.setPower(-power);
         }
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
         }
@@ -1237,10 +677,6 @@ public class ProgrammingFrame {
         if (!handoff) stopDriveMotors();
 
         startDriveEncoders();
-
-        // systemTools.telemetry.addData("Path", "Complete");
-        // systemTools.telemetry.addData("counts", TICKS);
-        // systemTools.telemetry.update();
     }
 
     public void strafeDistanceCM3(int centimeters, double power, boolean handoff) {
@@ -1284,9 +720,7 @@ public class ProgrammingFrame {
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
         // start motion
-
         if (left) {
             frontLeftMotor.setPower(-power);
             frontRightMotor.setPower(power);
@@ -1298,12 +732,7 @@ public class ProgrammingFrame {
             backRightMotor.setPower(power);
             backLeftMotor.setPower(-power);
         }
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()) {
         }
 
@@ -1320,15 +749,12 @@ public class ProgrammingFrame {
         // IMPORTANT: for backramp, subtract the percent from 100. For example, if you want the robot to ramp down for the last 30.0 percent, set it to 70.0
 
         // holds the conversion factor for TICKS to centimeters
-        // holds the conversion factor for TICKS to centimeters
-
         //final double conversion_factor = 27.55; // old conversion factor using 3x3x3 cartridges on the drive motor
         final double conversion_factor = 22;  // new conversion factor using 4x5 gear cartridges
         double setPower = 0.0;
         double percent;
         double percent2;
         boolean backwards;
-
 
         // sets the power negative if the distance is negative
         if (centimeters < 0 && power > 0) {
@@ -1340,24 +766,10 @@ public class ProgrammingFrame {
         // calculates the target amount of motor TICKS
         int TICKS = (int) Math.round(centimeters * conversion_factor);
 
-
         // Debug: Send telemetry message with calculated TICKS;
         // systemTools.telemetry.addData("Calculated Counts =", TICKS);
-        //   systemTools.telemetry.update();
-
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        //   systemTools.telemetry.update();
 
         resetDriveEncoders();
-
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addLine();
@@ -1385,13 +797,7 @@ public class ProgrammingFrame {
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
              //   (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
             (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
@@ -1418,10 +824,8 @@ public class ProgrammingFrame {
                 // converts that to a percent on the backramp left (0-1)
                 percent = percent2 / (100.0 - backRamp);
                 setPower = (1 - percent) * power; // power decreases to zero at the end
-               // if (setPower  <0.1) {setPower = 0.08;}
-
+               // if (setPower  <0.1) {setPower = 0.08;} // Minimum if needed to stop without rooling down too much
             }
-
 
             // set the power the motors need to be going at
             if (!backwards) {
@@ -1439,32 +843,12 @@ public class ProgrammingFrame {
 
         if (!handoff) stopDriveMotors();
 
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
-        // fem 12-24  debug       startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addLine();
         // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
         //         frontLeftMotor.getCurrentPosition(),
         //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         // systemTools.telemetry.update();
-
-        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
-
-        /*
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
-
-         */
     }
 
 
@@ -1489,24 +873,11 @@ public class ProgrammingFrame {
         // calculates the target amount of motor TICKS
         int TICKS = (int) Math.round(centimeters * conversion_factor);
 
-
         // Debug: Send telemetry message with calculated TICKS;
         // systemTools.telemetry.addData("Calculated Counts =", TICKS);
         //   systemTools.telemetry.update();
 
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addLine();
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        //   systemTools.telemetry.update();
-
         resetDriveEncoders();
-
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addLine();
@@ -1514,7 +885,6 @@ public class ProgrammingFrame {
         //         frontLeftMotor.getCurrentPosition(),
         //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         //  systemTools.telemetry.update();
-
 
         // sets the target position for each of the motor encoders
         if (left) {
@@ -1540,18 +910,7 @@ public class ProgrammingFrame {
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
-        /*while (linearOpMode.opModeIsActive() &&
-                (Math.abs(frontLeftMotor.getCurrentPosition()) < TICKS && Math.abs(frontRightMotor.getCurrentPosition()) < TICKS && Math.abs(backLeftMotor.getCurrentPosition()) < TICKS && Math.abs(backRightMotor.getCurrentPosition()) < TICKS)) {
-        }
-        */
-
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
 
@@ -1583,7 +942,6 @@ public class ProgrammingFrame {
                 }
             }
 
-
             // set the power the motors need to be going at
             if (left) {
                 frontLeftMotor.setPower(-setPower);
@@ -1600,32 +958,12 @@ public class ProgrammingFrame {
 
         if (!handoff) stopDriveMotors();
 
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
-        // fem 12-24  debug       startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addLine();
         // systemTools.telemetry.addData("Final", "Starting at %7d :%7d :%7d :%7d",
         //         frontLeftMotor.getCurrentPosition(),
         //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
         // systemTools.telemetry.update();
-
-        //while (linearOpMode.opModeIsActive()) {}  //  Empty while loop - program waits until user terminates op-mode
-
-        /*
-        systemTools.telemetry.addData("Path", "Complete");
-        systemTools.telemetry.addData("counts", TICKS);
-        systemTools.telemetry.update();
-
-         */
     }
 
 
@@ -1634,52 +972,53 @@ public class ProgrammingFrame {
     }
 
 
-        public void wobble(double liftingPower) {
-            if (armState == States.Off) { // don't do manual movements if moving automatically
-
-
+    public void wobble(double liftingPower) {
+        if (armState == States.Off) { // don't do manual movements if moving automatically
 //           if (!robot.lowSwitch1.isPressed() && !robot.lowSwitch2.isPressed() && !robot.highSwitch1.isPressed() && !robot.highSwitch2.isPressed()) {
 //               liftingPower = y2/2;
 //           }
-                if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
-                    lifting.setPower(Range.clip(liftingPower, -.5, 0));
-                    //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
-                } else if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
-                    lifting.setPower(Range.clip(liftingPower, 0, 0.3));
-                } else {
-                    lifting.setPower(liftingPower);
-                }
-
+            if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
+                lifting.setPower(Range.clip(liftingPower, -.5, 0));
+                //robot.lifting.setPower(Range.clip(liftingPower, 0,0.5));
+            } else if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
+                lifting.setPower(Range.clip(liftingPower, 0, 0.3));
             } else {
-                if (armState == States.Forwards) {
-                    // Don't break the robot check
-                    if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
-                        lifting.setPower(0);
-                        lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        armState = States.Off;
-                    }
-                } else { // lifter is going backwards, aka down
-                    // Don't break the robot check
-                    if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
-                        lifting.setPower(0);
-                        lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        armState = States.Off;
-                    }
+                lifting.setPower(liftingPower);
+            }
+
+        } else {
+            if (armState == States.Forwards) {
+                // Don't break the robot check
+                if (highSwitch1.isPressed() || highSwitch2.isPressed()) {
+                    lifting.setPower(0);
+                    lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    armState = States.Off;
                 }
-                if (!lifting.isBusy()) {
+            } else { // lifter is going backwards, aka down
+                // Don't break the robot check
+                if (lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
                     lifting.setPower(0);
                     lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     armState = States.Off;
                 }
             }
+            if (!lifting.isBusy()) {
+                // If it has completed the automatic action, turn it off
+                lifting.setPower(0);
+                lifting.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                armState = States.Off;
+            }
         }
+    }
+
+    //***************************************************************************************************
+
     public static class wobble extends ProgrammingFrame {
 
         public static boolean success = false;
         public static int rotateBack;
         public static int travelDist;
     }  // end static class wobble
-//***************************************************************************************************
 
     public void wobbleFind(int degrees, double power, double difference, LinearOpMode linearOpMode) {
         double distance = 100;
@@ -1692,21 +1031,8 @@ public class ProgrammingFrame {
         }
 
         int TICKS = (int) Math.round(degrees * conversion_factor);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
-
-        // Send telemetry message to signify robot waiting;
-        // systemTools.telemetry.addData("Status", "Resetting Encoders");
-        // systemTools.telemetry.update();
 
         resetDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
@@ -1733,12 +1059,7 @@ public class ProgrammingFrame {
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
 
@@ -1758,31 +1079,16 @@ public class ProgrammingFrame {
                 break;
             }
         }
+
         stopDriveMotors();
 
         // calculate change after entire drive
         int FLdelta2 = frontLeftMotor.getCurrentPosition() - FLstart;
         int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor);
 
-
-//        frontLeftMotor.setPower(0);
-//        frontRightMotor.setPower(0);
-//        backRightMotor.setPower(0);
-//        backLeftMotor.setPower(0);
-
         startDriveEncoders();
-//        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // systemTools.telemetry.addData("Path", "Complete");
-        // systemTools.telemetry.addData("counts", TICKS);
-        // systemTools.telemetry.update();
-//
 
         wobble.rotateBack = rotateBackDeg2;
-
     }  // end wobble find
 
     //**********************************************************************************************
@@ -1802,10 +1108,6 @@ public class ProgrammingFrame {
         }
         int wStart=0, wEnd=0;
         int TICKS = (int) Math.round(degrees * conversion_factor);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
 
         resetDriveEncoders();
 
@@ -1833,13 +1135,7 @@ public class ProgrammingFrame {
         backRightMotor.setPower(-power);
         backLeftMotor.setPower(power);
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
             distance = wobbleSensor.getDistance(DistanceUnit.CM);
@@ -1905,13 +1201,7 @@ public class ProgrammingFrame {
         backRightMotor.setPower(-power);
         backLeftMotor.setPower(power);
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
                 (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {}
         stopDriveMotors();
@@ -1949,8 +1239,3 @@ public class ProgrammingFrame {
 */
     }  // end wobble find 2
 }   //end programming frame
-
-
-
-
-
