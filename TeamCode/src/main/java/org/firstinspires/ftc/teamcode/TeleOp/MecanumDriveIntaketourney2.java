@@ -99,7 +99,7 @@ public class MecanumDriveIntaketourney2 extends OpMode
      */
     public void moveGripper(boolean close) {
         robot.gripperServo.setDirection(Servo.Direction.REVERSE);
-        robot.gripperServo.scaleRange(0, 1.0);
+        robot.gripperServo.scaleRange(0, 0.93);
         if (close) {
             robot.gripperServo.setPosition(1);
         }
@@ -700,7 +700,7 @@ public class MecanumDriveIntaketourney2 extends OpMode
         }
 
         if (yClick && flyWheel2) { // checks if the storage is moving and if the storage pressed flag is raised
-            if (!flyMotor) {robot.shooting.setPower(0.70);} // if the flywheel is off , turn it on
+            if (!flyMotor) {robot.shooting.setPower(0.71);} // if the flywheel is off , turn it on  was 0.7; is 0.73 max 2-24-21
             else if (flyMotor) {robot.shooting.setPower(0);} // // if the flywheel is on , turn it off
         }
         if (flyWheel2) {

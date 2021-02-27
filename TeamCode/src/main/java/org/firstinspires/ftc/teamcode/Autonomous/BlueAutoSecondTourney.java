@@ -30,11 +30,11 @@ public class BlueAutoSecondTourney extends LinearOpMode {
         robot.raiseGripper(730);
 
         robot.gripperClose();
-        robot.wait(400L,this);
+        robot.wait(500L,this);
         robot.raiseGripper(350);
 
        // robot.GoDistanceCM2(70, .5, false,this);
-        robot.goDistanceAcceleration(65,0.8,false,5,60,this);// 0.9 5 20
+        robot.goDistanceAcceleration(65,0.8,false,5,50,this);// 0.9 5 20
         robot.wait(300,this);  // Wait for robot to stop before reading rings
 
             // Detect the rings here and return A, B, C, or E for Error
@@ -77,8 +77,8 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.wait(400L,this);
             robot.GoDistanceCM2(-7,0.3,false,this);
             robot.lowerGripper(950);
-            robot.RotateDEG(148, 0.7, this);        // rotation was 146 at 0.7 power is 148  2/22/21
-            robot.goDistanceAcceleration(97, 0.9, false, 5, 70, this);// distance was 103 is 101 2-22-21
+            robot.RotateDEG(149, 0.7, this);        // rotation was 146 at 0.7 power is 148  2/22/21
+            robot.goDistanceAcceleration(94, 0.9, false, 5, 70, this);// distance was 103 is 101 2-22-21 was97 is 94 for second tourney 2-25-21
            // robot.wobbleFind(35, 0.2, 40, this);
             robot.wobbleFind2(45, 0.2, 40, this);
             boolean success = ProgrammingFrame.wobble.success;
@@ -106,7 +106,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
         }   // end drop zone A
 
         else if (ringAt == 'B') {
-            robot.goDistanceAcceleration(127, 0.8, false,8, 75, this);   // added extra 20 cm to get ring out of the way.  Wobble was landing on top of ring 1-27-2021
+            robot.goDistanceAcceleration(125, 0.8, false,8, 75, this);   // was 127 2-24-21, added extra 20 cm to get ring out of the way.  Wobble was landing on top of ring 1-27-2021
             robot.GoDistanceCM2(-29, -0.4, false, this);  //  back up and drop wobble away from ring
             robot.strafeDistanceCM2(29, 0.5,false, this);
             // drop wobble goal here
@@ -115,8 +115,8 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.wait(500L,this);
             robot.lowerGripper(950);
             robot.GoDistanceCM2(-10, .3, false, this);
-            robot.RotateDEG(174, 0.6, this); // was 171
-            robot.goDistanceAcceleration(133, 0.9, false, 5, 75, this);  //distance was 135 2-22-21
+            robot.RotateDEG(175, 0.6, this); // was 171
+            robot.goDistanceAcceleration(134, 0.9, false, 5, 75, this);  //distance was 135 2-22-21
             // robot.wobbleFind(35, 0.2, 40, this);
             robot.wobbleFind2(45, 0.2, 40, this);
             boolean success = ProgrammingFrame.wobble.success;
@@ -193,7 +193,7 @@ public class BlueAutoSecondTourney extends LinearOpMode {
          robot.storage(false,this);
 
         robot.gripperClose();
-        robot.wait(500L,this);  //allow time for servo to finish closing grip before terminating
+        robot.wait(200L,this);  //allow time for servo to finish closing grip before terminating
         // /*  Debug: comment out rest of method  MAx M. 2-15-2021
         // Add function hat navigates to launch line if second wobble misses
         // Move to the launch line

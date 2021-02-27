@@ -92,7 +92,7 @@ public class WobbleControl extends OpMode
      */
     public void moveGripper(boolean close) {
         robot.gripperServo.setDirection(Servo.Direction.REVERSE);
-        robot.gripperServo.scaleRange(0, 1.0);
+        robot.gripperServo.scaleRange(0, 0.93);
         if (close) {
             robot.gripperServo.setPosition(1);
         }

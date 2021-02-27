@@ -173,7 +173,7 @@ public class Wobble2 extends LinearOpMode {
                     if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
                              travelDist = (int)(9 + (startWobbleDist-22.5));
                         }
-                    if (travelDist >18) {
+                    if (travelDist >25) {
                         telemetry.addData("Error, travel distance exceeded. Travel distance:   ", travelDist);
                         telemetry.addData("Elapsed Time: ", getRuntime()-startTime);
                         telemetry.update();
