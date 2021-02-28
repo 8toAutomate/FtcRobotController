@@ -34,7 +34,9 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -91,6 +93,8 @@ public class MecanumDriveIntaketourney3 extends OpMode
     boolean flyWheel, flyMotor, flyWheel2 = false;
     boolean strafe20,rtClick = false;
     boolean shootingReverse = false;
+    boolean whackerServoRunning = false;
+    boolean leftBumperDown = false;
     double liftingPower;
     int travelDist;
     double wStartTime;
@@ -976,7 +980,20 @@ public class MecanumDriveIntaketourney3 extends OpMode
             }
         }
 
+        if (gamepad1.left_bumper) {
+            if (!leftBumperDown) {
+                whackerServoRunning = !whackerServoRunning;
+                leftBumperDown = true;
+            }
+        } else {
+            leftBumperDown = false;
+        }
 
+        if (whackerServoRunning) {
+            robot.whackerServo.setPower(1);
+        } else {
+            robot.whackerServo.setPower(0);
+        }
         //********************************* Storage Servo **********************************************
 
         // this code raises and lowers the storage servo using the left bumper button.

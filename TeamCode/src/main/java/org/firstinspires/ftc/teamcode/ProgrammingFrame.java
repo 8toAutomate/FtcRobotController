@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -59,6 +60,7 @@ public class ProgrammingFrame {
     public Servo gripperServo = null;
     public Servo ringPusher = null;
     public Servo storageServo = null;
+    public CRServo whackerServo = null;
 
     public NormalizedColorSensor colorSensor1;
     public NormalizedColorSensor colorSensor2;
@@ -117,7 +119,6 @@ public class ProgrammingFrame {
         shooting = hwMap.get(DcMotor.class, "shooting");
         lifting = hwMap.get(DcMotor.class, "lifting");
 
-
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -128,6 +129,7 @@ public class ProgrammingFrame {
         gripperServo = hwMap.get(Servo.class, "gripper");
         ringPusher = hwMap.get(Servo.class, "push_arm");
         storageServo = hwMap.get(Servo.class, "storage_servo");
+        whackerServo = hwMap.get(CRServo.class, "whacker_servo");
         lights = hwMap.get(RevBlinkinLedDriver.class, "ledController");
         // set motor directions
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -368,6 +370,7 @@ public class ProgrammingFrame {
         intake.setPower(0);
         shooting.setPower(0);
         lifting.setPower(0);
+        whackerServo.setPower(0);
     }
 
     public void resetDriveEncoders() {
