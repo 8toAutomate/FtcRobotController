@@ -79,13 +79,13 @@ public class ProgrammingFrame {
 
     public RevBlinkinLedDriver lights;
 
-    enum States {
+    public enum States {
         On, Off, Backwards, Forwards
     }
 
     States armState = States.Off;
 
-    enum LightsStates {
+    public enum LightsStates {
         Off, SixtySecs, FiftySecs, FourtySecs, FlashFreeze, LowBattery, GrabberLimit, Normal, Custom
     }
 

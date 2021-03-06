@@ -78,7 +78,6 @@ public class BlueAutoSecondTourney extends LinearOpMode {
             robot.GoDistanceCM2(-7,0.3,false,this);
             robot.lowerGripper(950);
             robot.RotateDEG(149, 0.7, this);        // rotation was 146 at 0.7 power is 148  2/22/21
-            robot.goDistanceAcceleration(94, 0.9, false, 5, 70, this);// distance was 103 is 101 2-22-21 was97 is 94 for second tourney 2-25-21
            // robot.wobbleFind(35, 0.2, 40, this);
             robot.wobbleFind2(45, 0.2, 40, this);
             boolean success = ProgrammingFrame.wobble.success;
