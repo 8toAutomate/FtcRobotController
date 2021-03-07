@@ -461,8 +461,8 @@ public class MecanumDriveIntaketourney3 extends OpMode
         // holds the conversion factor for TICKS to centimeters
         // 27.55 for 3 3:1 cartridges
         final double conversion_factor = 21.4;
-        boolean sensor1Detected;
-        boolean sensor2Detected;
+        boolean sensor1Detected = false;
+        boolean sensor2Detected = false;
         float gain = 2;
         int hueTarget = 30;
         final float[] hsvValues = new float[3];
@@ -540,18 +540,55 @@ public class MecanumDriveIntaketourney3 extends OpMode
         // Testing this new function call instead of using RUN_TO_POSITION everywhere
         robot.startDriveEncodersTarget();
 
-        // reset the timeout time and start motion.
-        robot.frontLeftMotor.setPower(power);
-        robot.frontRightMotor.setPower(power);
-        robot.backRightMotor.setPower(power);
-        robot.backLeftMotor.setPower(power);
+
+        if (sensor1Detected) {
+
+            // reset the timeout time and start motion.
+            robot.frontLeftMotor.setPower(power);
+            robot.backLeftMotor.setPower(power);
 
 
+            while (robot.frontLeftMotor.isBusy() && robot.backLeftMotor.isBusy()) {
+
+                // get color sensors
+                NormalizedRGBA colors2 = robot.topRingColor.getNormalizedColors();
+                NormalizedRGBA colors1 = robot.bottomRingColor.getNormalizedColors();
+                Color.colorToHSV(colors1.toColor(), hsvValues);
+                Color.colorToHSV(colors2.toColor(), hsvValues2);
+
+                if (hsvValues2[0] > hueTarget) {
+                    break;
+                }
+
+            }
+        }
+
+        if (sensor2Detected) {
+
+            // reset the timeout time and start motion.
+            robot.frontRightMotor.setPower(power);
+            robot.backRightMotor.setPower(power);
+
+
+            while (robot.frontRightMotor.isBusy() && robot.backRightMotor.isBusy()) {
+
+                // get color sensors
+                NormalizedRGBA colors2 = robot.topRingColor.getNormalizedColors();
+                NormalizedRGBA colors1 = robot.bottomRingColor.getNormalizedColors();
+                Color.colorToHSV(colors1.toColor(), hsvValues);
+                Color.colorToHSV(colors2.toColor(), hsvValues2);
+
+                if (hsvValues[0] > hueTarget) {
+                    break;
+                }
+
+            }
+        }
 
 
         if (!handoff) robot.stopDriveMotors();
 
-        // fem 12-24  debug       startDriveEncoders();
+        // fem 12-24  debug       
 
         // Send telemetry message to indicate successful Encoder reset
         // systemTools.telemetry.addLine();
