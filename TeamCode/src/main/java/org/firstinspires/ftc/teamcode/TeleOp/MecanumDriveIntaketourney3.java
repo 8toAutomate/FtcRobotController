@@ -34,7 +34,9 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -91,6 +93,8 @@ public class MecanumDriveIntaketourney3 extends OpMode
     boolean flyWheel, flyMotor, flyWheel2 = false;
     boolean strafe20,rtClick = false;
     boolean shootingReverse = false;
+    boolean whackerServoRunning = false;
+    boolean leftBumperDown = false;
     double liftingPower;
     int travelDist;
     double wStartTime;
@@ -188,12 +192,7 @@ public class MecanumDriveIntaketourney3 extends OpMode
         robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while ((robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())) {
 
             distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
@@ -293,13 +292,7 @@ public class MecanumDriveIntaketourney3 extends OpMode
         robot.backRightMotor.setPower(-power);
         robot.backLeftMotor.setPower(power);
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy()) {
             distance = robot.wobbleSensor.getDistance(DistanceUnit.CM);
             frontEdgeFound = false;
@@ -363,13 +356,7 @@ public class MecanumDriveIntaketourney3 extends OpMode
         robot.backRightMotor.setPower(-power);
         robot.backLeftMotor.setPower(power);
 
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
+        // keep looping while we are still active, and there is time left, and all motors are running.
         while (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy()) {}
         robot.stopDriveMotors();
 
@@ -1012,8 +999,29 @@ public class MecanumDriveIntaketourney3 extends OpMode
                 gripperMoving = false;
             }
         }
+        //********************************* Whacker Servo ********************************************
 
+        // This code rotates the whacker servo clockwise using the left bumper button.
+        // It is implemented for toggle functionality.
 
+        // FLAGS:
+        // leftBumperDown - checks if left bumper was pressed
+        // whackerServoRunning - holds the state of the whacker servo
+
+        if (gamepad1.left_bumper) {
+            if (!leftBumperDown) {
+                whackerServoRunning = !whackerServoRunning;
+                leftBumperDown = true;
+            }
+        } else {
+            leftBumperDown = false;
+        }
+
+        if (whackerServoRunning) {
+            robot.whackerServo.setPower(1);
+        } else {
+            robot.whackerServo.setPower(0);
+        }
         //********************************* Storage Servo **********************************************
 
         // this code raises and lowers the storage servo using the left bumper button.
