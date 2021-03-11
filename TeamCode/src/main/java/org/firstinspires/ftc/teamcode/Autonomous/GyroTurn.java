@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
 @Disabled
+
 @Autonomous(name="GyroTurn", group="Motion")
 
 public class GyroTurn extends LinearOpMode {
@@ -75,8 +76,8 @@ public class GyroTurn extends LinearOpMode {
             robot.backLeftMotor.setPower(power);
 
             // keep looping while we are still active, and there is time left, and all motors are running.
-            while (opModeIsActive() &&
-                    (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())
+YZI,                    (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())
+
             ) {
                 angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
