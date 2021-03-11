@@ -25,71 +25,72 @@ public class GyroTurn extends LinearOpMode {
     BNO055IMU imu;
     Orientation angles;
 
+    public void GyroRotateDEG(int ticks, double power, double angle) {
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+        // conversion for ticks to ticks
+        final double conversion_factor = 12.73;
+
+        // if ticks are negative, set the power negative
+        if (ticks < 0 && power > 0) {
+            power = power * -1;
+        }
+
+        int TICKS = (int) Math.round(ticks * conversion_factor);
+
+        robot.resetDriveEncoders();
+
+        // Send telemetry message to indicate successful Encoder reset
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
+
+        // set target position for all the motor encoders
+        int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = robot.frontRightMotor.getCurrentPosition() - TICKS;
+        int BLtarget = robot.backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = robot.backRightMotor.getCurrentPosition() - TICKS;
+
+        robot.frontLeftMotor.setTargetPosition(FLtarget);
+        robot.frontRightMotor.setTargetPosition(FRtarget);
+        robot.backLeftMotor.setTargetPosition(BLtarget);
+        robot.backRightMotor.setTargetPosition(BRtarget);
+
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+        robot.frontLeftMotor.setPower(power);
+        robot.frontRightMotor.setPower(-power);
+        robot.backRightMotor.setPower(-power);
+        robot.backLeftMotor.setPower(power);
+
+        // keep looping while we are still active, and there is time left, and all motors are running.
+        while (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy()) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+            if (angles.firstAngle == angle) {
+                break;
+            }
+
+        }
+
+        robot.stopDriveMotors();
+        robot.startDriveEncoders();
+
+    }   //end RotateDeg
+
     @Override
     public void runOpMode() {
-        public void RotateDEG(int degrees, double power, double angle) {
-
-            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-            parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-
-            imu = hardwareMap.get(BNO055IMU.class, "imu");
-            imu.initialize(parameters);
-
-            // conversion for degrees to ticks
-            final double conversion_factor = 12.73;
-
-            // if degrees are negative, set the power negative
-            if (degrees < 0 && power > 0) {
-                power = power * -1;
-            }
-
-            int TICKS = (int) Math.round(degrees * conversion_factor);
-
-            robot.resetDriveEncoders();
-
-            // Send telemetry message to indicate successful Encoder reset
-            // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
-            //         frontLeftMotor.getCurrentPosition(),
-            //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
-            // systemTools.telemetry.update();
-
-            // set target position for all the motor encoders
-            int FLtarget = robot.frontLeftMotor.getCurrentPosition() + TICKS;
-            int FRtarget = robot.frontRightMotor.getCurrentPosition() - TICKS;
-            int BLtarget = robot.backLeftMotor.getCurrentPosition() + TICKS;
-            int BRtarget = robot.backRightMotor.getCurrentPosition() - TICKS;
-
-            robot.frontLeftMotor.setTargetPosition(FLtarget);
-            robot.frontRightMotor.setTargetPosition(FRtarget);
-            robot.backLeftMotor.setTargetPosition(BLtarget);
-            robot.backRightMotor.setTargetPosition(BRtarget);
-
-            robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // reset the timeout time and start motion.
-            robot.frontLeftMotor.setPower(power);
-            robot.frontRightMotor.setPower(-power);
-            robot.backRightMotor.setPower(-power);
-            robot.backLeftMotor.setPower(power);
-
-            // keep looping while we are still active, and there is time left, and all motors are running.
-YZI,                    (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy())
-
-            ) {
-                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-                if (angles.firstAngle == angle) {
-                    break;
-                }
-            }
-
-            robot.stopDriveMotors();
-            robot.startDriveEncoders();
-
-        }   //end RotateDeg
+        GyroRotateDEG(2000,0.8,90);
     }
 
 }
