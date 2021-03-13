@@ -789,13 +789,15 @@ public class MecanumDriveIntaketourney3test extends OpMode
         // flyWheel - holds the state of the Flywheel operation
         // flyMotor- holds if the flywheel motor is running or off
         // xClick - checks if flywheel button is pressed
-
+        // Update 3/12/2021
+        // This Lets us control the power/speed of the flywheel mototr based on the d-pad
         if (gamepad1.dpad_up) {
-            robot.shooting.setPower(0);
+            power += .005;
+            telemetry.addData("Status", "Power:" + power);
         }
         if (gamepad1.dpad_down) {
-            flywheelspeed += .005;
-            robot.shooting.setPower(powee-flywheelspeed);
+            power -= .005;
+            telemetry.addData("Status", "Power:" + power);
         }
         if (!flyWheel) { // checks if the flywheel is not already moving
             if (gamepad2.x) { // checks if the bumper is pressed
