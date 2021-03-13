@@ -25,7 +25,7 @@ public class GyroTurn extends LinearOpMode {
     BNO055IMU imu;
     Orientation angles;
 
-    public void GyroRotateDEG(int ticks, double power, double angle) {
+    public void GyroRotateDEG(int maxDegrees, double power, double angle) {
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -37,11 +37,11 @@ public class GyroTurn extends LinearOpMode {
         final double conversion_factor = 12.73;
 
         // if ticks are negative, set the power negative
-        if (ticks < 0 && power > 0) {
+        if (maxDegrees < 0 && power > 0) {
             power = power * -1;
         }
 
-        int TICKS = (int) Math.round(ticks * conversion_factor);
+        int TICKS = (int) Math.round(maxDegrees * conversion_factor);
 
         robot.resetDriveEncoders();
 
