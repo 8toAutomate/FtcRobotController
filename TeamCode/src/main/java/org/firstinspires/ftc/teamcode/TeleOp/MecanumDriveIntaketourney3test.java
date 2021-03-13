@@ -100,6 +100,7 @@ public class MecanumDriveIntaketourney3test extends OpMode
     double wStartTime;
     boolean wobbleFound = false;
     double power = 0.8;
+    double flywheelspeed = 0.005;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -788,7 +789,16 @@ public class MecanumDriveIntaketourney3test extends OpMode
         // flyWheel - holds the state of the Flywheel operation
         // flyMotor- holds if the flywheel motor is running or off
         // xClick - checks if flywheel button is pressed
-
+        // Update 3/12/2021
+        // This Lets us control the power/speed of the flywheel mototr based on the d-pad
+        if (gamepad1.dpad_up) {
+            power += .005;
+            telemetry.addData("Status", "Power:" + power);
+        }
+        if (gamepad1.dpad_down) {
+            power -= .005;
+            telemetry.addData("Status", "Power:" + power);
+        }
         if (!flyWheel) { // checks if the flywheel is not already moving
             if (gamepad2.x) { // checks if the bumper is pressed
                 xClick = true; // set X-button flag - X-button was pressed
@@ -1113,12 +1123,7 @@ public class MecanumDriveIntaketourney3test extends OpMode
                 //gripperMoving=false;
             }
         }
-        if (gamepad1.dpad_up) {
-            power = 1;
-        }
-        if (gamepad1.dpad_down) {
-            power = 0;
-        }
+
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
