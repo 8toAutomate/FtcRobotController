@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -45,7 +46,11 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class ProgrammingFrame {
 
@@ -77,6 +82,10 @@ public class ProgrammingFrame {
     public DistanceSensor topRing;
     public DistanceSensor wobbleSensor;
 
+    BNO055IMU imu;
+
+    Orientation angles;
+
     public RevBlinkinLedDriver lights;
 
     public enum States {
@@ -94,6 +103,9 @@ public class ProgrammingFrame {
     public boolean wobbleSuccess;
 
     public int degreesRotated;
+
+    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -150,8 +162,8 @@ public class ProgrammingFrame {
         startDriveEncoders();
 
         // Define and initialize ALL installed servos.
-      //  colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
-       // colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
+        //  colorSensor1 = hwMap.get(NormalizedColorSensor.class, "leftLine");
+        // colorSensor2 = hwMap.get(NormalizedColorSensor.class, "rightLine");
         // bottomRing = hwMap.get(RevColorSensorV3.class, "bottomRing");
         //topRing = hwMap.get(RevColorSensorV3.class, "topRing");
         bottomRing = hwMap.get(DistanceSensor.class, "bottomRing");
@@ -174,6 +186,9 @@ public class ProgrammingFrame {
         lifting.setPower(0);
         lifting.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         */
+
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
 
     }
 
@@ -233,7 +248,7 @@ public class ProgrammingFrame {
     }   //end RotateDeg
 //***********************************************************************************************
 
-//**************************************************************************************************
+    //**************************************************************************************************
     // find line function
     public void findLine(double power, LinearOpMode linearOpMode) {
         // Make sure floor color sensors are added back in before trying to use!
@@ -330,10 +345,10 @@ public class ProgrammingFrame {
         topRingDetected = topRingValueCM < maxTopRingDistCM;
 
         //sleep(100);
-       // linearOpMode.sleep(100);
+        // linearOpMode.sleep(100);
 
-       // topRingValueCM = topRing.getDistance(DistanceUnit.CM);
-       // bottomRingValueCM = bottomRing.getDistance(DistanceUnit.CM);
+        // topRingValueCM = topRing.getDistance(DistanceUnit.CM);
+        // bottomRingValueCM = bottomRing.getDistance(DistanceUnit.CM);
 
         //bottomRingDetected = bottomRingValueCM < maxBotRingDistCM || bottomRingDetected;
         //topRingDetected = topRingValueCM < maxTopRingDistCM || topRingDetected;
@@ -401,8 +416,7 @@ public class ProgrammingFrame {
             lightsState = LightsStates.FlashFreeze;
         } else if (highSwitch1.isPressed() || highSwitch2.isPressed() || lowSwitch1.isPressed() || lowSwitch2.isPressed()) {
             lightsState = LightsStates.GrabberLimit;
-        }
-        else if (opMode.getRuntime() >= 80) {
+        } else if (opMode.getRuntime() >= 80) {
             lightsState = LightsStates.FourtySecs;
         } else if (opMode.getRuntime() >= 70) {
             lightsState = LightsStates.FiftySecs;
@@ -468,7 +482,7 @@ public class ProgrammingFrame {
         }
     }
 
-// gripperClose & gripperOpen are used in Autonomous is used in teleop
+    // gripperClose & gripperOpen are used in Autonomous is used in teleop
     public void gripperClose() {
         gripperServo.setDirection(Servo.Direction.REVERSE);
         gripperServo.scaleRange(0, 0.93);
@@ -571,8 +585,8 @@ public class ProgrammingFrame {
 
         // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
-           //     (frontLeftMotor.isBusy() || frontRightMotor.isBusy() || backLeftMotor.isBusy() || backRightMotor.isBusy())) {
-            (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+                //     (frontLeftMotor.isBusy() || frontRightMotor.isBusy() || backLeftMotor.isBusy() || backRightMotor.isBusy())) {
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
         }
 
         if (!handoff) stopDriveMotors();
@@ -815,8 +829,8 @@ public class ProgrammingFrame {
 
         // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
-             //   (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
-            (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+                //   (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
 
             // Finds out how far into the motion we are (0-100)
             double fLpercent = (double) (frontLeftMotor.getCurrentPosition()) / frontLeftMotor.getTargetPosition() * 100;
@@ -840,7 +854,7 @@ public class ProgrammingFrame {
                 // converts that to a percent on the backramp left (0-1)
                 percent = percent2 / (100.0 - backRamp);
                 setPower = (1 - percent) * power; // power decreases to zero at the end
-               // if (setPower  <0.1) {setPower = 0.08;} // Minimum if needed to stop without rooling down too much
+                // if (setPower  <0.1) {setPower = 0.08;} // Minimum if needed to stop without rooling down too much
             }
 
             // set the power the motors need to be going at
@@ -1090,8 +1104,9 @@ public class ProgrammingFrame {
 
             if (distance < difference) {
                 wobble.success = true;
-                for (int i = 1; i <= 20000; ++i) {}        // waste some time to allow robot to turn more and align gripper with wobble.
-                                                            // this saves over 0.5 seconds over adding another 3 degree turn
+                for (int i = 1; i <= 20000; ++i) {
+                }        // waste some time to allow robot to turn more and align gripper with wobble.
+                // this saves over 0.5 seconds over adding another 3 degree turn
                 break;
             }
         }
@@ -1122,7 +1137,7 @@ public class ProgrammingFrame {
         if (degrees < 0 && power > 0) {
             power = power * -1;
         }
-        int wStart=0, wEnd=0;
+        int wStart = 0, wEnd = 0;
         int TICKS = (int) Math.round(degrees * conversion_factor);
 
         resetDriveEncoders();
@@ -1158,18 +1173,18 @@ public class ProgrammingFrame {
             frontEdgeFound = false;
             // reset the timeout time and start motion.
 
-                if (distance < difference) {//  wobble found
-                    wobble.success = true;
-                    wStart = frontLeftMotor.getCurrentPosition() ;
-                    frontEdgeFound = true;
-                    // for ( int i = 1; i < 10000; ++i) {sum += i;}   // sum = sum + i.  waste some time to allow robot to turn more and align gripper with wobble.
-                    //this saves over 0.5 seconds over adding another 3 degree turn
-                }  // end if
+            if (distance < difference) {//  wobble found
+                wobble.success = true;
+                wStart = frontLeftMotor.getCurrentPosition();
+                frontEdgeFound = true;
+                // for ( int i = 1; i < 10000; ++i) {sum += i;}   // sum = sum + i.  waste some time to allow robot to turn more and align gripper with wobble.
+                //this saves over 0.5 seconds over adding another 3 degree turn
+            }  // end if
 
-                if (frontEdgeFound && distance > difference) {
-                    stopDriveMotors();
-                    //   break;
-                } // end if
+            if (frontEdgeFound && distance > difference) {
+                stopDriveMotors();
+                //   break;
+            } // end if
 
         } // end while
 
@@ -1178,7 +1193,7 @@ public class ProgrammingFrame {
         int FLdelta = Math.abs(wEnd - wStart);
         //telemetry.addData("wStart: ", wStart + "  wEnd: "+ wEnd + "  FLdelta2: " + FLdelta2);
         //int alignWobbleDeg = (int)((-FLdelta / conversion_factor)-8);
-        int alignWobbleDeg = (int)(-FLdelta -7.5*conversion_factor);      // FLdelta is already in ticks so no need to change twice
+        int alignWobbleDeg = (int) (-FLdelta - 7.5 * conversion_factor);      // FLdelta is already in ticks so no need to change twice
 
         // startDriveEncoders();
         //telemetry.addData("rotateBackDeg2: ", rotateBackDeg2);
@@ -1186,13 +1201,13 @@ public class ProgrammingFrame {
         //************************************************
         //rotate robot back
         power = 0.4;
-        if (alignWobbleDeg< 0 && power > 0) {
+        if (alignWobbleDeg < 0 && power > 0) {
             power = power * -1;
-            }// end if
+        }// end if
 
         //TICKS = (int) Math.round(alignWobbleDeg * conversion_factor);
         TICKS = alignWobbleDeg;
-         // resetDriveEncoders();
+        // resetDriveEncoders();
 
 
         // set target position for all the motor encoders
@@ -1219,25 +1234,26 @@ public class ProgrammingFrame {
 
         // keep looping while we are still active, and there is time left, and all motors are running.
         while (linearOpMode.opModeIsActive() &&
-                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {}
+                (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+        }
         stopDriveMotors();
 
         //************************************************
         //distance = wobbleSensor.getDistance(DistanceUnit.CM);
 
         // calculate change after entire drive
-       int FLdelta2 = frontLeftMotor.getCurrentPosition() - FLstart;
+        int FLdelta2 = frontLeftMotor.getCurrentPosition() - FLstart;
         int rotateBackDeg2 = (int) (FLdelta2 / conversion_factor);
 
         wobble.rotateBack = rotateBackDeg2;
 
-       // startDriveEncoders();
-        double startWobbleDist=wobbleSensor.getDistance(DistanceUnit.CM);
-        wobble.travelDist=8;
-        if (startWobbleDist > 22.5 ||startWobbleDist < 21.5 ){
-            wobble.travelDist = (int)(9 + (startWobbleDist-22.5));
+        // startDriveEncoders();
+        double startWobbleDist = wobbleSensor.getDistance(DistanceUnit.CM);
+        wobble.travelDist = 8;
+        if (startWobbleDist > 22.5 || startWobbleDist < 21.5) {
+            wobble.travelDist = (int) (9 + (startWobbleDist - 22.5));
         }
-        if (wobble.travelDist >25) {
+        if (wobble.travelDist > 25) {
             systemTools.telemetry.addData("Error, travel distance exceeded. Travel distance:   ", wobble.travelDist);
             systemTools.telemetry.update();
             wobble.success = false;
@@ -1255,4 +1271,67 @@ public class ProgrammingFrame {
 */
     }  // end wobble find 2
 
-}   //end programming frame
+    public void GyroRotateDEG(int maxDegrees, double power, double angle) {
+
+        imu.initialize(parameters);
+
+        // conversion for ticks to ticks
+        final double conversion_factor = 12.73;
+
+        // if ticks are negative, set the power negative
+        if (maxDegrees < 0 && power > 0) {
+            power = power * -1;
+        }
+
+        int TICKS = (int) Math.round(maxDegrees * conversion_factor);
+
+        resetDriveEncoders();
+
+        // Send telemetry message to indicate successful Encoder reset
+        // systemTools.telemetry.addData("Path0", "Starting at %7d :%7d",
+        //         frontLeftMotor.getCurrentPosition(),
+        //         frontRightMotor.getCurrentPosition(), backLeftMotor.getCurrentPosition(), backRightMotor.getCurrentPosition());
+        // systemTools.telemetry.update();
+
+        // set target position for all the motor encoders
+        int FLtarget = frontLeftMotor.getCurrentPosition() + TICKS;
+        int FRtarget = frontRightMotor.getCurrentPosition() - TICKS;
+        int BLtarget = backLeftMotor.getCurrentPosition() + TICKS;
+        int BRtarget = backRightMotor.getCurrentPosition() - TICKS;
+
+        frontLeftMotor.setTargetPosition(FLtarget);
+        frontRightMotor.setTargetPosition(FRtarget);
+        backLeftMotor.setTargetPosition(BLtarget);
+        backRightMotor.setTargetPosition(BRtarget);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(-power);
+        backRightMotor.setPower(-power);
+        backLeftMotor.setPower(power);
+
+         // keep looping while we are still active, and there is time left, and all motors are running.
+        while (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy()) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+            if (angles.firstAngle == angle) {
+                break;
+
+            }
+
+            stopDriveMotors();
+            startDriveEncoders();
+
+        }
+    } //end RotateDeg
+
+    public void InitIMU() {
+        imu.initialize(parameters);
+    }
+
+}//end programming frame
