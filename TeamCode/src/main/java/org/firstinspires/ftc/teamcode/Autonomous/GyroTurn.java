@@ -77,13 +77,14 @@ public class GyroTurn extends LinearOpMode {
         while (robot.frontLeftMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-            if (angles.firstAngle == angle) {
-                break;
+            if (angles.firstAngle >= angle) {
+                //break;
+                robot.stopDriveMotors();
             }
 
         }
 
-        robot.stopDriveMotors();
+        //robot.stopDriveMotors();
         robot.startDriveEncoders();
 
     }   //end RotateDeg
