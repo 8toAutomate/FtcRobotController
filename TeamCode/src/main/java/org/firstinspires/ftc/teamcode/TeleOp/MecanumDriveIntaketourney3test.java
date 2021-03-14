@@ -810,7 +810,10 @@ public class MecanumDriveIntaketourney3test extends OpMode
         }
 
         if (xClick && flyWheel) { // checks if the flywheel is moving and if the storage pressed flag is raised
-            if (!flyMotor) {robot.shooting.setPower(power);} // if the flywheel is off , turn it on
+            if (!flyMotor) {
+                robot.shooting.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.shooting.setPower(power);
+            } // if the flywheel is off , turn it on
             else if (flyMotor) {robot.shooting.setPower(0);} // if the flywheel is on , turn it off
         }
         if (flyWheel) {
