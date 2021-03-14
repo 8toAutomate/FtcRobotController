@@ -1124,6 +1124,8 @@ public class MecanumDriveIntaketourney3test extends OpMode
             }
         }
 
+        if (gamepad1.dpad_left) {robot.powerShot();}
+
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
