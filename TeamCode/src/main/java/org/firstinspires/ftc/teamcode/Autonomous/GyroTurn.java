@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.ProgrammingFrame;
 
-@Disabled
+//@Disabled
 
 @Autonomous(name="GyroTurn", group="Motion")
 
@@ -91,7 +91,7 @@ public class GyroTurn extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, this);
-        GyroRotateDEG(2000,0.8,90);
+        GyroRotateDEG(180,0.3,45);
     }
 
 }

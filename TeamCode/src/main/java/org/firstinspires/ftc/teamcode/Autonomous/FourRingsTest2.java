@@ -14,15 +14,14 @@ public class FourRingsTest2 extends LinearOpMode {
     double initialSH;
     ProgrammingFrame.wobble wobble = new ProgrammingFrame.wobble();
 
-
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, this);
         waitForStart();
-        robot.storageServo.setPosition(0);
         robot.shooting.setPower(.75);
         robot.goDistanceAcceleration(65,0.8,false,5,50,this);
-
+        robot.storageServo.setPosition(0);
+        robot.wait(300, this);
         for (int i = 1; i<=3; i++) {
             robot.pushRing(0.4, this);
             robot.flywheel(true, 0.8); // increase power for second and third shot

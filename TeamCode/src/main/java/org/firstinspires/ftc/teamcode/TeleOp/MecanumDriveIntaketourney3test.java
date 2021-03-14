@@ -792,12 +792,12 @@ public class MecanumDriveIntaketourney3test extends OpMode
         // Update 3/12/2021
         // This Lets us control the power/speed of the flywheel mototr based on the d-pad
         if (gamepad1.dpad_up) {
-            power += .005;
-            telemetry.addData("Status", "Power:" + power);
+            power += .002;
+
         }
         if (gamepad1.dpad_down) {
-            power -= .005;
-            telemetry.addData("Status", "Power:" + power);
+            power -= .002;
+         //   telemetry.addData("Status", "Power:" + power);
         }
         if (!flyWheel) { // checks if the flywheel is not already moving
             if (gamepad2.x) { // checks if the bumper is pressed
@@ -1129,15 +1129,14 @@ public class MecanumDriveIntaketourney3test extends OpMode
 
        // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
-        telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+     //   telemetry.addData("Strafing constant", "Strafing Constant = " + strafingConstant);
+     //   telemetry.addData("Motors", "front_left (%.2f), front_right (%.2f), back_left (%.2f), back_right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
         telemetry.addData("Switch 1 Status", robot.lowSwitch1.isPressed());
         telemetry.addData("Switch 2 Status", robot.lowSwitch2.isPressed());
+        telemetry.addData("Status", "Shooting Power:" + power);
     }
-
     public void stop() {
         robot.stopAllMotors();
     }
-
 
 }
