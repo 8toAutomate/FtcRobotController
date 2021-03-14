@@ -90,6 +90,7 @@ public class GyroTurn extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        robot.init(hardwareMap, this);
         GyroRotateDEG(2000,0.8,90);
     }
 

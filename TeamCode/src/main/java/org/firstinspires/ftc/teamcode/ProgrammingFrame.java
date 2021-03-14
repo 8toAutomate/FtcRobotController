@@ -1334,4 +1334,15 @@ public class ProgrammingFrame {
         imu.initialize(parameters);
     }
 
+    public void powerShot() {
+
+        // reset gyro
+        InitIMU();
+
+        strafeDistanceCM3(40,0.8,false);
+
+        GyroRotateDEG(370, 0.4,0);
+
+    }
+
 }//end programming frame
